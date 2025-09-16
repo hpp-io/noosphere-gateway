@@ -137,3 +137,9 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+/package-lock.json
+/buildSrc/.gradle/
+/buildSrc/build/
+/.idea/
+/build/
+/.gradle/
