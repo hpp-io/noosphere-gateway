@@ -2,7 +2,7 @@ const { ModuleFederationPlugin } = require('@module-federation/enhanced/webpack'
 
 const packageJson = require('../package.json');
 // Microfrontend api, should match across gateway and microservices.
-const apiVersion = '0.0.1';
+const apiVersion = '1.0.0';
 
 const sharedDefaults = { singleton: true, strictVersion: true, requiredVersion: apiVersion };
 const shareMappings = (...mappings) => Object.fromEntries(mappings.map(map => [map, { ...sharedDefaults, version: apiVersion }]));

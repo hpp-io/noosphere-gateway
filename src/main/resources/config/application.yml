@@ -218,7 +218,7 @@ jhipster:
     management-include-pattern: /management/**
     title: Noosphere Gateway API
     description: Noosphere Gateway API documentation
-    version: 0.0.1
+    version: 1.0.0
     terms-of-service-url:
     contact-name:
     contact-url:
