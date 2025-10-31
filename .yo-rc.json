@@ -21,7 +21,7 @@
     "feignClient": null,
     "gradleEnterpriseHost": null,
     "jhipsterVersion": "8.11.0",
-    "languages": ["en", "zh-cn", "ja", "ko"],
+    "languages": ["en", "zh_cn", "ja", "ko"],
     "microfrontend": true,
     "microfrontends": [],
     "nativeLanguage": "en",

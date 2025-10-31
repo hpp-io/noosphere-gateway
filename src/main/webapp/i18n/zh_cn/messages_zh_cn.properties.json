@@ -1,0 +1,487 @@
+{
+  "activate": {
+    "messages": {
+      "error": "<strong>您的账号无法启用.</strong> 请重新注册.",
+      "success": "<strong>您的账号已启用.</strong>"
+    },
+    "title": "启用"
+  },
+  "buttons": {
+    "generate": "Generate"
+  },
+  "configuration": {
+    "filter": "过滤 (按前缀)",
+    "table": {
+      "prefix": "前缀",
+      "properties": "属性"
+    },
+    "title": "配置"
+  },
+  "entity": {
+    "action": {
+      "addblob": "增加 BLOB",
+      "addimage": "增加图片",
+      "back": "返回",
+      "cancel": "取消",
+      "delete": "删除",
+      "edit": "编辑",
+      "open": "打开",
+      "save": "保存",
+      "show": "显示 {{otherEntity}}",
+      "view": "查看"
+    },
+    "delete": {
+      "title": "确认删除"
+    },
+    "detail": {
+      "field": "字段",
+      "value": "值"
+    },
+    "filters": {
+      "clear": "清除筛选条件",
+      "clearAll": "清除所有筛选条件",
+      "set": "已设定以下筛选条件"
+    },
+    "validation": {
+      "datetimelocal": "本字段必须为日期和时间.",
+      "max": "本字段不能大于 {{max}}.",
+      "maxbytes": "本字段不多余 {{max}} 字符.",
+      "maxlength": "本字段最大长度为 {{max}} 个字符.",
+      "min": "本字段不能小于 {{min}}.",
+      "minbytes": "本字段不少于 {{min}} 字符.",
+      "minlength": "本字段最短长度为 {{min}} 个字符.",
+      "number": "本字段必须为数字.",
+      "pattern": "本字段必须符合模式 {{pattern}}.",
+      "required": "本字段不能为空."
+    }
+  },
+  "error": {
+    "NotNull": "域 {{fieldName}} 不能为空!",
+    "Size": "域 {{fieldName}} 不满足最大/最小值限制!",
+    "concurrencyFailure": "出现并发提交. 您的提交被拒绝.",
+    "emailexists": "该邮箱已被使用!",
+    "file": {
+      "could": {
+        "not": {
+          "extract": "无法解压缩文件"
+        }
+      },
+      "not": {
+        "image": "文件应该是图片格式，但实际却是 \"{{ fileType }}\""
+      }
+    },
+    "http": {
+      "400": "请求失败.",
+      "403": "您没有权限访问此页面.",
+      "404": "该页面不存在.",
+      "405": "不允许此方法访问页面.",
+      "500": "内部服务器错误."
+    },
+    "idexists": "新建的 {{entityName}} 不能包含ID",
+    "idinvalid": "无效的 ID",
+    "idnotfound": "找不到对应的 ID",
+    "idnull": "无效的 ID",
+    "internalServerError": "服务器内部错误",
+    "message": "消息:",
+    "server": {
+      "not": {
+        "reachable": "服务器无法访问"
+      }
+    },
+    "status": "状态:",
+    "subtitle": "抱歉,发生了一个错误.",
+    "title": "您的请求无法被处理",
+    "url": {
+      "not": {
+        "found": "未找到"
+      }
+    },
+    "userexists": "该用户名已存在!",
+    "validation": "服务器校验失败."
+  },
+  "gateway": {
+    "refresh": {
+      "button": "刷新"
+    },
+    "routes": {
+      "error": "警告: 没有可用服务实例!",
+      "servers": "服务实例地址",
+      "service": "服务名称",
+      "title": "当前可用路由",
+      "url": "映射路径"
+    },
+    "title": "网关"
+  },
+  "global": {
+    "browsehappy": "您目前使用<strong>过于老旧</strong>的浏览器, 建议您<a href=\"http://browsehappy.com/?locale=en\">升级浏览器</a>让您有更佳的上网体验.",
+    "field": {
+      "id": "ID"
+    },
+    "footer": {
+      "title": "这里是页脚"
+    },
+    "form": {
+      "confirmpassword": {
+        "label": "新密码确认",
+        "placeholder": "确认您的新密码"
+      },
+      "currentpassword": {
+        "label": "当前密码",
+        "placeholder": "您的当前密码"
+      },
+      "email": {
+        "label": "电子邮件",
+        "placeholder": "您的电子邮件"
+      },
+      "newpassword": {
+        "label": "新密码",
+        "placeholder": "您的新密码"
+      },
+      "username": {
+        "label": "账号",
+        "placeholder": "您的账号"
+      }
+    },
+    "item-count": "显示第 {{first}} - {{second}} 条，共 {{total}} 条",
+    "menu": {
+      "account": {
+        "login": "登录",
+        "logout": "退出",
+        "main": "账号",
+        "password": "密码",
+        "register": "注册",
+        "sessions": "会话",
+        "settings": "设置"
+      },
+      "admin": {
+        "apidocs": "API",
+        "configuration": "配置",
+        "database": "数据库",
+        "gateway": "网关",
+        "health": "服务状态",
+        "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)",
+        "logs": "日志",
+        "main": "管理",
+        "metrics": "资源监控",
+        "tracker": "追踪使用者",
+        "userManagement": "用户管理"
+      },
+      "entities": {
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "main": "数据"
+      },
+      "home": "首页",
+      "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+      "language": "语言"
+    },
+    "messages": {
+      "error": {
+        "dontmatch": "您输入的密码和确认密码不匹配!"
+      },
+      "info": {
+        "authenticated": {
+          "link": "登录"
+        },
+        "register": {
+          "link": "注册一个新账号",
+          "noaccount": "您还没有账号"
+        }
+      },
+      "validate": {
+        "confirmpassword": {
+          "maxlength": "您的确认密码长度不能超过50个字符",
+          "minlength": "您的确认密码长度至少要有4个字符",
+          "required": "您的确认密码是必填项."
+        },
+        "email": {
+          "invalid": "您的电子邮件格式格式不正确.",
+          "maxlength": "您的电子邮件长度不能超过50个字符",
+          "minlength": "您的电子邮件长度至少要有5个字符",
+          "required": "您的电子邮件是必填项."
+        },
+        "newpassword": {
+          "maxlength": "您的密码长度不能超过50个字符",
+          "minlength": "您的密码长度至少要有4个字符",
+          "required": "您的密码是必填项.",
+          "strength": "密码强度:"
+        }
+      }
+    },
+    "ribbon": {
+      "dev": "开发环境"
+    },
+    "title": "NoosphereGateway"
+  },
+  "health": {
+    "details": {
+      "details": "详细情况",
+      "error": "错误",
+      "name": "名称",
+      "properties": "属性",
+      "value": "值"
+    },
+    "indicator": {
+      "clientConfigServer": "Microservice Config Server",
+      "consul": "Consul",
+      "discoveryComposite": "Discovery Composite",
+      "diskSpace": "硬盘空间",
+      "hystrix": "Hystrix",
+      "livenessState": "Liveness state",
+      "mail": "电子邮件",
+      "ping": "Application",
+      "readinessState": "Readiness state",
+      "refreshScope": "Microservice Refresh Scope"
+    },
+    "refresh": {
+      "button": "刷新"
+    },
+    "stacktrace": "堆栈调用",
+    "status": {
+      "DOWN": "异常",
+      "UNKNOWN": "UNKNOWN",
+      "UP": "正常"
+    },
+    "table": {
+      "service": "服务名称",
+      "status": "状态"
+    },
+    "title": "服务状态"
+  },
+  "home": {
+    "github": "GitHub",
+    "like": "如果您喜欢 JHipster, 请记得给我们加星在",
+    "link": {
+      "bugtracker": "JHipster 的缺陷追踪",
+      "chat": "JHipster public chat room",
+      "follow": "在 Twitter 上联络 @jhipster",
+      "homepage": "JHipster 首頁",
+      "stackoverflow": "Stack Overflow 上关于 JHipster 的讨论"
+    },
+    "logged": {
+      "message": "您目前是以 \"{{username}}\" 账号登录."
+    },
+    "question": "如果您有任何有关 JHipster 的问题, 可以查阅下列资源:",
+    "subtitle": "这里是首页",
+    "title": "欢迎, {{name}}!"
+  },
+  "login": {
+    "form": {
+      "button": "登录",
+      "password": {
+        "placeholder": "您的密码"
+      },
+      "rememberme": "自动登录"
+    },
+    "messages": {
+      "error": {
+        "authentication": "<strong>登录失败!</strong> 请检查您的登录信息, 并重试一次."
+      }
+    },
+    "password": {
+      "forgot": "忘记密码?"
+    },
+    "title": "登录"
+  },
+  "logs": {
+    "filter": "筛选",
+    "nbloggers": "共有 {{ total }} 条日志.",
+    "table": {
+      "level": "等级",
+      "name": "名称"
+    },
+    "title": "日志"
+  },
+  "metrics": {
+    "cache": {
+      "cachename": "缓存名称",
+      "evictions": "收回计数",
+      "hits": "缓存命中计数",
+      "misses": "缓存遗漏计数",
+      "title": "Cache 统计"
+    },
+    "datasource": {
+      "count": "计数",
+      "max": "最大值",
+      "mean": "平均值",
+      "min": "最小值",
+      "name": "池使用情况",
+      "p50": "p50",
+      "p75": "p75",
+      "p95": "p95",
+      "p99": "p99",
+      "title": "数据源统计 (时间单位为毫秒)",
+      "usage": "用法"
+    },
+    "jvm": {
+      "gc": {
+        "marksweepcount": "标记清除次数",
+        "marksweeptime": "标记清除耗时",
+        "scavengecount": "回收次数",
+        "scavengetime": "回收耗时",
+        "title": "垃圾回收"
+      },
+      "http": {
+        "active": "使用中请求:",
+        "code": {
+          "notfound": "4xx (请求错误)",
+          "ok": "2xx (成功)",
+          "servererror": "5xx (服务器错误)"
+        },
+        "table": {
+          "average": "平均值",
+          "code": "状态码",
+          "count": "次数",
+          "max": "Max",
+          "mean": "平均数"
+        },
+        "title": "HTTP 请求 (事件 / 秒)",
+        "total": "请求总数:"
+      },
+      "memory": {
+        "heap": "堆内存",
+        "nonheap": "非堆内存",
+        "title": "内存",
+        "total": "总内存"
+      },
+      "threads": {
+        "all": "所有",
+        "blocked": "阻塞中",
+        "dump": {
+          "blockedcount": "阻塞次数",
+          "blockedtime": "阻塞时间",
+          "hide": "隐藏",
+          "id": "Id: ",
+          "lockname": "锁名称",
+          "show": "显示",
+          "stacktrace": "堆栈追踪",
+          "title": "线程转储",
+          "waitedcount": "等待次数",
+          "waitedtime": "等待时间"
+        },
+        "runnable": "可运行",
+        "timedwaiting": "定时等待",
+        "title": "线程",
+        "waiting": "等待中"
+      },
+      "title": "JVM 资源监控"
+    },
+    "refresh": {
+      "button": "刷新"
+    },
+    "servicesstats": {
+      "table": {
+        "count": "计数",
+        "max": "最大值",
+        "mean": "平均值",
+        "min": "最小值",
+        "name": "服务名称",
+        "p50": "p50",
+        "p75": "p75",
+        "p95": "p95",
+        "p99": "p99"
+      },
+      "title": "服务统计 (时间单位为毫秒)"
+    },
+    "title": "应用程序资源监控",
+    "updating": "更新中..."
+  },
+  "password": {
+    "form": {
+      "button": "保存"
+    },
+    "messages": {
+      "error": "<strong>发生错误!</strong> 密码无法被修改.",
+      "success": "<strong>密码修改成功!</strong>"
+    },
+    "title": "[<strong>{{username}}</strong>] 的密码"
+  },
+  "register": {
+    "form": {
+      "button": "注册"
+    },
+    "messages": {
+      "error": {
+        "emailexists": "<strong>邮件已经被注册!</strong> 请选择其它邮件.",
+        "fail": "<strong>注册失败!</strong> 请稍后再试.",
+        "userexists": "<strong>账号已被注册!</strong> 请选择其它账号."
+      },
+      "success": "<strong>注册成功!</strong> 请检查您的邮箱.",
+      "validate": {
+        "login": {
+          "maxlength": "您的账号长度不能超过50个字符",
+          "minlength": "您的账号长度至少要有1个字符",
+          "pattern": "Your username is invalid.",
+          "required": "您的账号是必填项."
+        }
+      }
+    },
+    "title": "注册"
+  },
+  "reset": {
+    "finish": {
+      "form": {
+        "button": "确定"
+      },
+      "messages": {
+        "error": "无法重置密码. 您必须在请求重置密码后24小时内完成重置.",
+        "info": "请设置新密码",
+        "keymissing": "无效的重置密码请求.",
+        "success": "<strong>您的密码已被重置.</strong> 请 "
+      },
+      "title": "重置密码"
+    },
+    "request": {
+      "form": {
+        "button": "重置密码"
+      },
+      "messages": {
+        "info": "请输入您注册时使用的邮件地址",
+        "success": "已将重置密码的操作说明发送到您的邮箱，请检查邮件."
+      },
+      "title": "重置您的密码"
+    }
+  },
+  "sessions": {
+    "messages": {
+      "error": "<strong>发生错误!</strong> 无法使 Session 失效.",
+      "success": "<strong>Session 已失效!</strong>"
+    },
+    "table": {
+      "button": "失效",
+      "date": "日期",
+      "ipaddress": "IP 位址",
+      "useragent": "用户代理"
+    },
+    "title": "[<strong>{{username}} 使用中的 Sessions</strong>]"
+  },
+  "settings": {
+    "form": {
+      "button": "保存",
+      "firstname": "名字",
+      "language": "语言",
+      "lastname": {
+        "placeholder": "您的姓氏"
+      }
+    },
+    "messages": {
+      "error": {
+        "emailexists": "<strong>该邮件地址已被使用!</strong> 请使用另外的邮件地址.",
+        "fail": "<strong>发生错误!</strong> 设置无法保存."
+      },
+      "success": "<strong>设置保存成功!</strong>",
+      "validate": {
+        "firstname": {
+          "maxlength": "您的名字长度不能超过50个字符",
+          "minlength": "您的名字长度至少要有1个字符",
+          "required": "您的名字是必填项."
+        },
+        "lastname": {
+          "maxlength": "您的姓氏长度不能超过50个字符",
+          "minlength": "您的姓氏长度至少要有1个字符",
+          "required": "您的姓氏是必填项."
+        }
+      }
+    },
+    "title": "[<strong>{{username}}</strong>] 的用户设置"
+  }
+}

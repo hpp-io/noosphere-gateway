@@ -1,0 +1,496 @@
+{
+  "activate": {
+    "messages": {
+      "error": "<strong>Your user could not be activated.</strong> Please use the registration form to sign up.",
+      "success": "<strong>Your user account has been activated.</strong> "
+    },
+    "title": "Activation"
+  },
+  "buttons": {
+    "generate": "Generate"
+  },
+  "configuration": {
+    "filter": "Filter (by prefix)",
+    "table": {
+      "prefix": "Prefix",
+      "properties": "Properties"
+    },
+    "title": "Configuration"
+  },
+  "entity": {
+    "action": {
+      "addblob": "Add blob",
+      "addimage": "Add image",
+      "back": "Back",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "edit": "Edit",
+      "open": "Open",
+      "save": "Save",
+      "show": "Show {{otherEntity}}",
+      "view": "View"
+    },
+    "delete": {
+      "title": "Confirm delete operation"
+    },
+    "detail": {
+      "field": "Field",
+      "value": "Value"
+    },
+    "filters": {
+      "clear": "Clear filter",
+      "clearAll": "Clear all filters",
+      "set": "Following filters are set"
+    },
+    "validation": {
+      "datetimelocal": "This field should be a date and time.",
+      "max": "This field cannot be more than {{ max }}.",
+      "maxbytes": "This field cannot be more than {{ max }} bytes.",
+      "maxlength": "This field cannot be longer than {{ max }} characters.",
+      "min": "This field should be at least {{ min }}.",
+      "minbytes": "This field should be at least {{ min }} bytes.",
+      "minlength": "This field is required to be at least {{ min }} characters.",
+      "number": "This field should be a number.",
+      "pattern": "This field should follow pattern for {{ pattern }}.",
+      "patternLogin": "This field can only contain letters, digits and e-mail addresses.",
+      "required": "This field is required."
+    }
+  },
+  "error": {
+    "NotNull": "Field {{ fieldName }} cannot be empty!",
+    "Size": "Field {{ fieldName }} does not meet min/max size requirements!",
+    "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
+    "emailexists": "Email is already in use!",
+    "file": {
+      "could": {
+        "not": {
+          "extract": "Could not extract file"
+        }
+      },
+      "not": {
+        "image": "File was expected to be an image but was found to be '{{ fileType }}'"
+      }
+    },
+    "http": {
+      "400": "Bad request.",
+      "403": "You are not authorized to access this page.",
+      "404": "The page does not exist.",
+      "405": "The HTTP verb you used is not supported for this URL.",
+      "500": "Internal server error."
+    },
+    "idexists": "A new {{ entityName }} cannot already have an ID",
+    "idinvalid": "Invalid ID",
+    "idnotfound": "ID cannot be found",
+    "idnull": "Invalid ID",
+    "internalServerError": "Internal server error",
+    "message": "Message:",
+    "server": {
+      "not": {
+        "reachable": "Server not reachable"
+      }
+    },
+    "status": "Status:",
+    "subtitle": "Sorry, an error has occurred.",
+    "title": "Your request cannot be processed",
+    "url": {
+      "not": {
+        "found": "Not found"
+      }
+    },
+    "userexists": "Login name already used!",
+    "validation": "Validation error on the server."
+  },
+  "gateway": {
+    "refresh": {
+      "button": "Refresh"
+    },
+    "routes": {
+      "error": "Warning: no server available!",
+      "servers": "Available servers",
+      "service": "Service",
+      "title": "Current routes",
+      "url": "URL"
+    },
+    "title": "Gateway"
+  },
+  "global": {
+    "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href='http://browsehappy.com/?locale=en'>upgrade your browser</a> to improve your experience.",
+    "field": {
+      "id": "ID"
+    },
+    "footer": {
+      "title": "This is your footer"
+    },
+    "form": {
+      "confirmpassword": {
+        "label": "New password confirmation",
+        "placeholder": "Confirm the new password"
+      },
+      "currentpassword": {
+        "label": "Current password",
+        "placeholder": "Current password"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Your email"
+      },
+      "newpassword": {
+        "label": "New password",
+        "placeholder": "New password"
+      },
+      "username": {
+        "label": "Username",
+        "placeholder": "Your username"
+      }
+    },
+    "item-count": "Showing {{first}} - {{second}} of {{total}} items.",
+    "menu": {
+      "account": {
+        "login": "Sign in",
+        "logout": "Sign out",
+        "main": "Account",
+        "password": "Password",
+        "register": "Register",
+        "sessions": "Sessions",
+        "settings": "Settings"
+      },
+      "admin": {
+        "apidocs": "API",
+        "configuration": "Configuration",
+        "database": "Database",
+        "gateway": "Gateway",
+        "health": "Health",
+        "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)",
+        "logs": "Logs",
+        "main": "Administration",
+        "metrics": "Metrics",
+        "tracker": "User tracker",
+        "userManagement": "User management"
+      },
+      "entities": {
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "main": "Entities"
+      },
+      "home": "Home",
+      "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+      "language": "Language"
+    },
+    "messages": {
+      "error": {
+        "dontmatch": "The password and its confirmation do not match!"
+      },
+      "info": {
+        "authenticated": {
+          "link": "Login"
+        },
+        "register": {
+          "link": "Register a new account",
+          "noaccount": "You don't have an account yet?"
+        }
+      },
+      "validate": {
+        "confirmpassword": {
+          "maxlength": "Your confirmation password cannot be longer than 50 characters.",
+          "minlength": "Your confirmation password is required to be at least 4 characters.",
+          "required": "Your confirmation password is required."
+        },
+        "email": {
+          "invalid": "Your email is invalid.",
+          "maxlength": "Your email cannot be longer than 50 characters.",
+          "minlength": "Your email is required to be at least 5 characters.",
+          "required": "Your email is required."
+        },
+        "newpassword": {
+          "maxlength": "Your password cannot be longer than 50 characters.",
+          "minlength": "Your password is required to be at least 4 characters.",
+          "required": "Your password is required.",
+          "strength": "Password strength:"
+        }
+      }
+    },
+    "ribbon": {
+      "dev": "Development"
+    },
+    "title": "NoosphereGateway"
+  },
+  "health": {
+    "details": {
+      "details": "Details",
+      "error": "Error",
+      "name": "Name",
+      "properties": "Properties",
+      "value": "Value"
+    },
+    "indicator": {
+      "clientConfigServer": "Microservice Config Server",
+      "consul": "Consul",
+      "discoveryComposite": "Discovery Composite",
+      "diskSpace": "Disk space",
+      "hystrix": "Hystrix",
+      "livenessState": "Liveness state",
+      "mail": "Email",
+      "ping": "Application",
+      "readinessState": "Readiness state",
+      "refreshScope": "Microservice Refresh Scope"
+    },
+    "refresh": {
+      "button": "Refresh"
+    },
+    "stacktrace": "Stacktrace",
+    "status": {
+      "DOWN": "DOWN",
+      "UNKNOWN": "UNKNOWN",
+      "UP": "UP"
+    },
+    "table": {
+      "service": "Service name",
+      "status": "Status"
+    },
+    "title": "Health Checks"
+  },
+  "home": {
+    "github": "GitHub",
+    "like": "If you like JHipster, don't forget to give us a star on",
+    "link": {
+      "bugtracker": "JHipster bug tracker",
+      "chat": "JHipster public chat room",
+      "follow": "follow @jhipster on Twitter",
+      "homepage": "JHipster homepage",
+      "stackoverflow": "JHipster on Stack Overflow"
+    },
+    "logged": {
+      "message": "You are logged in as user '{{username}}'."
+    },
+    "question": "If you have any question on JHipster:",
+    "subtitle": "This is your homepage",
+    "title": "Welcome, {{name}}!"
+  },
+  "login": {
+    "form": {
+      "button": "Sign in",
+      "password": {
+        "placeholder": "Your password"
+      },
+      "rememberme": "Remember me"
+    },
+    "messages": {
+      "error": {
+        "authentication": "<strong>Failed to sign in!</strong> Please check your credentials and try again."
+      }
+    },
+    "password": {
+      "forgot": "Did you forget your password?"
+    },
+    "title": "Sign in"
+  },
+  "logs": {
+    "filter": "Filter",
+    "nbloggers": "There are {{ total }} loggers.",
+    "table": {
+      "level": "Level",
+      "name": "Name"
+    },
+    "title": "Logs"
+  },
+  "metrics": {
+    "cache": {
+      "averageGetTime": "Average get time (µs)",
+      "averagePutTime": "Average put time (µs)",
+      "averageRemoveTime": "Average remove time (µs)",
+      "cachename": "Cache name",
+      "evictions": "Cache Evictions",
+      "gets": "Cache Gets",
+      "hitPercent": "Cache Hit %",
+      "hits": "Cache Hits",
+      "missPercent": "Cache Miss %",
+      "misses": "Cache Misses",
+      "puts": "Cache Puts",
+      "removals": "Cache Removals",
+      "title": "Cache statistics"
+    },
+    "datasource": {
+      "count": "Count",
+      "max": "Max",
+      "mean": "Mean",
+      "min": "Min",
+      "name": "Pool usage",
+      "p50": "p50",
+      "p75": "p75",
+      "p95": "p95",
+      "p99": "p99",
+      "title": "DataSource statistics (time in millisecond)",
+      "usage": "Connection Pool Usage"
+    },
+    "jvm": {
+      "gc": {
+        "marksweepcount": "Mark Sweep count",
+        "marksweeptime": "Mark Sweep time",
+        "scavengecount": "Scavenge count",
+        "scavengetime": "Scavenge time",
+        "title": "Garbage collections"
+      },
+      "http": {
+        "active": "Active requests:",
+        "code": {
+          "notfound": "Not found",
+          "ok": "Ok",
+          "servererror": "Server Error"
+        },
+        "table": {
+          "average": "Average",
+          "code": "Code",
+          "count": "Count",
+          "max": "Max",
+          "mean": "Mean"
+        },
+        "title": "HTTP requests (time in millisecond)",
+        "total": "Total requests:"
+      },
+      "memory": {
+        "heap": "Heap Memory",
+        "nonheap": "Non-Heap Memory",
+        "title": "Memory",
+        "total": "Total Memory"
+      },
+      "threads": {
+        "all": "All",
+        "blocked": "Blocked",
+        "dump": {
+          "blockedcount": "Blocked Count",
+          "blockedtime": "Blocked Time",
+          "hide": "Hide Stacktrace",
+          "id": "Id: ",
+          "lockname": "Lock name",
+          "show": "Show Stacktrace",
+          "stacktrace": "Stacktrace",
+          "title": "Threads dump",
+          "waitedcount": "Waited Count",
+          "waitedtime": "Waited Time"
+        },
+        "runnable": "Runnable",
+        "timedwaiting": "Timed waiting",
+        "title": "Threads",
+        "waiting": "Waiting"
+      },
+      "title": "JVM Metrics"
+    },
+    "refresh": {
+      "button": "Refresh"
+    },
+    "servicesstats": {
+      "table": {
+        "count": "Count",
+        "max": "Max",
+        "mean": "Mean",
+        "min": "Min",
+        "name": "Service name",
+        "p50": "p50",
+        "p75": "p75",
+        "p95": "p95",
+        "p99": "p99"
+      },
+      "title": "Services statistics (time in millisecond)"
+    },
+    "title": "Application Metrics",
+    "updating": "Updating..."
+  },
+  "password": {
+    "form": {
+      "button": "Save"
+    },
+    "messages": {
+      "error": "<strong>An error has occurred!</strong> The password could not be changed.",
+      "success": "<strong>Password changed!</strong>"
+    },
+    "title": "Password for [<strong>{{username}}</strong>]"
+  },
+  "register": {
+    "form": {
+      "button": "Register"
+    },
+    "messages": {
+      "error": {
+        "emailexists": "<strong>Email is already in use!</strong> Please choose another one.",
+        "fail": "<strong>Registration failed!</strong> Please try again later.",
+        "userexists": "<strong>Login name already registered!</strong> Please choose another one."
+      },
+      "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
+      "validate": {
+        "login": {
+          "maxlength": "Your username cannot be longer than 50 characters.",
+          "minlength": "Your username is required to be at least 1 character.",
+          "pattern": "Your username is invalid.",
+          "required": "Your username is required."
+        }
+      }
+    },
+    "title": "Registration"
+  },
+  "reset": {
+    "finish": {
+      "form": {
+        "button": "Validate new password"
+      },
+      "messages": {
+        "error": "Your password couldn't be reset. Remember a password request is only valid for 24 hours.",
+        "info": "Choose a new password",
+        "keymissing": "The reset key is missing.",
+        "success": "<strong>Your password has been reset.</strong> Please "
+      },
+      "title": "Reset password"
+    },
+    "request": {
+      "form": {
+        "button": "Reset password"
+      },
+      "messages": {
+        "info": "Enter the email address you used to register",
+        "success": "Check your email for details on how to reset your password."
+      },
+      "title": "Reset your password"
+    }
+  },
+  "sessions": {
+    "messages": {
+      "error": "<strong>An error has occurred!</strong> The session could not be invalidated.",
+      "success": "<strong>Session invalidated!</strong>"
+    },
+    "table": {
+      "button": "Invalidate",
+      "date": "Date",
+      "ipaddress": "IP address",
+      "useragent": "User Agent"
+    },
+    "title": "Active sessions for [<strong>{{username}}</strong>]"
+  },
+  "settings": {
+    "form": {
+      "button": "Save",
+      "firstname": "First Name",
+      "language": "Language",
+      "lastname": {
+        "placeholder": "Your last name"
+      }
+    },
+    "messages": {
+      "error": {
+        "emailexists": "<strong>Email is already in use!</strong> Please choose another one.",
+        "fail": "<strong>An error has occurred!</strong> Settings could not be saved."
+      },
+      "success": "<strong>Settings saved!</strong>",
+      "validate": {
+        "firstname": {
+          "maxlength": "Your first name cannot be longer than 50 characters",
+          "minlength": "Your first name is required to be at least 1 character",
+          "required": "Your first name is required."
+        },
+        "lastname": {
+          "maxlength": "Your last name cannot be longer than 50 characters",
+          "minlength": "Your last name is required to be at least 1 character",
+          "required": "Your last name is required."
+        }
+      }
+    },
+    "title": "User settings for [<strong> {{username}} </strong>]"
+  }
+}
