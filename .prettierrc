@@ -10,4 +10,4 @@ plugins:
 overrides:
   - files: "*.java"
     options:
-      tabWidth: 4
+      tabWidth: 2

@@ -1,0 +1,495 @@
+{
+  "activate": {
+    "messages": {
+      "error": "<strong>あなたのアカウントはアクティベートされませんでした。</strong>サインアップするために登録フォームを使ってサインアップしてください。",
+      "success": "<strong>あなたのアカウントはアクティベートされました。</strong>"
+    },
+    "title": "アクティベーション"
+  },
+  "buttons": {
+    "generate": "Generate"
+  },
+  "configuration": {
+    "filter": "フィルター (by prefix)",
+    "table": {
+      "prefix": "Prefix",
+      "properties": "プロパティ"
+    },
+    "title": "設定"
+  },
+  "entity": {
+    "action": {
+      "addblob": "Blobの追加",
+      "addimage": "イメージの追加",
+      "back": "戻る",
+      "cancel": "キャンセル",
+      "delete": "削除",
+      "edit": "編集",
+      "open": "開く",
+      "save": "保存",
+      "show": "表示 {{otherEntity}}",
+      "view": "表示"
+    },
+    "delete": {
+      "title": "削除の確認"
+    },
+    "detail": {
+      "field": "フィールド",
+      "value": "値"
+    },
+    "filters": {
+      "clear": "フィルタのクリア",
+      "clearAll": "すべてのフィルタのクリア",
+      "set": "次のフィルタが設定されています。"
+    },
+    "validation": {
+      "datetimelocal": "このフィールドは日付と時刻を入力してください。",
+      "max": "このフィールドは{{max}}以下で入力してください。",
+      "maxbytes": "このフィールドは{{max}}バイト以下で入力してください。",
+      "maxlength": "このフィールドは{{max}}文字以下で入力してください。",
+      "min": "このフィールドは{{min}}以上で入力してください。",
+      "minbytes": "このフィールドは{{min}}バイト以上で入力してください。",
+      "minlength": "このフィールドは{{min}}文字以上で入力してください。",
+      "number": "このフィールドは数値を入力してください。",
+      "pattern": "このフィールドはパターン{{pattern}}に従い入力してください。",
+      "required": "このフィールドを入力してください。"
+    }
+  },
+  "error": {
+    "NotNull": "フィールド{{fieldName}}を空にすることはできません。",
+    "Size": "フィールド{{fieldName}}が最小/最大サイズ要件を満たしていません。",
+    "concurrencyFailure": "他のユーザがあなたと同時にこのデータを変更しました。あなたの変更は拒否されました。",
+    "emailexists": "電子メールは既に使用されています。",
+    "file": {
+      "could": {
+        "not": {
+          "extract": "ファイルを抽出できませんでした。"
+        }
+      },
+      "not": {
+        "image": "ファイルはイメージ形式である必要がありますが、'{{ fileType }}' 形式がアップロードされました。"
+      }
+    },
+    "http": {
+      "400": "不正なリクエストです。",
+      "403": "このページヘのアクセスは許可されていません。",
+      "404": "ページが存在しません。",
+      "405": "使用したHTTPメソッドはこのURLでは許可されていません。",
+      "500": "サーバ内部エラーです。"
+    },
+    "idexists": "新しい{{entityName}}にIDを設定することはできません。",
+    "idinvalid": "無効なIDです。",
+    "idnotfound": "IDが見つかりません。",
+    "idnull": "IDがありません。",
+    "internalServerError": "サーバ内部エラー",
+    "message": "メッセージ:",
+    "server": {
+      "not": {
+        "reachable": "サーバーに到達できません。"
+      }
+    },
+    "status": "ステータス:",
+    "subtitle": "エラーが発生しました。",
+    "title": "リクエストは処理されませんでした。",
+    "url": {
+      "not": {
+        "found": "見つかりません"
+      }
+    },
+    "userexists": "ログイン名はすでに使用されています!",
+    "validation": "サーバで検証エラーが発生しました。"
+  },
+  "gateway": {
+    "refresh": {
+      "button": "リフレッシュ"
+    },
+    "routes": {
+      "error": "警告:使用可能なサーバがありません!",
+      "servers": "使用可能なサーバ",
+      "service": "サービス",
+      "title": "現在のルート",
+      "url": "URL"
+    },
+    "title": "ゲートウェイ"
+  },
+  "global": {
+    "browsehappy": "<strong>古い</strong>ブラウザーが使われています。より良い体験を得るために<a href='http://browsehappy.com/?locale=en'>ブラウザをアップデート</a>してください。",
+    "field": {
+      "id": "ID"
+    },
+    "footer": {
+      "title": "フッターです"
+    },
+    "form": {
+      "confirmpassword": {
+        "label": "新しいパスワード(確認)",
+        "placeholder": "新しいパスワード(確認)"
+      },
+      "currentpassword": {
+        "label": "現在のパスワード",
+        "placeholder": "現在のパスワード"
+      },
+      "email": {
+        "label": "メールアドレス",
+        "placeholder": "あなたのメールアドレス"
+      },
+      "newpassword": {
+        "label": "新しいパスワード",
+        "placeholder": "新しいパスワード"
+      },
+      "username": {
+        "label": "ユーザー名",
+        "placeholder": "ユーザー名"
+      }
+    },
+    "item-count": "{{total}}件中 {{first}} - {{second}}件目を表示しています。",
+    "menu": {
+      "account": {
+        "login": "ログイン",
+        "logout": "ログアウト",
+        "main": "アカウント",
+        "password": "パスワード",
+        "register": "登録",
+        "sessions": "セッション",
+        "settings": "設定"
+      },
+      "admin": {
+        "apidocs": "API",
+        "configuration": "設定",
+        "database": "データベース",
+        "gateway": "ゲートウェイ",
+        "health": "ヘルスステータス",
+        "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)",
+        "logs": "ログ",
+        "main": "管理",
+        "metrics": "メトリクス",
+        "tracker": "ユーザートラッカー",
+        "userManagement": "ユーザー管理"
+      },
+      "entities": {
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "main": "エンティティ"
+      },
+      "home": "ホーム",
+      "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+      "language": "言語"
+    },
+    "messages": {
+      "error": {
+        "dontmatch": "パスワードが一致しません!"
+      },
+      "info": {
+        "authenticated": {
+          "link": "ログイン"
+        },
+        "register": {
+          "link": "アカウントを登録する",
+          "noaccount": "アカウントをまだお持ちでないですか?"
+        }
+      },
+      "validate": {
+        "confirmpassword": {
+          "maxlength": "パスワード(確認)は50文字以下で入力してください。",
+          "minlength": "パスワード(確認)は4文字以上で入力してください。",
+          "required": "パスワード(確認)を入力してください。"
+        },
+        "email": {
+          "invalid": "正しいメールアドレスを入力してください。",
+          "maxlength": "メールアドレスは50文字以下で入力してください。",
+          "minlength": "メールアドレスは5文字以上で入力してください。",
+          "required": "メールアドレスを入力してください。"
+        },
+        "newpassword": {
+          "maxlength": "パスワードは50文字以下で入力してください。",
+          "minlength": "パスワードは4文字以上で入力してください。",
+          "required": "パスワードを入力してください。",
+          "strength": "パスワード強度:"
+        }
+      }
+    },
+    "ribbon": {
+      "dev": "Development"
+    },
+    "title": "NoosphereGateway"
+  },
+  "health": {
+    "details": {
+      "details": "詳細",
+      "error": "エラー",
+      "name": "名前",
+      "properties": "プロパティ",
+      "value": "値"
+    },
+    "indicator": {
+      "clientConfigServer": "Microservice Config Server",
+      "consul": "Consul",
+      "discoveryComposite": "Discovery Composite",
+      "diskSpace": "ディスクスペース",
+      "hystrix": "Hystrix",
+      "livenessState": "Liveness state",
+      "mail": "メール",
+      "ping": "アプリケーション",
+      "readinessState": "Readiness state",
+      "refreshScope": "Microservice Refresh Scope"
+    },
+    "refresh": {
+      "button": "リロード"
+    },
+    "stacktrace": "スタックトレース",
+    "status": {
+      "DOWN": "DOWN",
+      "UNKNOWN": "UNKNOWN",
+      "UP": "UP"
+    },
+    "table": {
+      "service": "サービス名",
+      "status": "ステータス"
+    },
+    "title": "ヘルスチェック"
+  },
+  "home": {
+    "github": "GitHub",
+    "like": "JHipsterを気に入ったら、是非スターをつけてください。",
+    "link": {
+      "bugtracker": "JHipsterのバグトラッカー",
+      "chat": "JHipsterの公開チャットルーム",
+      "follow": "Twitterの @jhipster",
+      "homepage": "JHipsterのサイト",
+      "stackoverflow": "Stack Overflow のJHipster"
+    },
+    "logged": {
+      "message": "'{{username}}'としてログインしています。"
+    },
+    "question": "JHipsterに関するお問い合わせは、こちらまで:",
+    "subtitle": "ここはトップページです。",
+    "title": "ようこそ, {{name}}!"
+  },
+  "login": {
+    "form": {
+      "button": "ログイン",
+      "password": {
+        "placeholder": "パスワード"
+      },
+      "rememberme": "自動ログイン"
+    },
+    "messages": {
+      "error": {
+        "authentication": "<strong>ログイン失敗!</strong> パスワードをチェックして再度入力してください。"
+      }
+    },
+    "password": {
+      "forgot": "パスワードを忘れてしまいましたか?"
+    },
+    "title": "ログイン"
+  },
+  "logs": {
+    "filter": "フィルター",
+    "nbloggers": "合計 {{ total }} 件のログがあります",
+    "table": {
+      "level": "Level",
+      "name": "Name"
+    },
+    "title": "ログ"
+  },
+  "metrics": {
+    "cache": {
+      "averageGetTime": "平均取得時間（µs）",
+      "averagePutTime": "平均書き込み時間（µs）",
+      "averageRemoveTime": "平均削除時間（µs）",
+      "cachename": "キャッシュ名",
+      "evictions": "追い出し数",
+      "gets": "読み込み数",
+      "hitPercent": "ヒット率%",
+      "hits": "ヒット数",
+      "missPercent": "ミス率%",
+      "misses": "ミス数",
+      "puts": "書き込み数",
+      "removals": "削除数",
+      "title": "キャッシュ統計"
+    },
+    "datasource": {
+      "count": "合計",
+      "max": "最大",
+      "mean": "中央値",
+      "min": "最小",
+      "name": "プール利用状況",
+      "p50": "p50",
+      "p75": "p75",
+      "p95": "p95",
+      "p99": "p99",
+      "title": "データベース統計（時間単位：ミリ秒）",
+      "usage": "コネクションプールの使用状況"
+    },
+    "jvm": {
+      "gc": {
+        "marksweepcount": "'Mark Sweep'合計",
+        "marksweeptime": "'Mark Sweep'時間",
+        "scavengecount": "'Scavenge'合計",
+        "scavengetime": "'Scavenge'時間",
+        "title": "ガベージコレクション"
+      },
+      "http": {
+        "active": "アクティブリクエスト数:",
+        "code": {
+          "notfound": "見つかりません",
+          "ok": "Ok",
+          "servererror": "サーバーエラー"
+        },
+        "table": {
+          "average": "平均",
+          "code": "コード",
+          "count": "合計",
+          "max": "最大",
+          "mean": "中央値"
+        },
+        "title": "HTTPリクエスト（時間単位：ミリ秒）",
+        "total": "トータルリクエススト数:"
+      },
+      "memory": {
+        "heap": "'Heap'メモリ",
+        "nonheap": "'Non-Heap'メモリ",
+        "title": "メモリ",
+        "total": "メモリ合計"
+      },
+      "threads": {
+        "all": "すべて",
+        "blocked": "ブロック済",
+        "dump": {
+          "blockedcount": "ブロック回数",
+          "blockedtime": "ブロック時間",
+          "hide": "非表示",
+          "id": "Id: ",
+          "lockname": "ロックプロセス名",
+          "show": "表示",
+          "stacktrace": "スタックトレース",
+          "title": "スレッドダンプ",
+          "waitedcount": "待機回数",
+          "waitedtime": "待機時間"
+        },
+        "runnable": "実行可能",
+        "timedwaiting": "待ち時間",
+        "title": "スレッド",
+        "waiting": "待機中"
+      },
+      "title": "JVMメトリクス"
+    },
+    "refresh": {
+      "button": "リロード"
+    },
+    "servicesstats": {
+      "table": {
+        "count": "合計",
+        "max": "最大",
+        "mean": "中央値",
+        "min": "最小",
+        "name": "サービス名",
+        "p50": "p50",
+        "p75": "p75",
+        "p95": "p95",
+        "p99": "p99"
+      },
+      "title": "サービス統計（時間単位：ミリ秒）"
+    },
+    "title": "アプリケーションメトリクス",
+    "updating": "更新中..."
+  },
+  "password": {
+    "form": {
+      "button": "保存"
+    },
+    "messages": {
+      "error": "<strong>エラーが発生しました!</strong> パスワードは更新されませんでした。",
+      "success": "<strong>パスワードが更新されました!</strong>"
+    },
+    "title": "[<strong>{{username}}</strong>]のパスワード"
+  },
+  "register": {
+    "form": {
+      "button": "登録する"
+    },
+    "messages": {
+      "error": {
+        "emailexists": "<strong>メールアドレスが既に登録されています!</strong> 別のメールアドレスを使用してください。",
+        "fail": "<strong>登録が失敗しました!</strong> 後ほど再度登録を行ってください。",
+        "userexists": "<strong>ユーザー名が既に登録されています!</strong> 別のユーザー名を使用してください。"
+      },
+      "success": "<strong>登録が完了しました!</strong> 送られたメールを確認して下さい。",
+      "validate": {
+        "login": {
+          "maxlength": "ユーザー名は50文字以下で入力してください",
+          "minlength": "ユーザー名は1文字以上で入力してください",
+          "pattern": "ユーザー名が無効です",
+          "required": "ユーザー名が必要です。"
+        }
+      }
+    },
+    "title": "登録"
+  },
+  "reset": {
+    "finish": {
+      "form": {
+        "button": "パスワードの再設定"
+      },
+      "messages": {
+        "error": "パスワードをリセットできませんでした。パスワードの要求は24時間以内に行ってください。",
+        "info": "新しいパスワードを入力してください。",
+        "keymissing": "リセットキーがありません。",
+        "success": "<strong>パスワードがリセットされました。</strong>"
+      },
+      "title": "パスワードのリセット"
+    },
+    "request": {
+      "form": {
+        "button": "パスワードのリセット"
+      },
+      "messages": {
+        "info": "登録に使用したメールアドレスを入力してください。",
+        "success": "パスワードのリセット方法の詳細については、電子メールを確認してください。"
+      },
+      "title": "パスワードのリセット"
+    }
+  },
+  "sessions": {
+    "messages": {
+      "error": "<strong>エラーが発生しました!</strong> セッションを無効化できませんでした。",
+      "success": "<strong>セッションが無効になりました!</strong>"
+    },
+    "table": {
+      "button": "無効にする",
+      "date": "日時",
+      "ipaddress": "IPアドレス",
+      "useragent": "User Agent"
+    },
+    "title": "[<strong>{{username}}</strong>]のアクティブセッション"
+  },
+  "settings": {
+    "form": {
+      "button": "保存する",
+      "firstname": "名",
+      "language": "言語",
+      "lastname": {
+        "placeholder": "姓"
+      }
+    },
+    "messages": {
+      "error": {
+        "emailexists": "<strong>メールアドレスが既に使われています!</strong> 別のメールアドレスを使用してください。",
+        "fail": "<strong>エラーが発生しました!</strong> 設定は保存されませんでした。"
+      },
+      "success": "<strong>設定を保存しました!</strong>",
+      "validate": {
+        "firstname": {
+          "maxlength": "名は50文字以下で入力してください",
+          "minlength": "名は1文字以上で入力してください",
+          "required": "名を入力してください"
+        },
+        "lastname": {
+          "maxlength": "姓は50文字以下で入力してください",
+          "minlength": "姓は1文字以上で入力してください",
+          "required": "姓を入力してください"
+        }
+      }
+    },
+    "title": "[<strong>{{username}}</strong>]の設定"
+  }
+}

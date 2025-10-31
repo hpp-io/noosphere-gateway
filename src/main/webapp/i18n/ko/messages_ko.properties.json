@@ -1,0 +1,487 @@
+{
+  "activate": {
+    "messages": {
+      "error": "<strong>당신의 계정이 활성화될 수 없습니다.</strong> 회원가입을 위해 등록 폼을 이용해 주세요.",
+      "success": "<strong>당신의 계정이 활성화되었습니다.</strong>"
+    },
+    "title": "계정 활성화"
+  },
+  "buttons": {
+    "generate": "생성"
+  },
+  "configuration": {
+    "filter": "필터 (prefix 기준)",
+    "table": {
+      "prefix": "Prefix",
+      "properties": "Properties"
+    },
+    "title": "설정"
+  },
+  "entity": {
+    "action": {
+      "addblob": "Blob 추가",
+      "addimage": "이미지 추가",
+      "back": "뒤로",
+      "cancel": "취소",
+      "delete": "삭제",
+      "edit": "수정",
+      "open": "Open",
+      "save": "저장",
+      "show": "Show {{otherEntity}}",
+      "view": "보기"
+    },
+    "delete": {
+      "title": "삭제 확인"
+    },
+    "detail": {
+      "field": "필드",
+      "value": "값"
+    },
+    "filters": {
+      "clear": "Clear filter",
+      "clearAll": "Clear all filters",
+      "set": "Following filters are set"
+    },
+    "validation": {
+      "datetimelocal": "날짜와 시간만 입력 가능합니다.",
+      "max": "최대 {{max}} 이하의 값만 입력 가능합니다.",
+      "maxbytes": "최대 {{max}} 바이트 미만이어야 합니다.",
+      "maxlength": "최대 {{max}}자 이하까지만 입력 가능합니다.",
+      "min": "최소 {{min}} 이상의 값만 입력 가능합니다.",
+      "minbytes": "최소 {{min}} 바이트 이상이어야 합니다.",
+      "minlength": "최소 {{min}}자 이상 입력해야 합니다.",
+      "number": "숫자만 입력 가능합니다.",
+      "pattern": "{{pattern}} 패턴에 따라 입력해야 합니다.",
+      "required": "필수항목입니다."
+    }
+  },
+  "error": {
+    "NotNull": "Field {{fieldName}} cannot be empty!",
+    "Size": "Field {{fieldName}} does not meet min/max size requirements!",
+    "concurrencyFailure": "Another user modified this data at the same time as you. Your changes were rejected.",
+    "emailexists": "Email is already in use!",
+    "file": {
+      "could": {
+        "not": {
+          "extract": "Could not extract file"
+        }
+      },
+      "not": {
+        "image": "File was expected to be an image but was found to be '{{ fileType }}'"
+      }
+    },
+    "http": {
+      "400": "Bad request.",
+      "403": "이 페이지에 접근할 권한이 없습니다.",
+      "404": "페이지가 존재하지 않습니다.",
+      "405": "The HTTP verb you used is not supported for this URL.",
+      "500": "Internal server error."
+    },
+    "idexists": "A new {{entityName}} cannot already have an ID",
+    "idinvalid": "Invalid Id",
+    "idnotfound": "ID cannot be found",
+    "idnull": "Invalid ID",
+    "internalServerError": "Internal server error",
+    "message": "메세지:",
+    "server": {
+      "not": {
+        "reachable": "Server not reachable"
+      }
+    },
+    "status": "상태:",
+    "subtitle": "죄송합니다, 에러가 발생했습니다.",
+    "title": "요청이 진행되지 못했습니다",
+    "url": {
+      "not": {
+        "found": "Not found"
+      }
+    },
+    "userexists": "Login name already used!",
+    "validation": "Validation error on the server."
+  },
+  "gateway": {
+    "refresh": {
+      "button": "Refresh"
+    },
+    "routes": {
+      "error": "Warning: no server available!",
+      "servers": "Available servers",
+      "service": "service",
+      "title": "Current routes",
+      "url": "URL"
+    },
+    "title": "Gateway"
+  },
+  "global": {
+    "browsehappy": "당신은 <strong>오래된</strong> 브라우저를 사용하고 있군요. <a href='http://browsehappy.com/?locale=en'>브라우저를 업그레이드</a> 해 당신의 경험을 발전시키세요.",
+    "field": {
+      "id": "ID"
+    },
+    "footer": {
+      "title": "하단영역"
+    },
+    "form": {
+      "confirmpassword": {
+        "label": "새 비밀번호 확인",
+        "placeholder": "새 비밀번호 확인"
+      },
+      "currentpassword": {
+        "label": "Current password",
+        "placeholder": "Current password"
+      },
+      "email": {
+        "label": "이메일",
+        "placeholder": "이메일을 입력하세요"
+      },
+      "newpassword": {
+        "label": "새 비밀번호",
+        "placeholder": "새 비밀번호"
+      },
+      "username": {
+        "label": "로그인 아이디",
+        "placeholder": "로그인 아이디"
+      }
+    },
+    "item-count": "Showing {{first}} - {{second}} of {{total}} items.",
+    "menu": {
+      "account": {
+        "login": "인증",
+        "logout": "로그아웃",
+        "main": "계정",
+        "password": "비밀번호",
+        "register": "등록",
+        "sessions": "세션",
+        "settings": "설정"
+      },
+      "admin": {
+        "apidocs": "API",
+        "configuration": "설정",
+        "database": "데이터베이스",
+        "gateway": "Gateway",
+        "health": "상태 확인",
+        "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)",
+        "logs": "로그",
+        "main": "관리자",
+        "metrics": "메트릭스",
+        "tracker": "사용자 트랙커",
+        "userManagement": "사용자 관리"
+      },
+      "entities": {
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "main": "Entities"
+      },
+      "home": "홈",
+      "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
+      "language": "언어"
+    },
+    "messages": {
+      "error": {
+        "dontmatch": "비밀번호가 일치하지 않습니다!"
+      },
+      "info": {
+        "authenticated": {
+          "link": "로그인"
+        },
+        "register": {
+          "link": "새로운 계정을 등록하세요",
+          "noaccount": "아직 계정이 없습니까?"
+        }
+      },
+      "validate": {
+        "confirmpassword": {
+          "maxlength": "확인할 비밀번호는 최대 50자 까지입니다",
+          "minlength": "확인할 비밀번호는 최소 4자 이상이어야 합니다",
+          "required": "확인할 비밀번호 입력이 필요합니다."
+        },
+        "email": {
+          "invalid": "잘못된 이메일입니다.",
+          "maxlength": "이메일은 최대 50자 까지입니다.",
+          "minlength": "이메일은 최소 5자 이상이어야 합니다",
+          "required": "이메일 입력이 필요합니다."
+        },
+        "newpassword": {
+          "maxlength": "비밀번호는 최대 50자 까지입니다.",
+          "minlength": "비밀번호는 최소 4자 이상이어야 합니다",
+          "required": "비밀번호 입력이 필요합니다.",
+          "strength": "비밀번호 길이:"
+        }
+      }
+    },
+    "ribbon": {
+      "dev": "Development"
+    },
+    "title": "NoosphereGateway"
+  },
+  "health": {
+    "details": {
+      "details": "세부사항",
+      "error": "오류",
+      "name": "이름",
+      "properties": "정보",
+      "value": "값"
+    },
+    "indicator": {
+      "clientConfigServer": "Microservice Config Server",
+      "consul": "Consul",
+      "discoveryComposite": "Discovery Composite",
+      "diskSpace": "디스크 공간",
+      "hystrix": "Hystrix",
+      "livenessState": "Liveness state",
+      "mail": "이메일",
+      "ping": "Application",
+      "readinessState": "Readiness state",
+      "refreshScope": "Microservice Refresh Scope"
+    },
+    "refresh": {
+      "button": "새로고침"
+    },
+    "stacktrace": "스택트레이스",
+    "status": {
+      "DOWN": "서비스 중",
+      "UNKNOWN": "UNKNOWN",
+      "UP": "사용할 수"
+    },
+    "table": {
+      "service": "서비스 이름",
+      "status": "상태"
+    },
+    "title": "상태 확인"
+  },
+  "home": {
+    "github": "GitHub",
+    "like": "JHipster 가 마음에 든다면, 별을 주는 것을 잊지 마세요.",
+    "link": {
+      "bugtracker": "JHipster 버그 트랙커",
+      "chat": "JHipster public chat room",
+      "follow": "트위터에서 @jhipster 에 접속하세요.",
+      "homepage": "JHipster 홈페이지",
+      "stackoverflow": "JHipster Stack Overflow"
+    },
+    "logged": {
+      "message": "'{{username}}'(으)로 로그인하셨습니다."
+    },
+    "question": "JHipster에 질문이 있다면:",
+    "subtitle": "이것은 당신의 홈페이지입니다.",
+    "title": "{{name}} 님 환영합니다!"
+  },
+  "login": {
+    "form": {
+      "button": "인증하기",
+      "password": {
+        "placeholder": "당신의 비밀번호"
+      },
+      "rememberme": "자동 로그인"
+    },
+    "messages": {
+      "error": {
+        "authentication": "<strong>인증 실패!</strong> credential을 확인하고 다시 시도해 주세요."
+      }
+    },
+    "password": {
+      "forgot": "비밀번호를 잊으셨나요?"
+    },
+    "title": "인증"
+  },
+  "logs": {
+    "filter": "필터",
+    "nbloggers": "총 {{ total }} 개의 logger가 있습니다.",
+    "table": {
+      "level": "레벨",
+      "name": "이름"
+    },
+    "title": "로그"
+  },
+  "metrics": {
+    "cache": {
+      "cachename": "캐시명",
+      "evictions": "제거(Eviction) 횟수",
+      "hits": "횟수",
+      "misses": "실패(Misses)",
+      "title": "Cache 통계"
+    },
+    "datasource": {
+      "count": "Count",
+      "max": "Max",
+      "mean": "Mean",
+      "min": "Min",
+      "name": "Pool usage",
+      "p50": "p50",
+      "p75": "p75",
+      "p95": "p95",
+      "p99": "p99",
+      "title": "DataSource statistics (time in millisecond)",
+      "usage": "Usage"
+    },
+    "jvm": {
+      "gc": {
+        "marksweepcount": "Mark Sweep 횟수",
+        "marksweeptime": "Mark Sweep 시간",
+        "scavengecount": "청소 횟수",
+        "scavengetime": "청소 시간",
+        "title": "가비지 콜렉션"
+      },
+      "http": {
+        "active": "활성화된 요청:",
+        "code": {
+          "notfound": "없는 페이지(Not found)",
+          "ok": "성공(Ok)",
+          "servererror": "서버 에러"
+        },
+        "table": {
+          "average": "평균(Average)",
+          "code": "상태코드",
+          "count": "횟수",
+          "max": "Max",
+          "mean": "대표값(Mean)"
+        },
+        "title": "HTTP 요청 (초당 이벤트)",
+        "total": "총 요청:"
+      },
+      "memory": {
+        "heap": "Heap 메모리",
+        "nonheap": "Non-Heap 메모리",
+        "title": "메모리",
+        "total": "총 메모리"
+      },
+      "threads": {
+        "all": "총",
+        "blocked": "Blocked",
+        "dump": {
+          "blockedcount": "Blocked 횟수",
+          "blockedtime": "Blocked 시간",
+          "hide": "숨기기",
+          "id": "Id: ",
+          "lockname": "Lock 명",
+          "show": "보이기",
+          "stacktrace": "스택트레이스",
+          "title": "쓰레드 덤프",
+          "waitedcount": "Waited 횟수",
+          "waitedtime": "Waited 시간"
+        },
+        "runnable": "Runnable",
+        "timedwaiting": "Timed waiting",
+        "title": "쓰레드",
+        "waiting": "Waiting"
+      },
+      "title": "JVM 메트릭스"
+    },
+    "refresh": {
+      "button": "새로고침"
+    },
+    "servicesstats": {
+      "table": {
+        "count": "횟수",
+        "max": "최대",
+        "mean": "평균",
+        "min": "최소",
+        "name": "서비스명",
+        "p50": "p50",
+        "p75": "p75",
+        "p95": "p95",
+        "p99": "p99"
+      },
+      "title": "서비스 통계 (밀리초 단위)"
+    },
+    "title": "애플리케이션 메트릭스",
+    "updating": "업데이트..."
+  },
+  "password": {
+    "form": {
+      "button": "저장"
+    },
+    "messages": {
+      "error": "<strong>에러가 발생했습니다!</strong> 비밀번호는 변경되지 않습니다.",
+      "success": "<strong>비밀번호 변경 완료!</strong>"
+    },
+    "title": "[<strong>{{username}}</strong>] 비밀번호"
+  },
+  "register": {
+    "form": {
+      "button": "등록"
+    },
+    "messages": {
+      "error": {
+        "emailexists": "<strong>이미 사용 중인 이메일입니다!</strong> 다른 이메일 주소를 선택하세요.",
+        "fail": "<strong>회원가입이 실패했습니다!</strong> 다시 시도해 주세요.",
+        "userexists": "<strong>로그인 아이디가 이미 존재합니다!</strong> 다른 아이디로 다시 시도해 주세요."
+      },
+      "success": "<strong>회원가입 내용이 저장되었습니다!</strong> 가입을 완료하기 위해 이메일을 확인해주세요.",
+      "validate": {
+        "login": {
+          "maxlength": "아이디는 최대 50자 까지입니다",
+          "minlength": "아이디는 적어도 1자 이상이어야 합니다",
+          "pattern": "Your username is invalid.",
+          "required": "아이디 입력이 필요합니다"
+        }
+      }
+    },
+    "title": "등록"
+  },
+  "reset": {
+    "finish": {
+      "form": {
+        "button": "새 비밀번호 검증"
+      },
+      "messages": {
+        "error": "비밀번호를 변경할 수 없습니다. 비밀번호 변경 요청은 오직 24시간 내에만 유효함을 기억하세요.",
+        "info": "새 비밀번호를 선택하세요.",
+        "keymissing": "변경키가 올바르지 않습니다.",
+        "success": "<strong>비밀번호가 변경되었습니다.</strong> "
+      },
+      "title": "비밀번호 변경"
+    },
+    "request": {
+      "form": {
+        "button": "비밀번호 변경"
+      },
+      "messages": {
+        "info": "회원가입 시 사용한 이메일 주소를 입력하세요.",
+        "success": "비밀번호 변경 방법에 대한 자세한 내용은 이메일을 확인하세요."
+      },
+      "title": "비밀번호 변경"
+    }
+  },
+  "sessions": {
+    "messages": {
+      "error": "<strong>에러가 발생했습니다!</strong> 세션은 무효화되지 않습니다.",
+      "success": "<strong>세션이 무효화되었습니다!</strong>"
+    },
+    "table": {
+      "button": "무효화",
+      "date": "날짜",
+      "ipaddress": "IP 주소",
+      "useragent": "User Agent"
+    },
+    "title": "[<strong>{{username}}</strong>] Active 세션"
+  },
+  "settings": {
+    "form": {
+      "button": "저장",
+      "firstname": "이름",
+      "language": "언어",
+      "lastname": {
+        "placeholder": "성"
+      }
+    },
+    "messages": {
+      "error": {
+        "emailexists": "<strong>이미 사용중인 이메일입니다!</strong> 다른 이메일 주소를 선택해 주세요.",
+        "fail": "<strong>에러가 발생했습니다!</strong> 사용자 설정은 저장되지 않습니다."
+      },
+      "success": "<strong>사용자 설정 저장 완료!</strong>",
+      "validate": {
+        "firstname": {
+          "maxlength": "이름은 최대 50자 까지입니다",
+          "minlength": "이름은 최소 1자 이상이어야 합니다",
+          "required": "이름을 입력해 주세요."
+        },
+        "lastname": {
+          "maxlength": "성은 최대 50자 까지입니다",
+          "minlength": "성은 최소 1자 이상이어야 합니다",
+          "required": "성을 입력해 주세요."
+        }
+      }
+    },
+    "title": "[<strong>{{username}}</strong>] 사용자 설정"
+  }
+}

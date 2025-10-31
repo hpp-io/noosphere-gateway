@@ -31,6 +31,7 @@ import {
   faUserPlus,
   faUsers,
   faUsersCog,
+  faWallet,
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -70,6 +71,7 @@ export const loadIcons = () => {
     faUserPlus,
     faUsers,
     faUsersCog,
+    faWallet,
     faWrench,
   );
 };
