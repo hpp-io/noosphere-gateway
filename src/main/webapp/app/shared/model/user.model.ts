@@ -3,6 +3,8 @@ export interface IUser {
   login?: string;
   firstName?: string;
   lastName?: string;
+  ownerAddress?: string;
+  name?: string;
   email?: string;
   activated?: boolean;
   langKey?: string;

@@ -150,6 +150,7 @@
         "logout": "Sign out",
         "main": "Account",
         "password": "Password",
+        "profile": "Profile",
         "register": "Register",
         "sessions": "Sessions",
         "settings": "Settings"

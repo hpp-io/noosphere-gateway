@@ -4,8 +4,10 @@
 // Import Bootstrap source files from node_modules
 @import 'bootstrap/scss/bootstrap';
 @import 'bootswatch/dist/cerulean/bootswatch';
+
 body {
   margin: 0;
+  background-color: #121212;
 }
 
 a {
@@ -23,7 +25,15 @@ a {
   }
 }
 
+h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
+  color: #ffffff;
+}
+
 .app-container {
+  margin: 50px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   box-sizing: border-box;
   .view-container {
     width: 100%;
@@ -57,13 +67,6 @@ a {
 /* ==========================================================================
 Browser Upgrade Prompt
 ========================================================================== */
-
-.browserupgrade {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
-}
 
 /* ==========================================================================
 Custom button styles
@@ -115,6 +118,13 @@ Generic styles
 .error {
   color: white;
   background-color: red;
+}
+
+.alert{
+  --bs-alert-color: white;
+  --bs-alert-bg: #4949b4;
+  --bs-alert-border-color: none;
+  --bs-alert-link-color: #ffffff;
 }
 
 .break {

@@ -9,6 +9,7 @@ const initialState = {
   errorMessage: null,
   users: [] as ReadonlyArray<IUser>,
   walletAddress: null,
+  apiKey: null,
 };
 
 const apiUrl = 'api/users';
@@ -33,6 +34,30 @@ export const createMyWalletAddress = createAsyncThunk('userManagement/fetch_user
 export const updateMyWalletAddress = createAsyncThunk('userManagement/fetch_user_wallet', async (entity: IUpdateWallet, thunkAPI) => {
   const requestUrl = `${apiUrl}/mine/wallet`;
   return axios.put<string>(requestUrl, entity);
+});
+
+export const createApiKey = createAsyncThunk('userManagement/fetch_user_wallet', async (entity: IUser, thunkAPI) => {
+  const requestUrl = `${apiUrl}/mine/api-key`;
+  const requestBody = {
+  };
+  return axios.post<string>(requestUrl, requestBody);
+});
+
+export const getApiKey = createAsyncThunk('userManagement/fetch_user_wallet', async () => {
+  const requestUrl = `${apiUrl}/mine/api-key`;
+  return axios.get<string>(requestUrl);
+});
+
+export const updateUser = createAsyncThunk('userManagement/fetch_user_wallet',
+    async (entity: IUser, thunkAPI) => {
+  const requestUrl = `${apiUrl}/${entity.id}`;
+  const requestBody = {
+    name: entity.name,
+    ownerAddress: entity.ownerAddress,
+    langKey: entity.langKey,
+    activated: entity.activated,
+  };
+  return axios.put<string>(requestUrl, requestBody);
 });
 
 export type UserManagementState = Readonly<typeof initialState>;
@@ -65,6 +90,7 @@ export const UserManagementSlice = createSlice({
       return {
         ...state,
         loading: false,
+        updating: false,
         updateSuccess: true,
         walletAddress: action.payload.data,
       };
@@ -79,6 +105,58 @@ export const UserManagementSlice = createSlice({
       };
     })
     .addMatcher(isPending(createMyWalletAddress, updateMyWalletAddress), (state, action) => {
+      return {
+        ...state,
+        updateSuccess: false,
+        loading: true,
+        updating: true,
+        errorMessage: null,
+      };
+    })
+    .addMatcher(isFulfilled(getApiKey), (state, action) => {
+      return {
+        ...state,
+        loading: false,
+        apiKey: action.payload.data,
+      };
+    })
+    .addMatcher(isFulfilled(createApiKey), (state, action) => {
+      return {
+        ...state,
+        loading: false,
+        updating: false,
+        updateSuccess: true,
+        apiKey: action.payload.data,
+      };
+    })
+    .addMatcher(isPending(getApiKey), (state, action) => {
+      return {
+        ...state,
+        updateSuccess: false,
+        loading: true,
+        updating: false,
+        errorMessage: null,
+      };
+    })
+    .addMatcher(isPending(createApiKey), (state, action) => {
+      return {
+        ...state,
+        updateSuccess: false,
+        loading: true,
+        updating: true,
+        errorMessage: null,
+      };
+    })
+    .addMatcher(isFulfilled(updateUser), (state, action) => {
+      return {
+        ...state,
+        loading: false,
+        updating: false,
+        updateSuccess: true,
+        entity: action.payload.data,
+      };
+    })
+    .addMatcher(isPending(updateUser), (state, action) => {
       return {
         ...state,
         updateSuccess: false,

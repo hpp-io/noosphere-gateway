@@ -149,6 +149,7 @@
         "logout": "退出",
         "main": "账号",
         "password": "密码",
+        "profile": "Profile",
         "register": "注册",
         "sessions": "会话",
         "settings": "设置"

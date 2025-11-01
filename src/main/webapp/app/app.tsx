@@ -3,7 +3,6 @@ import './app.scss';
 import 'app/config/dayjs';
 
 import React, { useEffect } from 'react';
-import { Card } from 'reactstrap';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
@@ -39,27 +38,27 @@ export const App = () => {
   return (
       <BrowserRouter basename={ baseHref }>
         <div className="app-container" style={ {paddingTop} }>
-          {/* <AppkitProvider>*/}
-            <ToastContainer position="top-left" className="toastify-container" toastClassName="toastify-toast"/>
-            <ErrorBoundary>
-              <Header
-                  isAuthenticated={ isAuthenticated }
-                  isAdmin={ isAdmin }
-                  currentLocale={ currentLocale }
-                  isInProduction={ isInProduction }
-                  isOpenAPIEnabled={ isOpenAPIEnabled }
-              />
-            </ErrorBoundary>
-            <div className="container-fluid view-container" id="app-view-container">
-              <Card className="jh-card">
-                <ErrorBoundary>
-                  <AppRoutes/>
-                </ErrorBoundary>
-              </Card>
-              <Footer/>
+          <ToastContainer position="top-left" className="toastify-container" toastClassName="toastify-toast"/>
+          <ErrorBoundary>
+            {/* Header Bar */ }
+            <Header
+                isAuthenticated={ isAuthenticated }
+                isAdmin={ isAdmin }
+                currentLocale={ currentLocale }
+                isInProduction={ isInProduction }
+                isOpenAPIEnabled={ isOpenAPIEnabled }
+            />
+
+            {/* Application Content */ }
+            <div className="app-content" role="main">
+              <AppRoutes/>
             </div>
-          {/* </AppkitProvider>*/}
+
+            {/* Footer */ }
+            <Footer/>
+          </ErrorBoundary>
         </div>
+
       </BrowserRouter>
   );
 };

@@ -149,6 +149,7 @@
         "logout": "로그아웃",
         "main": "계정",
         "password": "비밀번호",
+        "profile": "프로필",
         "register": "등록",
         "sessions": "세션",
         "settings": "설정"
