@@ -1,14 +1,12 @@
 import './home.scss';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
-import { Alert, Col, Row, Button, Input } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Alert, Col, Row } from 'reactstrap';
 
 import { getLoginUrl, REDIRECT_URL } from 'app/shared/util/url-utils';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { createMyWalletAddress } from "app/shared/reducers/user-management";
 
 export const Home = () => {
   const account = useAppSelector(state => state.authentication.account);
@@ -27,15 +25,7 @@ export const Home = () => {
     }
   });
 
-  const [ownerAddress, setOwnerAddress] = useState(null);
 
-  const createWalletAddress = () => {
-    if (ownerAddress) {
-      dispatch(createMyWalletAddress({ownerAddress}));
-    }
-  };
-
-  console.log("walletAddress", walletAddress);
   return (
       <Row>
         <Col md="9">
@@ -52,24 +42,18 @@ export const Home = () => {
                     You are logged in as user { account.login }.
                   </Translate>
                 </Alert>
-                <p className="lead">
-                  { walletAddress ? (
-                  <span>Wallet Address: {walletAddress}</span>
-                      ) :
-                      (
-                          <div>
-                            <Input value={ownerAddress} onChange={e => setOwnerAddress(e.target.value)} />
-                          <Button onClick={createWalletAddress} color={isFetching ? 'danger' : 'primary'} disabled={isFetching}>
-                            <FontAwesomeIcon icon="wallet" />
-                            &nbsp;
-                            <Translate component="span" contentKey="buttons.generate">
-                              Refresh
-                            </Translate>
-                          </Button>
-                          </div>
-                      )
-                  }
-                </p>
+                <Alert color="success">
+                  <a
+                      className="alert-link"
+                      onClick={ () =>
+                          navigate('/profile', {
+                            state: {from: pageLocation},
+                          })
+                      }
+                  >
+                    <Translate contentKey="global.menu.account.profile">Profile</Translate>
+                  </a>
+                </Alert>
               </div>
           ) : (
               <div>

@@ -8,6 +8,13 @@
 body {
   margin: 0;
   background-color: #121212;
+  color: #ffffff;
+  input:disabled{
+    background-color: #AFAFAFFF;
+  }
+  .form-control:disabled{
+    background-color: #AFAFAFFF;
+  }
 }
 
 a {

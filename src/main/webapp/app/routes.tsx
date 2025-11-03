@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router';
+import {Route } from 'react-router';
 
 import Loadable from 'react-loadable';
 
@@ -20,6 +20,11 @@ const Admin = Loadable({
   loading: () => loading,
 });
 
+const Container = Loadable({
+  loader: () => import(/* webpackChunkName: "administration" */ 'app/modules/container'),
+  loading: () => loading,
+});
+
 const AppRoutes = () => {
   return (
     <div className="view-routes">
@@ -34,7 +39,7 @@ const AppRoutes = () => {
             </PrivateRoute>
           }
         />
-        <Route path="sign-in" element={<LoginRedirect />} />
+        <Route path="login" element={<LoginRedirect />} />
         <Route
           path="*"
           element={
@@ -43,7 +48,23 @@ const AppRoutes = () => {
             </PrivateRoute>
           }
         />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+            path="profile"
+            element={
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
+                <Profile />
+              </PrivateRoute>
+            }
+        />
+        <Route
+            path="container/*"
+            element={
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
+                <Container />
+              </PrivateRoute>
+            }
+        />
+        {/* <Route path="/oauth2/authorization/oidc" element={<LoginRedirect />}/>*/}
         <Route path="*" element={<PageNotFound />} />
       </ErrorBoundaryRoutes>
     </div>
