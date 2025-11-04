@@ -167,6 +167,7 @@
         "tracker": "사용자 트랙커",
         "userManagement": "사용자 관리"
       },
+      "container": "Container",
       "entities": {
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
         "main": "Entities"

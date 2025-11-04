@@ -67,7 +67,7 @@ describe('Authentication reducer tests', () => {
 
   describe('Other cases', () => {
     it('should properly reset the current state when a logout is requested', () => {
-      const payload = { data: { logoutUrl: 'http://localhost:8080/logout' } };
+      const payload = { data: { logoutUrl: 'http://localhost:8280/logout' } };
       const toTest = authentication(undefined, { type: logoutServer.fulfilled.type, payload });
       expect(toTest).toMatchObject({
         loading: false,

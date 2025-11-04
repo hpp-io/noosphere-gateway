@@ -40,14 +40,14 @@ const AppRoutes = () => {
           }
         />
         <Route path="login" element={<LoginRedirect />} />
-        <Route
-          path="*"
+         <Route
+          path="entities/*"
           element={
             <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
               <EntitiesRoutes />
             </PrivateRoute>
           }
-        />
+         />
         <Route
             path="profile"
             element={

@@ -54,7 +54,7 @@ class LogoutResourceIT {
 
     @Test
     void getLogoutInformation() {
-        final String ORIGIN_URL = "http://localhost:8080";
+        final String ORIGIN_URL = "http://localhost:8280";
         String logoutUrl =
             this.registrations.findByRegistrationId("oidc")
                 .map(oidc -> oidc.getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString())
@@ -65,7 +65,7 @@ class LogoutResourceIT {
                 mockAuthentication(registerAuthenticationToken(authorizedClientService, clientRegistration, authenticationToken(claims)))
             )
             .post()
-            .uri("http://localhost:8080/api/logout")
+            .uri("http://localhost:8280/api/logout")
             .header(HttpHeaders.ORIGIN, ORIGIN_URL)
             .exchange()
             .expectStatus()

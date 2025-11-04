@@ -1,8 +1,10 @@
+import { StatusCode } from "app/shared/model/enumerations/status-code.model";
+
 export interface ISearchContainer {
   name?: string | null;
   price?: string | null;
   searchText?: string | null;
-  statusCode?: string | null;
+  statusCode?: StatusCode | null;
   createdByUserId?: string | null;
   page: number,
   size: number,
