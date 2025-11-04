@@ -18,7 +18,7 @@ export default defineConfig({
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return (await import('./src/test/javascript/cypress/plugins/index')).default(on, config);
     },
-    baseUrl: 'http://localhost:8080/',
+    baseUrl: 'http://localhost:8280',
     specPattern: 'src/test/javascript/cypress/e2e/**/*.cy.ts',
     supportFile: 'src/test/javascript/cypress/support/index.ts',
     experimentalRunAllSpecs: true,

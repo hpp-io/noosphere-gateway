@@ -167,6 +167,7 @@
         "tracker": "追踪使用者",
         "userManagement": "用户管理"
       },
+      "container": "Container",
       "entities": {
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
         "main": "数据"

@@ -1,0 +1,80 @@
+.container-search-section {
+  margin-bottom: 80px;
+  .search-form{
+    margin-bottom: 50px;
+  }
+  .search-result-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e3e8f0; // Subtle border
+
+    thead {
+      background: linear-gradient(90deg, #52b5ff, #1e90ff); // Blue gradient header
+      color: #ffffff; // White header text
+      font-weight: bold;
+      text-transform: uppercase;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      th {
+        background: inherit;
+      }
+    }
+
+    tbody {
+      tr {
+
+        &:nth-child(even) {
+          background-color: #eaf6ff; // Fancy pastel blue for even rows
+        }
+
+        &:nth-child(odd) {
+          background-color: #ffffff; // White for odd rows
+        }
+
+        &:hover {
+          background-color: #eaf4ff !important; // Light pastel blue for hover
+          //transform: translateY(-3px); // Slight lift effect on hover
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Add a soft shadow on hover
+        }
+      }
+
+
+      td {
+        padding: 10px;
+        border: 1px solid #e3e8f0; // Faint borders between cells
+        text-align: left;
+        color: #212529; // Standard text color
+        &:hover{
+          background-color: inherit;
+        }
+      }
+
+      //// Status row highlighting
+      //td:nth-child(5) { // Assuming the Status Code column is #5
+      //  &.ACTIVE {
+      //    background: linear-gradient(90deg, #b2f7c3, #4caf50); // Green gradient
+      //    color: #1b5e20; // Dark green
+      //    font-weight: bold;
+      //  }
+      //
+      //  &.INACTIVE {
+      //    background: linear-gradient(90deg, #ffcdd2, #f44336); // Red gradient
+      //    color: #b71c1c; // Dark red
+      //    font-weight: bold;
+      //  }
+      //
+      //  &.PENDING {
+      //    background: linear-gradient(90deg, #ffe082, #ffa000); // Yellow-Orange gradient
+      //    color: #e65100; // Bold orange text
+      //    font-weight: bold;
+      //  }
+      //}
+    }
+
+    // Add rounded corners to the entire table
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+}

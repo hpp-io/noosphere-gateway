@@ -13,13 +13,13 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
     ports:
-      - 127.0.0.1:8080:8080
+      - 127.0.0.1:8280:8280
     healthcheck:
       test:
         - CMD
         - curl
         - -f
-        - http://localhost:8080/management/health
+        - http://localhost:8280/management/health
       interval: 5s
       timeout: 5s
       retries: 40

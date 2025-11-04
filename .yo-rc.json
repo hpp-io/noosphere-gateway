@@ -28,7 +28,7 @@
     "packageName": "io.hpp.noosphere.gw",
     "prodDatabaseType": null,
     "reactive": true,
-    "serverPort": 8080,
+    "serverPort": 8280,
     "serviceDiscoveryType": "consul",
     "skipUserManagement": true,
     "syncUserWithIdp": false,

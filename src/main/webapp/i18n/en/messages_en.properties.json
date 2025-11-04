@@ -168,6 +168,7 @@
         "tracker": "User tracker",
         "userManagement": "User management"
       },
+      "container": "Container",
       "entities": {
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
         "main": "Entities"
