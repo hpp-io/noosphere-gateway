@@ -5,7 +5,8 @@ import { Button, Input, Form, Row, Col, Table } from 'reactstrap';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { searchContainers } from './container.reducer';
 import { defaultValue } from "app/shared/model/search-container.model";
-import { StatusCode } from "app/shared/model/enumerations/status-code.model"; // Example reducer
+import { StatusCode } from "app/shared/model/enumerations/status-code.model";
+import { IDownloadContainer } from "app/shared/model/download-container.model"; // Example reducer
 
 export const SearchContainer = () => {
   const dispatch = useAppDispatch();
@@ -56,13 +57,25 @@ export const SearchContainer = () => {
   };
 
 
+  const mapToDownloadContainer = (item: any): IDownloadContainer => ({
+    id: item.id,
+    name: item.name,
+    image: item.image,
+    external: item.external,
+    port: item.port,
+    command: item.command,
+    parameters: item.parameters,
+    generatesProofs: item.generatesProofs,
+    price: item.price
+  });
+
   const downloadAsJson = () => {
     if (selectedItems.size === 0) {
       alert('Please select items to download');
       return;
     }
 
-    const selectedData = Array.from(selectedItems).map(index => searchResults[index]);
+    const selectedData:  IDownloadContainer[] = Array.from(selectedItems).map(index => mapToDownloadContainer((searchResults[index])));
 
     const jsonContent = JSON.stringify(selectedData, null, 2);
     const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
