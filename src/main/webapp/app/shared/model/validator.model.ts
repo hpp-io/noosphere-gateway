@@ -1,4 +1,4 @@
-export interface IContainer {
+export interface IValidator {
   id?: string;
   name?: string | null;
   walletAddress?: string;
@@ -8,5 +8,5 @@ export interface IContainer {
   parameters?: string;
 }
 
-export const defaultValue: Readonly<IContainer> = {
+export const defaultValue: Readonly<IValidator> = {
 };

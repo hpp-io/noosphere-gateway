@@ -12,6 +12,9 @@ const entitiesMenuItems = () => (
       <MenuItem icon="box-archive" to="/container">
         <Translate contentKey="global.menu.container">Container</Translate>
       </MenuItem>
+      <MenuItem icon="box-archive" to="/validator">
+        <Translate contentKey="global.menu.validator">Validator</Translate>
+      </MenuItem>
     </>
 );
 

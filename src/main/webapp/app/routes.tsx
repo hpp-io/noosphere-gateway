@@ -21,7 +21,12 @@ const Admin = Loadable({
 });
 
 const Container = Loadable({
-  loader: () => import(/* webpackChunkName: "administration" */ 'app/modules/container'),
+  loader: () => import('app/modules/container'),
+  loading: () => loading,
+});
+
+const Validator = Loadable({
+  loader: () => import( 'app/modules/validator'),
   loading: () => loading,
 });
 
@@ -61,6 +66,14 @@ const AppRoutes = () => {
             element={
               <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
                 <Container />
+              </PrivateRoute>
+            }
+        />
+        <Route
+            path="validator/*"
+            element={
+              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
+                <Validator />
               </PrivateRoute>
             }
         />
