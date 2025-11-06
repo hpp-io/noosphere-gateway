@@ -52,6 +52,7 @@
       "minlength": "本字段最短长度为 {{min}} 个字符.",
       "number": "本字段必须为数字.",
       "pattern": "本字段必须符合模式 {{pattern}}.",
+      "patternLogin": "This field can only contain letters, digits and e-mail addresses.",
       "required": "本字段不能为空."
     }
   },
@@ -174,7 +175,10 @@
       },
       "home": "首页",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
-      "language": "语言"
+      "language": "语言",
+      "products": {
+        "main": "Products"
+      }
     },
     "messages": {
       "error": {
@@ -295,10 +299,18 @@
   },
   "metrics": {
     "cache": {
+      "averageGetTime": "Average get time (µs)",
+      "averagePutTime": "Average put time (µs)",
+      "averageRemoveTime": "Average remove time (µs)",
       "cachename": "缓存名称",
       "evictions": "收回计数",
+      "gets": "Cache Gets",
+      "hitPercent": "Cache Hit %",
       "hits": "缓存命中计数",
+      "missPercent": "Cache Miss %",
       "misses": "缓存遗漏计数",
+      "puts": "Cache Puts",
+      "removals": "Cache Removals",
       "title": "Cache 统计"
     },
     "datasource": {

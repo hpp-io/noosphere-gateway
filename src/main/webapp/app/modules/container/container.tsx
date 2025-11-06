@@ -5,12 +5,16 @@ import { Button, Input, Form, Row, Col, Table } from 'reactstrap';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { searchContainers } from './container.reducer';
 import { defaultValue } from "app/shared/model/search-container.model";
-import { StatusCode } from "app/shared/model/enumerations/status-code.model"; // Example reducer
+import { StatusCode } from "app/shared/model/enumerations/status-code.model";
+import { IDownloadContainer } from "app/shared/model/download-container.model"; // Example reducer
 
 export const SearchContainer = () => {
   const dispatch = useAppDispatch();
   const searchResults = useAppSelector(state => state.container.entities); // Adjust state slice name if different
   const [searchCriteria, setSearchCriteria] = useState(defaultValue);
+  const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
+  const [selectAll, setSelectAll] = useState(false);
+
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -29,6 +33,64 @@ export const SearchContainer = () => {
     }
     dispatch(searchContainers(tempCriteria)); // Attach backend search logic here
   };
+
+  const handleSelectItem = (index: number) => {
+    const newSelectedItems = new Set(selectedItems);
+    if (newSelectedItems.has(index)) {
+      newSelectedItems.delete(index);
+    } else {
+      newSelectedItems.add(index);
+    }
+    setSelectedItems(newSelectedItems);
+    setSelectAll(newSelectedItems.size === searchResults.length);
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedItems(new Set());
+      setSelectAll(false);
+    } else {
+      const allIndices: Set<any> = new Set(searchResults.map((_, index) => index));
+      setSelectedItems(allIndices);
+      setSelectAll(true);
+    }
+  };
+
+
+  const mapToDownloadContainer = (item: any): IDownloadContainer => ({
+    id: item.id,
+    name: item.name,
+    image: item.image,
+    external: item.external,
+    port: item.port,
+    command: item.command,
+    parameters: item.parameters,
+    generatesProofs: item.generatesProofs,
+    price: item.price
+  });
+
+  const downloadAsJson = () => {
+    if (selectedItems.size === 0) {
+      alert('Please select items to download');
+      return;
+    }
+
+    const selectedData:  IDownloadContainer[] = Array.from(selectedItems).map(index => mapToDownloadContainer((searchResults[index])));
+
+    const jsonContent = JSON.stringify(selectedData, null, 2);
+    const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `containers_${new Date().toISOString().split('T')[0]}.json`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+
+
 
   return (
     <div className="search-container container-search-section">
@@ -99,37 +161,69 @@ export const SearchContainer = () => {
       </Form>
 
       {searchResults && searchResults.length > 0 && (
-        <Table responsive striped className="search-result-table mt-4">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Price</th>
-              <th>Parameters</th>
-              {/* <th>Status Code</th>*/}
-              {/* <th>Created By</th>*/}
-            </tr>
-          </thead>
-          <tbody>
-            {searchResults.map((result, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{result.name}</td>
-                <td>{result.description}</td>
-                <td>{result.price}</td>
-                <td>{result.parameters}</td>
-                {/* <td>{result.statusCode}</td>*/}
-                {/* <td>{result.createdByUserId}</td>*/}
+          <>
+            <div className="d-flex justify-content-between align-items-center mt-4 mb-3">
+              <div>
+              <span className="text-muted">
+                {selectedItems.size} of {searchResults.length} items selected
+              </span>
+              </div>
+              <div>
+                <Button
+                    color="info"
+                    size="sm"
+                    onClick={downloadAsJson}
+                    disabled={selectedItems.size === 0}
+                >
+                  Download JSON
+                </Button>
+              </div>
+            </div>
+
+            <Table responsive striped className="search-result-table">
+              <thead>
+              <tr>
+                <th>
+                  <Input
+                      type="checkbox"
+                      checked={selectAll}
+                      onChange={handleSelectAll}
+                      title="Select All"
+                  />
+                </th>
+                <th>#</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Parameters</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+              </thead>
+              <tbody>
+              {searchResults.map((result, index) => (
+                  <tr key={index} className={selectedItems.has(index) ? 'table-active' : ''}>
+                    <td>
+                      <Input
+                          type="checkbox"
+                          checked={selectedItems.has(index)}
+                          onChange={() => handleSelectItem(index)}
+                      />
+                    </td>
+                    <td>{index + 1}</td>
+                    <td>{result.name}</td>
+                    <td>{result.description}</td>
+                    <td>{result.price}</td>
+                    <td>{result.parameters}</td>
+                  </tr>
+              ))}
+              </tbody>
+            </Table>
+          </>
       )}
 
       {searchResults && searchResults.length === 0 && (
-        <div className="text-center mt-4">No results found.</div>
+          <div className="text-center mt-4">No results found.</div>
       )}
+
     </div>
   );
 };

@@ -52,6 +52,7 @@
       "minlength": "このフィールドは{{min}}文字以上で入力してください。",
       "number": "このフィールドは数値を入力してください。",
       "pattern": "このフィールドはパターン{{pattern}}に従い入力してください。",
+      "patternLogin": "This field can only contain letters, digits and e-mail addresses.",
       "required": "このフィールドを入力してください。"
     }
   },
@@ -174,7 +175,10 @@
       },
       "home": "ホーム",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
-      "language": "言語"
+      "language": "言語",
+      "products": {
+        "main": "Products"
+      }
     },
     "messages": {
       "error": {
