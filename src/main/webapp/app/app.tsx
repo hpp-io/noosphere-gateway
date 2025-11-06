@@ -15,7 +15,7 @@ import { hasAnyAuthority } from 'app/shared/auth/private-route';
 import ErrorBoundary from 'app/shared/error/error-boundary';
 import { AUTHORITIES } from 'app/config/constants';
 import AppRoutes from 'app/routes';
-// import AppkitProvider from 'app/app-kit';
+import AppkitProvider from './app-kit';
 
 const baseHref = document.querySelector('base').getAttribute('href').replace(/\/$/, '');
 
@@ -34,8 +34,10 @@ export const App = () => {
   const isOpenAPIEnabled = useAppSelector(state => state.applicationProfile.isOpenAPIEnabled);
 
   const paddingTop = '60px';
+
   // prettier-ignore
   return (
+      <AppkitProvider cookies={null}>
       <BrowserRouter basename={ baseHref }>
         <div className="app-container" style={ {paddingTop} }>
           <ToastContainer position="top-left" className="toastify-container" toastClassName="toastify-toast"/>
@@ -58,8 +60,8 @@ export const App = () => {
             <Footer/>
           </ErrorBoundary>
         </div>
-
       </BrowserRouter>
+      </AppkitProvider>
   );
 };
 
