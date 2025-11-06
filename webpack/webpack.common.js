@@ -9,6 +9,7 @@ const { hashElement } = require('folder-hash');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 const utils = require('./utils.js');
 const environment = require('./environment');
+const dotenv = require('dotenv');
 
 const getTsLoaderRule = () => {
   return [
@@ -31,6 +32,9 @@ const getTsLoaderRule = () => {
   ];
 };
 
+const env = dotenv.config({ path: path.resolve(__dirname, '../.env') }).parsed || {};
+
+
 module.exports = async options => {
   const development = options.env === 'development';
   const languagesHash = await hashElement(path.resolve(__dirname, '../src/main/webapp/i18n'), {
@@ -38,6 +42,12 @@ module.exports = async options => {
     encoding: 'hex',
     files: { include: ['*.json'] },
   });
+
+  const envKeys = Object.keys(env).reduce((prev, next) => {
+    prev[`process.env.${next}`] = JSON.stringify(env[next]);
+    return prev;
+  }, {});
+
 
   return merge(
     {
@@ -63,6 +73,20 @@ module.exports = async options => {
         alias: utils.mapTypescriptAliasToWebpackAlias(),
         fallback: {
           path: require.resolve('path-browserify'),
+          // Add fallbacks for React Native modules
+          '@react-native-async-storage/async-storage': false,
+          'react-native': false,
+          'react-native-randombytes': false,
+          'react-native-crypto': false,
+          'react-native-get-random-values': false,
+          // Add other common React Native fallbacks
+          crypto: require.resolve('crypto-browserify'),
+          stream: require.resolve('stream-browserify'),
+          buffer: require.resolve('buffer'),
+          util: require.resolve('util'),
+          url: require.resolve('url'),
+          assert: require.resolve('assert'),
+          process: require.resolve('process'),
         },
       },
       module: {
@@ -98,7 +122,17 @@ module.exports = async options => {
           DEVELOPMENT: JSON.stringify(development),
           VERSION: JSON.stringify(environment.VERSION),
           SERVER_API_URL: JSON.stringify(environment.SERVER_API_URL),
+          'process.env.NODE_ENV': JSON.stringify(development ? 'development' : 'production'),
+          // Add all environment variables from .env file
+          ...envKeys,
+
         }),
+        // Provide polyfills for Node.js globals
+        new webpack.ProvidePlugin({
+          Buffer: ['buffer', 'Buffer'],
+          process: 'process',
+        }),
+
         new ESLintPlugin({
           configType: 'flat',
           extensions: ['ts', 'tsx'],

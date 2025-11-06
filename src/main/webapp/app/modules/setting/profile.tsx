@@ -1,7 +1,11 @@
+import './profile.scss';
+
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { createMyApiKey, createMyWalletAddress, getMyApiKey, getMyWalletAddress, updateUser } from 'app/shared/reducers/user-management';
 import { Alert, Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
+import { useAppKit, useAppKitAccount } from '@reown/appkit/react';
+import { useAccount, useDisconnect } from 'wagmi';
 
 export const Profile = () => {
   const dispatch = useAppDispatch();
@@ -15,6 +19,22 @@ export const Profile = () => {
     lastName: account?.lastName || '',
     email: account?.email || '',
   });
+
+
+  const { open: openWalletDialog , close: closeWalletDialog } = useAppKit();
+
+  const { address, isConnected } = useAccount();
+
+  const { disconnect } = useDisconnect();
+
+
+  const openWalletDialogClicked = () =>{
+    openWalletDialog({ view: "Connect" });
+  }
+
+  const disconnectWalletClicked = () =>{
+    disconnect();
+  }
 
 
   const [successMessage, setSuccessMessage] = useState('');
@@ -35,13 +55,13 @@ export const Profile = () => {
     dispatch(getMyApiKey());
   }, []);
 
-  useEffect(() => {
-    console.log("walletAddress", walletAddress);
-  }, [walletAddress]);
 
   useEffect(() => {
-    console.log("apiKey", apiKey);
-  }, [apiKey]);
+    if (address) {
+      setOwnerAddress(address);
+      closeWalletDialog();
+    }
+  }, [address]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
@@ -75,8 +95,6 @@ export const Profile = () => {
   };
 
 
-  // console.log("walletAddress", walletAddress);
-  // console.log("apiKey", apiKey);
   return (
       <div className="profile-page">
         <Row>
@@ -170,6 +188,18 @@ export const Profile = () => {
                         onChange={ e => setOwnerAddress(e.target.value) }
                         placeholder="Enter your owner address"
                     />
+                    <br/>
+                    {isConnected === true ?(
+                        <Button color="primary" disabled={ userLoading } onClick={ disconnectWalletClicked }>
+                          { 'Disconnect Wallet' }
+                        </Button>
+                    ):(
+                        <Button color="primary" disabled={ userLoading } onClick={ openWalletDialogClicked }>
+                          { 'Connect Wallet' }
+                        </Button>
+                    )}
+
+                    <br/>
                     <br/>
                     <Button color="primary" disabled={ userLoading } onClick={ onCreateWalletAddress }>
                       { 'Regenerate Wallet Address' }
