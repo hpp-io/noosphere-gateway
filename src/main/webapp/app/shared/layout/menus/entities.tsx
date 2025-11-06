@@ -19,7 +19,7 @@ const entitiesMenuItems = () => (
 export const EntitiesMenu = ({ isAuthenticated = false }) => (
   <NavDropdown
     icon="th-list"
-    name={translate('global.menu.entities.main')}
+    name={translate('global.menu.products.main')}
     id="entity-menu"
     data-cy="entity"
     style={{ maxHeight: '80vh', overflow: 'auto' }}

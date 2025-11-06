@@ -52,6 +52,7 @@
       "minlength": "최소 {{min}}자 이상 입력해야 합니다.",
       "number": "숫자만 입력 가능합니다.",
       "pattern": "{{pattern}} 패턴에 따라 입력해야 합니다.",
+      "patternLogin": "This field can only contain letters, digits and e-mail addresses.",
       "required": "필수항목입니다."
     }
   },
@@ -174,7 +175,10 @@
       },
       "home": "홈",
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
-      "language": "언어"
+      "language": "언어",
+      "products": {
+        "main": "Products"
+      }
     },
     "messages": {
       "error": {
@@ -295,10 +299,18 @@
   },
   "metrics": {
     "cache": {
+      "averageGetTime": "Average get time (µs)",
+      "averagePutTime": "Average put time (µs)",
+      "averageRemoveTime": "Average remove time (µs)",
       "cachename": "캐시명",
       "evictions": "제거(Eviction) 횟수",
+      "gets": "Cache Gets",
+      "hitPercent": "Cache Hit %",
       "hits": "횟수",
+      "missPercent": "Cache Miss %",
       "misses": "실패(Misses)",
+      "puts": "Cache Puts",
+      "removals": "Cache Removals",
       "title": "Cache 통계"
     },
     "datasource": {
