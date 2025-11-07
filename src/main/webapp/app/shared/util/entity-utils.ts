@@ -20,7 +20,7 @@ export const cleanEntity = entity => {
  * @param idList Elements to map.
  * @returns The list of objects with mapped ids.
  */
-export const mapIdList = (idList: ReadonlyArray<any>) => idList?.filter((id: any) => id !== '').map((id: any) => ({ id }));
+export const mapIdList = (idList: ReadonlyArray<any>) => idList?.filter((id: any) => id !== '').map((id: any) => ({id}));
 
 export const overrideSortStateWithQueryParams = (paginationBaseState: ISortBaseState, locationSearch: string) => {
   const params = new URLSearchParams(locationSearch);
@@ -35,7 +35,7 @@ export const overrideSortStateWithQueryParams = (paginationBaseState: ISortBaseS
 
 export const overridePaginationStateWithQueryParams = (paginationBaseState: IPaginationBaseState, locationSearch: string) => {
   const sortedPaginationState: IPaginationBaseState = <IPaginationBaseState>(
-    overrideSortStateWithQueryParams(paginationBaseState, locationSearch)
+      overrideSortStateWithQueryParams(paginationBaseState, locationSearch)
   );
   const params = new URLSearchParams(locationSearch);
   const page = params.get('page');
@@ -45,14 +45,47 @@ export const overridePaginationStateWithQueryParams = (paginationBaseState: IPag
   return sortedPaginationState;
 };
 
-export const parseStringToJsonObject = (inputString: string)=>{
+export const parseStringToJsonObject = (inputString: string,) => {
   let returnObject = null;
-  if (inputString){
-    returnObject=   JSON.parse(inputString);
+  if (inputString) {
+    returnObject = JSON.parse(inputString);
   }
-  if (returnObject){
+  if (returnObject) {
     return returnObject;
   } else {
     return undefined;
   }
 }
+
+export const parseEnvVariablesStringToJsonObject = (inputString: string,) => {
+  let returnObject = null;
+  if (inputString) {
+    returnObject = JSON.parse(inputString);
+  }
+  if (returnObject) {
+    return returnObject;
+  } else {
+    return undefined;
+  }
+}
+
+export const convertEnvVariablesToString = (environmentVariables): string => {
+  return "{" + environmentVariables
+  .filter(env => env.name && env.name.trim() !== '')
+  .map(env => `"${ env.name }": ${ env.value || '' }"`)
+  .join(',') + "}";
+};
+
+export const convertVolumesToString = (volumes): string => {
+  return "[" + volumes
+  .filter(volume => volume.trim() !== '')
+  .map(volume => `"${ volume.trim() }"`)
+  .join(',') + "]";
+};
+
+export const convertPaymentsToString = (payments): string => {
+  return "{" + payments
+  .filter(payment => payment.address && payment.address.trim() !== '')
+  .map(payment => `"${ payment.address }": "${ payment.amount || '0' }"`)
+  .join(',') + "}";
+};

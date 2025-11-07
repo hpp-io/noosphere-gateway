@@ -1,22 +1,11 @@
-
-export interface IAcceptedPayment {
-  address?: string;
-  price?: number;
-}
-
-export interface IEnv {
-  address?: string;
-  price?: number;
-}
-
 export interface IDownloadContainer {
   id?: any;
   image?: string;
   port?: number;
   command?: string;
-  env?: object;
+  env?: {};
   volumes?: string[];
-  acceptedPayments?: IAcceptedPayment[];
+  acceptedPayments?: {};
 }
 
 export const defaultValueContainer: Readonly<IDownloadContainer> = {

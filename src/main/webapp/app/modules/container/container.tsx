@@ -80,6 +80,7 @@ export const SearchContainer = () => {
 
     const selectedData: IDownloadContainer[] = Array.from(selectedItems).map(index => mapToDownloadContainer((searchResults[index])));
 
+    console.log(selectedData);
     const jsonContent = JSON.stringify(selectedData, null, 2);
     const blob = new Blob([jsonContent], {type: 'application/json;charset=utf-8;'});
     const link = document.createElement('a');
