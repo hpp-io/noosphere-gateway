@@ -15,14 +15,16 @@ public class ValidatorDTO implements Serializable {
     private String name;
 
     private String walletAddress;
+    private String verifierAddress;
+    private String imageName;
+    private Integer port;
+    private Integer command;
+    private Integer environmentVariables;
+    private Integer volumes;
+    private Integer payments;
 
-    private BigDecimal price;
 
     private StatusCode statusCode;
-
-    private String description;
-
-    private String parameters;
 
 
 }

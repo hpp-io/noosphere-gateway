@@ -8,7 +8,8 @@ public class SearchValidatorVm {
 
     private String name;
     private String searchText;
-    private Double price;
+    private String walletAddress;
+    private String verifierAddress;
     private StatusCode statusCode;
     private String createdByUserId;
 }

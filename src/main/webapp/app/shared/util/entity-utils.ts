@@ -44,3 +44,15 @@ export const overridePaginationStateWithQueryParams = (paginationBaseState: IPag
   }
   return sortedPaginationState;
 };
+
+export const parseStringToJsonObject = (inputString: string)=>{
+  let returnObject = null;
+  if (inputString){
+    returnObject=   JSON.parse(inputString);
+  }
+  if (returnObject){
+    return returnObject;
+  } else {
+    return undefined;
+  }
+}

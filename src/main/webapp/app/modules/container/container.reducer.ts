@@ -22,7 +22,7 @@ export const searchContainers = createAsyncThunk('container/fetch_entities',
       const requestBody = {
         name: entity.name,
         searchText: entity.searchText,
-        price: entity.price,
+        walletAddress: entity.walletAddress,
         statusCode: entity.statusCode,
         createdByUserId: entity.createdByUserId,
       };

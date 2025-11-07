@@ -9,7 +9,7 @@ const ValidatorRoutes = () => {
         <ErrorBoundaryRoutes>
           {/* <Route path={`${match.url}/new`} element={<FacilityUpdate/>} />*/ }
           {/* <Route path={`${match.url}/:id/edit`} element={<FacilityUpdate />} />*/ }
-          <Route path={ '' } element={ <Validator/> }/>
+          <Route path={ '/search' } element={ <Validator/> }/>
         </ErrorBoundaryRoutes>
       </div>
   );

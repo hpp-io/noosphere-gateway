@@ -8,7 +8,7 @@ public class SearchContainerVm {
 
     private String name;
     private String searchText;
-    private Double price;
+    private String walletAddress;
     private StatusCode statusCode;
     private String createdByUserId;
 }

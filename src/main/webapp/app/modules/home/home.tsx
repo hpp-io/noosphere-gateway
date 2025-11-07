@@ -63,7 +63,19 @@ export const Home = () => {
                           })
                       }
                   >
-                    <Translate contentKey="global.menu.container">Container</Translate>
+                    <Translate contentKey="global.menu.container.title">Container</Translate>
+                  </a>
+                </Alert>
+                <Alert color="success">
+                  <a
+                      className="alert-link"
+                      onClick={ () =>
+                          navigate('/validator', {
+                            state: {from: pageLocation},
+                          })
+                      }
+                  >
+                    <Translate contentKey="global.menu.validator.title">Validator</Translate>
                   </a>
                 </Alert>
               </div>
