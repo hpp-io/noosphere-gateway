@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { createAsyncThunk, isFulfilled, isPending } from '@reduxjs/toolkit';
+import { createAsyncThunk, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
 import { createEntitySlice, EntityState } from "app/shared/reducers/reducer.utils";
 import { defaultValue, IContainer } from "app/shared/model/container.model";
 import { ISearchContainer } from "app/shared/model/search-container.model";
@@ -22,11 +22,17 @@ export const searchContainers = createAsyncThunk('container/fetch_entities',
       const requestBody = {
         name: entity.name,
         searchText: entity.searchText,
-        price: entity.price,
+        walletAddress: entity.walletAddress,
         statusCode: entity.statusCode,
         createdByUserId: entity.createdByUserId,
       };
       return axios.post<IContainer[]>(requestUrl, requestBody);
+    });
+
+export const createContainer = createAsyncThunk('container/create_entity',
+    async (entity: Omit<IContainer, 'id'>, thunkAPI) => {
+      const result = await axios.post<IContainer>(apiUrl, entity);
+      return result;
     });
 
 export const ContainerSlice = createEntitySlice({
@@ -44,6 +50,24 @@ export const ContainerSlice = createEntitySlice({
       state.errorMessage = null;
       state.updateSuccess = false;
       state.loading = true;
+    })
+    .addMatcher(isFulfilled(createContainer), (state, action) => {
+      state.loading = false;
+      state.updating = false;
+      state.updateSuccess = true;
+      state.entity = action.payload.data;
+    })
+    .addMatcher(isPending(createContainer), state => {
+      state.errorMessage = null;
+      state.updateSuccess = false;
+      state.updating = true;
+      state.loading = true;
+    })
+    .addMatcher(isRejected(searchContainers, createContainer), (state, action) => {
+      state.loading = false;
+      state.updating = false;
+      state.updateSuccess = false;
+      state.errorMessage = action.error.message;
     })
     ;
   },

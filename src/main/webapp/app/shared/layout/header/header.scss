@@ -58,3 +58,14 @@ Navbar styles
   top: 0;
   z-index: 1031;
 }
+
+#container-menu, #validator-menu {
+}
+
+.dropdown {
+  a {
+    span {
+      padding-left: 5px;
+    }
+  }
+}

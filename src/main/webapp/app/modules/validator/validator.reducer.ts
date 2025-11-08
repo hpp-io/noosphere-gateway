@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { createAsyncThunk, isFulfilled, isPending } from '@reduxjs/toolkit';
+import { createAsyncThunk, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
 import { createEntitySlice, EntityState } from "app/shared/reducers/reducer.utils";
 import { defaultValue, IValidator } from "app/shared/model/validator.model";
 import { ISearchValidator } from "app/shared/model/search-validator.model";
@@ -22,11 +22,18 @@ export const searchValidators = createAsyncThunk('validator/fetch_entities',
       const requestBody = {
         name: entity.name,
         searchText: entity.searchText,
-        price: entity.price,
+        walletAddress: entity.walletAddress,
+        verifierAddress: entity.verifierAddress,
         statusCode: entity.statusCode,
         createdByUserId: entity.createdByUserId,
       };
       return axios.post<IValidator[]>(requestUrl, requestBody);
+    });
+
+export const createValidator = createAsyncThunk('validator/create_entity',
+    async (entity: Omit<IValidator, 'id'>, thunkAPI) => {
+      const result = await axios.post<IValidator>(apiUrl, entity);
+      return result;
     });
 
 export const ValidatorSlice = createEntitySlice({
@@ -44,6 +51,24 @@ export const ValidatorSlice = createEntitySlice({
       state.errorMessage = null;
       state.updateSuccess = false;
       state.loading = true;
+    })
+    .addMatcher(isFulfilled(createValidator), (state, action) => {
+      state.loading = false;
+      state.updating = false;
+      state.updateSuccess = true;
+      state.entity = action.payload.data;
+    })
+    .addMatcher(isPending(createValidator), state => {
+      state.errorMessage = null;
+      state.updateSuccess = false;
+      state.updating = true;
+      state.loading = true;
+    })
+    .addMatcher(isRejected(searchValidators, createValidator), (state, action) => {
+      state.loading = false;
+      state.updating = false;
+      state.updateSuccess = false;
+      state.errorMessage = action.error.message;
     })
     ;
   },

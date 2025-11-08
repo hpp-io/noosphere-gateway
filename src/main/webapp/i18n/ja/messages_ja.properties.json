@@ -168,7 +168,11 @@
         "tracker": "ユーザートラッカー",
         "userManagement": "ユーザー管理"
       },
-      "container": "Container",
+      "container": {
+        "add": "Add Container",
+        "search": "Search Containers",
+        "title": "Container"
+      },
       "entities": {
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
         "main": "エンティティ"
@@ -178,6 +182,11 @@
       "language": "言語",
       "products": {
         "main": "Products"
+      },
+      "validator": {
+        "add": "Add Validator",
+        "search": "Search Validators",
+        "title": "Validator"
       }
     },
     "messages": {

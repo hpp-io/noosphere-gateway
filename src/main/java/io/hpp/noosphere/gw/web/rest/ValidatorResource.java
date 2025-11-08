@@ -1,10 +1,13 @@
 package io.hpp.noosphere.gw.web.rest;
 
 import static io.hpp.noosphere.gw.config.Constants.API_URL_SLASH;
+import static io.hpp.noosphere.gw.config.Constants.SERVICE_API_CONTAINERS;
 import static io.hpp.noosphere.gw.config.Constants.SERVICE_API_VALIDATORS;
 import static io.hpp.noosphere.gw.config.Constants.SERVICE_API_PREFIX;
 import static io.hpp.noosphere.gw.config.Constants.SERVICE_API_SEARCH;
 
+import io.hpp.noosphere.gw.web.rest.errors.BadRequestAlertException;
+import io.hpp.noosphere.gw.web.rest.vm.ValidatorDTO;
 import io.hpp.noosphere.gw.web.rest.vm.ValidatorDTO;
 import io.hpp.noosphere.gw.web.rest.vm.search.SearchValidatorVm;
 import jakarta.validation.Valid;
@@ -43,6 +46,26 @@ public class ValidatorResource extends BaseResource<ValidatorDTO> {
     super(ValidatorDTO.class, clientManager, discoveryClient, webClientBuilder);
   }
 
+
+  @PostMapping
+  public Mono<ResponseEntity<ValidatorDTO>> createValidator(
+    @Valid @RequestBody ValidatorDTO validatorDTO,
+    ServerWebExchange exchange
+  ) {
+    LOG.debug("REST request to create Validator : {}", validatorDTO);
+
+    if (validatorDTO.getId() != null) {
+      return Mono.error(new BadRequestAlertException("A new validator cannot already have an ID", ENTITY_NAME, "idexists"));
+    }
+
+    return Mono.defer(() -> {
+      String serviceUrl = getNoosphereHubServiceUrl();
+      String requestUrl = serviceUrl + SERVICE_API_PREFIX + SERVICE_API_VALIDATORS;
+
+      return executePost(exchange, requestUrl, validatorDTO)
+        .doOnSuccess(result -> LOG.debug("Created validator with ID: {}", result.getBody().getId()));
+    });
+  }
 
   @PostMapping("/search")
   public Mono<ResponseEntity<List<ValidatorDTO>>> search(

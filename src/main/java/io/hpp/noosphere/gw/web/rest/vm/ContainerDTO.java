@@ -15,14 +15,15 @@ public class ContainerDTO implements Serializable {
     private String name;
 
     private String walletAddress;
+    private String imageName;
+    private Integer port;
+    private String command;
+    private String environmentVariables;
+    private String volumes;
+    private String payments;
 
-    private BigDecimal price;
 
     private StatusCode statusCode;
-
-    private String description;
-
-    private String parameters;
 
 
 }

@@ -5,6 +5,7 @@ import static io.hpp.noosphere.gw.config.Constants.SERVICE_API_CONTAINERS;
 import static io.hpp.noosphere.gw.config.Constants.SERVICE_API_PREFIX;
 import static io.hpp.noosphere.gw.config.Constants.SERVICE_API_SEARCH;
 
+import io.hpp.noosphere.gw.web.rest.errors.BadRequestAlertException;
 import io.hpp.noosphere.gw.web.rest.vm.ContainerDTO;
 import io.hpp.noosphere.gw.web.rest.vm.search.SearchContainerVm;
 import jakarta.validation.Valid;
@@ -43,6 +44,25 @@ public class ContainerResource extends BaseResource<ContainerDTO> {
     super(ContainerDTO.class, clientManager, discoveryClient, webClientBuilder);
   }
 
+  @PostMapping
+  public Mono<ResponseEntity<ContainerDTO>> createContainer(
+    @Valid @RequestBody ContainerDTO containerDTO,
+    ServerWebExchange exchange
+  ) {
+    LOG.debug("REST request to create Container : {}", containerDTO);
+
+    if (containerDTO.getId() != null) {
+      return Mono.error(new BadRequestAlertException("A new container cannot already have an ID", ENTITY_NAME, "idexists"));
+    }
+
+    return Mono.defer(() -> {
+      String serviceUrl = getNoosphereHubServiceUrl();
+      String requestUrl = serviceUrl + SERVICE_API_PREFIX + SERVICE_API_CONTAINERS;
+
+      return executePost(exchange, requestUrl, containerDTO)
+        .doOnSuccess(result -> LOG.debug("Created container with ID: {}", result.getBody().getId()));
+    });
+  }
 
   @PostMapping("/search")
   public Mono<ResponseEntity<List<ContainerDTO>>> search(
@@ -74,6 +94,5 @@ public class ContainerResource extends BaseResource<ContainerDTO> {
       return executeGet(exchange, requestUrl);
     });
   }
-
 
 }
