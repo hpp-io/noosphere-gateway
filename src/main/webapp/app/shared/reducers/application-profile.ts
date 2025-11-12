@@ -11,7 +11,12 @@ const initialState = {
 
 export type ApplicationProfileState = Readonly<typeof initialState>;
 
-export const getProfile = createAsyncThunk('applicationProfile/get_profile', async () => axios.get<any>('management/info'), {
+interface ProfileInfo {
+  'display-ribbon-on-profiles': string;
+  activeProfiles: string[];
+}
+
+export const getProfile = createAsyncThunk('applicationProfile/get_profile', async () => axios.get<ProfileInfo>('management/info'), {
   serializeError: serializeAxiosError,
 });
 

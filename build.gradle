@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.spring.boot)
     id "jhipster.cucumber-conventions"
     id "jhipster.gatling-conventions"
-//    id "jhipster.docker-conventions"
+    id "jhipster.docker-conventions"
     id "jhipster.code-quality-conventions"
     id "jhipster.node-gradle-conventions"
     // jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
@@ -20,7 +20,7 @@ description = ""
 
 sourceCompatibility=17
 targetCompatibility=17
-assert System.properties["java.specification.version"] == "17" || "21" || "24"
+assert ["17", "21", "24"].contains(System.properties["java.specification.version"])
 
 ext {
     springProfiles = ""
@@ -45,6 +45,8 @@ apply plugin: 'io.spring.dependency-management'
 
 if (project.hasProperty("prod")) {
     apply from: "gradle/profile_prod.gradle"
+} else if (project.hasProperty("test2")) {
+    apply from: "gradle/profile_test2.gradle"
 } else {
     apply from: "gradle/profile_dev.gradle"
 }
@@ -79,24 +81,23 @@ springBoot {
     mainClass = "io.hpp.noosphere.gw.NoosphereGatewayApp"
 }
 
-test {
+tasks.withType(Test).configureEach {
     useJUnitPlatform()
-    exclude "**/*IT*", "**/*IntTest*"
     testLogging {
         events 'FAILED', 'SKIPPED'
     }
     jvmArgs += '-Djava.security.egd=file:/dev/./urandom -Xmx512m'
-    // uncomment if the tests reports are not generated
-    // see https://github.com/jhipster/generator-jhipster/pull/2771 and https://github.com/jhipster/generator-jhipster/pull/4484
-    // ignoreFailures true
-    reports.html.required = false
-    testLogging.exceptionFormat "full"
-
     if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
         jvmArgs += [
             "-XX:+AllowRedefinitionToAddDeleteMethods"
         ]
     }
+    reports.html.required = false
+    testLogging.exceptionFormat "full"
+}
+
+test {
+    exclude "**/*IT*", "**/*IntTest*"
 }
 
 check.dependsOn integrationTest

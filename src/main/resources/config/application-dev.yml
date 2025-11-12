@@ -80,7 +80,7 @@ jhipster:
   cors:
     # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
     # Ports 9061-9069 are allowed for microfrontend development
-    allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000,http://localhost:9060,https://localhost:9060,http://localhost:9061,https://localhost:9061,http://localhost:9062,https://localhost:9062,http://localhost:9063,https://localhost:9063,http://localhost:9064,https://localhost:9064,http://localhost:9065,https://localhost:9065,http://localhost:9066,https://localhost:9066,http://localhost:9067,https://localhost:9067,http://localhost:9068,https://localhost:9068,http://localhost:9069,https://localhost:9069,http://localhost:8085'
+    allowed-origins: 'http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000,http://localhost:9060,https://localhost:9060,http://localhost:9061,https://localhost:9061,http://localhost:9062,https://localhost:9062,http://localhost:9063,https://localhost:9063,http://localhost:9064,https://localhost:9064,http://localhost:9065,https://localhost:9065,http://localhost:9066,https://localhost:9066,http://localhost:9067,https://localhost:9067,http://localhost:9068,https://localhost:9068,http://localhost:9069,https://localhost:9069,http://localhost:8085,http://hppserver1:8085,http://hppserver1:7080'
     # Enable CORS when running in GitHub Codespaces
     allowed-origin-patterns: 'https://*.githubpreview.dev'
     allowed-methods: '*'
@@ -104,4 +104,9 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  keycloak:
+    auth-url: http://hppserver1:7080
+    realm-id: noosphere
+    admin-client-id: admin-cli
+    admin-client-secret: '${HPP_AUTH_ADMIN_CLI_SECRET}'

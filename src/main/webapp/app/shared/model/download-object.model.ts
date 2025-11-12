@@ -3,9 +3,9 @@ export interface IDownloadContainer {
   image?: string;
   port?: number;
   command?: string;
-  env?: {};
+  env?: Record<string, any>;
   volumes?: string[];
-  acceptedPayments?: {};
+  acceptedPayments?: Record<string, any>;
 }
 
 export const defaultValueContainer: Readonly<IDownloadContainer> = {

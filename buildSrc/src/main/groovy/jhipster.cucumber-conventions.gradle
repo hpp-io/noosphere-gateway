@@ -17,6 +17,11 @@ tasks.register('consoleLauncherTest', JavaExec) {
     args("--scan-classpath")
     args("--include-engine", "cucumber")
     args("--reports-dir", cucumberReportsDir)
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_13)) {
+        jvmArgs += [
+            "-XX:+AllowRedefinitionToAddDeleteMethods"
+        ]
+    }
 }
 
 tasks.register('cucumberTest', Test) {

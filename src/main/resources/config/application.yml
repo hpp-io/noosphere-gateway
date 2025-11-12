@@ -161,7 +161,7 @@ spring:
         registration:
           oidc:
             client-id: web_app
-            client-secret: CDjVklSVbPIkyAWSyZcGHl1igK8PJICD
+            client-secret: '${HPP_AUTH_WEB_APP_SECRET}'
             scope: openid, profile, email, offline_access # last one for refresh tokens
   task:
     execution:
