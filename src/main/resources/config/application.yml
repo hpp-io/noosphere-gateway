@@ -24,6 +24,19 @@ springdoc:
   api-docs:
     enabled: false
 ---
+
+logging:
+  file:
+    path: ./logs
+  pattern:
+    console: '%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){red} %clr(%-5p) %clr(${PID}){faint} %clr([%thread]){faint} %clr(%logger{36}){cyan} %clr(-){red} %clr(%msg){faint}%n'
+    file: '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p ${PID} [%thread] %logger{36} - %msg%n'
+  logback:
+    rollingpolicy:
+      max-file-size: 30MB
+      max-history: 0
+  config: classpath:logback-spring.xml
+
 reactive:
   feign:
     circuit:

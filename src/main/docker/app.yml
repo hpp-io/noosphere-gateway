@@ -1,17 +1,22 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 name: noospheregateway
 services:
-  app:
-    image: noospheregateway
+  noosphere-gateway:
+    image: ghcr.io/hpp-io/noosphere-gateway:test2
     environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - _JAVA_OPTIONS=-Xmx1024m -Xms512m
+      - SPRING_PROFILES_ACTIVE=test2,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - SPRING_CLOUD_CONSUL_HOST=consul
+      - SPRING_CLOUD_CONSUL_HOST=noosphere-consul
       - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/realms/jhipster
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=https://authtest.hpp.io/realms/noosphere
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=${HPP_AUTH_WEB_APP_SECRET}
+      - SPRING_PULSAR_CLIENT_SERVICE_URL=pulsar://noosphere-pulsar:6650
+      - SPRING_PULSAR_ADMINISTRATION_SERVICE_URL=http://noosphere-pulsar:9082
+      - APPLICATION_KEYCLOAK_AUTH_URL=https://authtest.hpp.io
+      - LOGGING_FILE_PATH=/app/logs
+    volumes:
+      - /data/noosphere/logs/nshub-logs/:/app/logs/
     ports:
       - 127.0.0.1:8280:8280
     healthcheck:
@@ -23,18 +28,5 @@ services:
       interval: 5s
       timeout: 5s
       retries: 40
-    depends_on:
-      keycloak:
-        condition: service_healthy
-  keycloak:
-    extends:
-      file: ./keycloak.yml
-      service: keycloak
-  consul:
-    extends:
-      file: ./consul.yml
-      service: consul
-  consul-config-loader:
-    extends:
-      file: ./consul.yml
-      service: consul-config-loader
+
+
