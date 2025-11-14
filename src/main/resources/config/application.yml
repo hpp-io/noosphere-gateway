@@ -265,4 +265,7 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  app-kit:
+    project-id: '${HPP_APP_KIT_PROJECT_ID}'
+  environment: '${HPP_ENV}'

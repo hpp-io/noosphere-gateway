@@ -2,24 +2,24 @@ import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 import { mainnet, arbitrum, sepolia } from '@reown/appkit/networks';
 import type { AppKitNetwork } from '@reown/appkit/networks';
 
-export const projectId = process.env.HPP_APP_KIT_PROJECT_ID;
-
-if (!projectId) {
-  throw new Error('Project ID is not defined');
-}
-
 export const metadata = {
   name: 'Noosphere',
   description: 'Noosphere',
   url: 'https://www.hpp.io',
   icons: ['https://avatars.githubusercontent.com/u/179229932'],
 };
-const env = process.env.HPP_ENV || 'development';
-export const networks = (env === 'production' ? [mainnet] : [sepolia]) as [AppKitNetwork, ...AppKitNetwork[]];
 
-export const wagmiAdapter = new WagmiAdapter({
-  projectId,
-  networks,
-});
+export function initializeWagmi(projectId: string, envValue: string) {
+  if (!projectId) {
+    throw new Error('Project ID is not defined');
+  }
 
-export const config = wagmiAdapter.wagmiConfig;
+  const networks = (envValue === 'production' ? [mainnet] : [sepolia]) as [AppKitNetwork, ...AppKitNetwork[]];
+
+  const wagmiAdapter = new WagmiAdapter({
+    projectId,
+    networks,
+  });
+
+  return { wagmiAdapter, config: wagmiAdapter.wagmiConfig };
+}

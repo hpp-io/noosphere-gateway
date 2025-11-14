@@ -19,7 +19,15 @@ public class ApplicationProperties {
     // jhipster-needle-application-properties-property-class
 
   private final Keycloak keycloak = new Keycloak();
+  private AppKit appKit = new AppKit();
+  private String environment;
 
+  @Data
+  public static class AppKit {
+
+    private String projectId;
+
+  }
   @Data
   public static class Keycloak {
 

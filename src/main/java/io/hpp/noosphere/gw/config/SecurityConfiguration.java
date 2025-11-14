@@ -117,6 +117,7 @@ public class SecurityConfiguration {
                     .pathMatchers("/*.*").permitAll()
                     .pathMatchers("/api/authenticate").permitAll()
                     .pathMatchers("/api/auth-info").permitAll()
+                    .pathMatchers("/api/server/info").permitAll()
                     .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .pathMatchers("/api/**").authenticated()
                     // microfrontend resources are loaded by webpack without authentication, they need to be public
