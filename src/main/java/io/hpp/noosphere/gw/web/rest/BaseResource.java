@@ -3,6 +3,8 @@ package io.hpp.noosphere.gw.web.rest;
 import static io.hpp.noosphere.gw.config.Constants.SERVICE_NAME_NOOSPHERE_HUB;
 
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 public abstract class BaseResource<T> {
+
+  private static final Logger LOG = LoggerFactory.getLogger(BaseResource.class);
 
   protected final DiscoveryClient discoveryClient;
   protected final ReactiveOAuth2AuthorizedClientManager clientManager;
@@ -61,6 +65,7 @@ public abstract class BaseResource<T> {
     String requestUrl,
     Object requestBody
   ) {
+    LOG.info("executePostReturnList: {}: {}", requestUrl, requestBody);
     return getOAuth2Token(exchange).flatMap(tokenValue ->
       webClientBuilder.build()
         .post()
@@ -79,6 +84,7 @@ public abstract class BaseResource<T> {
     String requestUrl,
     Object requestBody
   ) {
+    LOG.info("executePost: {}: {}", requestUrl, requestBody);
     return getOAuth2Token(exchange).flatMap(tokenValue ->
       webClientBuilder.build()
         .post()
