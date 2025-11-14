@@ -14,6 +14,7 @@ public final class Constants {
     public static final String SERVICE_API_MINE_API_KEY = "/users/mine/api-key";
     public static final String SERVICE_API_USER_PROFILE = "/users/profile";
     public static final String SERVICE_API_CONTAINERS = "/containers";
+    public static final String SERVICE_API_AGENT_REQUESTS = "/agent-requests";
     public static final String SERVICE_API_VERIFIERS = "/verifiers";
     public static final String SERVICE_API_SEARCH = "/search";
     public static final String API_URL_SLASH = "/";
