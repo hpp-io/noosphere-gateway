@@ -120,12 +120,6 @@ tasks.withType(com.gorylenko.GenerateGitPropertiesTask).configureEach {
   outputs.doNotCacheIf("Task is always executed") { true }
 }
 
-jib {
-    dockerClient {
-        executable = "/usr/local/bin/docker"
-    }
-}
-
 configurations {
     providedRuntime
     implementation.exclude module: "spring-boot-starter-tomcat"
