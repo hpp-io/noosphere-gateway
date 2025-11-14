@@ -45,15 +45,8 @@ spring:
         format: yaml
         profile-separator: '-'
       discovery:
-        prefer-ip-address: true
-        tags:
-          - profile=${spring.profiles.active}
-          - version='@project.version@'
-          - git-version=${git.commit.id.describe:}
-          - git-commit=${git.commit.id.abbrev:}
-          - git-branch=${git.branch:}
-      host: localhost
-      port: 8500
+        instanceId: noosphere-gateway:${spring.application.instance-id:${random.value}}
+        service-name: noosphere-gateway
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:

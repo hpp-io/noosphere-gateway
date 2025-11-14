@@ -40,9 +40,12 @@ spring:
   cloud:
     consul:
       discovery:
-        prefer-ip-address: true
-      host: localhost
-      port: 8500
+        instanceId: noosphere-gateway:${spring.application.instance-id:${random.value}}
+        service-name: noosphere-gateway
+        scheme: https
+        hostname: ngtest.hpp.io
+        port: 443
+      host: noosphere-consul
   thymeleaf:
     cache: true
 
