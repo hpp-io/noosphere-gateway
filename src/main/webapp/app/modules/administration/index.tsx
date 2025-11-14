@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Route } from 'react-router';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
-import Logs from './logs/logs';
+import Logs from './utils/logs';
 import Health from './health/health';
 import Metrics from './metrics/metrics';
 import Configuration from './configuration/configuration';
