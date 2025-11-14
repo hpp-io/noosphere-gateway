@@ -2,13 +2,12 @@ package io.hpp.noosphere.gw.web.rest.vm;
 
 import io.hpp.noosphere.gw.web.rest.vm.enumeration.StatusCode;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.UUID;
 import lombok.Data;
 
 @SuppressWarnings("common-java:DuplicatedBlocks")
 @Data
-public class ValidatorDTO implements Serializable {
+public class VerifierDTO implements Serializable {
 
     private UUID id;
 

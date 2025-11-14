@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { createAsyncThunk, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
 import { createEntitySlice, EntityState } from "app/shared/reducers/reducer.utils";
-import { defaultValue, IValidator } from "app/shared/model/validator.model";
-import { ISearchValidator } from "app/shared/model/search-validator.model";
+import { defaultValue, IVerifier } from "app/shared/model/verifier.model";
+import { ISearchVerifier } from "app/shared/model/search-verifier.model";
 
-const initialState: EntityState<IValidator> = {
+const initialState: EntityState<IVerifier> = {
   loading: false,
   errorMessage: null,
   entities: [],
@@ -14,10 +14,10 @@ const initialState: EntityState<IValidator> = {
   updateSuccess: false,
 };
 
-const apiUrl = 'api/validators';
+const apiUrl = 'api/verifiers';
 
-export const searchValidators = createAsyncThunk('validator/fetch_entities',
-    async (entity: ISearchValidator, thunkAPI) => {
+export const searchVerifiers = createAsyncThunk('verifier/fetch_entities',
+    async (entity: ISearchVerifier, thunkAPI) => {
       const requestUrl = `${ apiUrl }/search${ entity.sort ? `?page=${ entity.page }&size=${ entity.size }&sort=${ entity.sort }&` : '?' }cacheBuster=${ new Date().getTime() }`;
       const requestBody = {
         name: entity.name,
@@ -27,44 +27,44 @@ export const searchValidators = createAsyncThunk('validator/fetch_entities',
         statusCode: entity.statusCode,
         createdByUserId: entity.createdByUserId,
       };
-      return axios.post<IValidator[]>(requestUrl, requestBody);
+      return axios.post<IVerifier[]>(requestUrl, requestBody);
     });
 
-export const createValidator = createAsyncThunk('validator/create_entity',
-    async (entity: Omit<IValidator, 'id'>, thunkAPI) => {
-      const result = await axios.post<IValidator>(apiUrl, entity);
+export const createVerifier = createAsyncThunk('verifier/create_entity',
+    async (entity: Omit<IVerifier, 'id'>, thunkAPI) => {
+      const result = await axios.post<IVerifier>(apiUrl, entity);
       return result;
     });
 
-export const ValidatorSlice = createEntitySlice({
-  name: 'validator',
+export const VerifierSlice = createEntitySlice({
+  name: 'verifier',
   initialState,
   reducers: {},
   extraReducers(builder) {
     builder
-    .addMatcher(isFulfilled(searchValidators), (state, action) => {
+    .addMatcher(isFulfilled(searchVerifiers), (state, action) => {
       state.loading = false;
       state.entities = action.payload.data;
       state.totalItems = parseInt(action.payload.headers['x-total-count'], 10);
     })
-    .addMatcher(isPending(searchValidators), state => {
+    .addMatcher(isPending(searchVerifiers), state => {
       state.errorMessage = null;
       state.updateSuccess = false;
       state.loading = true;
     })
-    .addMatcher(isFulfilled(createValidator), (state, action) => {
+    .addMatcher(isFulfilled(createVerifier), (state, action) => {
       state.loading = false;
       state.updating = false;
       state.updateSuccess = true;
       state.entity = action.payload.data;
     })
-    .addMatcher(isPending(createValidator), state => {
+    .addMatcher(isPending(createVerifier), state => {
       state.errorMessage = null;
       state.updateSuccess = false;
       state.updating = true;
       state.loading = true;
     })
-    .addMatcher(isRejected(searchValidators, createValidator), (state, action) => {
+    .addMatcher(isRejected(searchVerifiers, createVerifier), (state, action) => {
       state.loading = false;
       state.updating = false;
       state.updateSuccess = false;
@@ -74,4 +74,4 @@ export const ValidatorSlice = createEntitySlice({
   },
 });
 
-export default ValidatorSlice.reducer;
+export default VerifierSlice.reducer;

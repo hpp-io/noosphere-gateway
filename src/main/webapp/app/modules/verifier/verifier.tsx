@@ -1,18 +1,18 @@
-import './validator.scss';
+import './verifier.scss';
 
 import React, { useState } from 'react';
 import { Button, Col, Form, Input, Row, Table } from 'reactstrap';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { searchValidators } from './validator.reducer';
-import { defaultValue } from "app/shared/model/search-validator.model";
+import { searchVerifiers } from './verifier.reducer';
+import { defaultValue } from "app/shared/model/search-verifier.model";
 import { StatusCode } from "app/shared/model/enumerations/status-code.model";
-import { IValidator } from "app/shared/model/validator.model";
-import { IDownloadValidator } from "app/shared/model/download-object.model";
+import { IVerifier } from "app/shared/model/verifier.model";
+import { IDownloadVerifier } from "app/shared/model/download-object.model";
 import { parseStringToJsonObject } from "app/shared/util/entity-utils";
 
-export const SearchValidator = () => {
+export const SearchVerifier = () => {
   const dispatch = useAppDispatch();
-  const searchResults = useAppSelector(state => state.validator.entities); // Adjust state slice name if different
+  const searchResults = useAppSelector(state => state.verifier.entities); // Adjust state slice name if different
   const [searchCriteria, setSearchCriteria] = useState(defaultValue);
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
   const [selectAll, setSelectAll] = useState(false);
@@ -33,7 +33,7 @@ export const SearchValidator = () => {
     if (!tempCriteria.statusCode) {
       tempCriteria.statusCode = StatusCode.ACTIVE;
     }
-    dispatch(searchValidators(tempCriteria)); // Attach backend search logic here
+    dispatch(searchVerifiers(tempCriteria)); // Attach backend search logic here
   };
 
   const handleSelectItem = (index: number) => {
@@ -59,7 +59,7 @@ export const SearchValidator = () => {
   };
 
 
-  const mapToDownloadValidator = (item: IValidator): IDownloadValidator => ({
+  const mapToDownloadVerifier = (item: IVerifier): IDownloadVerifier => ({
     id: item.name,
     image: item.imageName,
     verifierAddress: item.verifierAddress,
@@ -76,14 +76,14 @@ export const SearchValidator = () => {
       return;
     }
 
-    const selectedData: IDownloadValidator[] = Array.from(selectedItems).map(index => mapToDownloadValidator((searchResults[index])));
+    const selectedData: IDownloadVerifier[] = Array.from(selectedItems).map(index => mapToDownloadVerifier((searchResults[index])));
 
     const jsonContent = JSON.stringify(selectedData, null, 2);
     const blob = new Blob([jsonContent], {type: 'application/json;charset=utf-8;'});
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    link.setAttribute('download', `validators_${ new Date().toISOString().split('T')[0] }.json`);
+    link.setAttribute('download', `verifiers_${ new Date().toISOString().split('T')[0] }.json`);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
@@ -92,8 +92,8 @@ export const SearchValidator = () => {
 
 
   return (
-      <div className="search-validator validator-search-section">
-        <h2 className="text-center my-4">Search Validators</h2>
+      <div className="search-verifier verifier-search-section">
+        <h2 className="text-center my-4">Search Verifiers</h2>
         <Form onSubmit={ handleSearch } className="search-form">
           <Row form>
             <Col md={ 4 }>
@@ -250,4 +250,4 @@ export const SearchValidator = () => {
   );
 };
 
-export default SearchValidator;
+export default SearchVerifier;

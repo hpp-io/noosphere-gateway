@@ -1,10 +1,10 @@
-import './validator.scss';
+import './verifier.scss';
 
 import React, { useState } from 'react';
 import { Button, Input, Form, Row, Col, FormGroup, Label, Alert, Card, CardBody } from 'reactstrap';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
 import { IEnv } from "app/shared/model/env.model";
-import { createValidator } from './validator.reducer';
+import { createVerifier } from './verifier.reducer';
 import { convertEnvVariablesToString, convertPaymentsToString, convertVolumesToString } from "app/shared/util/entity-utils";
 
 interface IPayment {
@@ -12,13 +12,13 @@ interface IPayment {
   amount?: string;
 }
 
-export const CreateValidator = () => {
+export const CreateVerifier = () => {
   const dispatch = useAppDispatch();
-  const loading = useAppSelector(state => state.validator.loading);
-  const updateSuccess = useAppSelector(state => state.validator.updateSuccess);
-  const errorMessage = useAppSelector(state => state.validator.errorMessage);
+  const loading = useAppSelector(state => state.verifier.loading);
+  const updateSuccess = useAppSelector(state => state.verifier.updateSuccess);
+  const errorMessage = useAppSelector(state => state.verifier.errorMessage);
 
-  const [validatorData, setValidatorData] = useState({
+  const [verifierData, setVerifierData] = useState({
     name: '',
     walletAddress: '',
     verifierAddress: '',
@@ -41,8 +41,8 @@ export const CreateValidator = () => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setValidatorData({
-      ...validatorData,
+    setVerifierData({
+      ...verifierData,
       [name]: value
     });
 
@@ -115,32 +115,32 @@ export const CreateValidator = () => {
   const validateForm = () => {
     const errors: Record<string, string> = {};
 
-    if (!validatorData.name.trim()) {
-      errors.name = 'Validator name is required';
+    if (!verifierData.name.trim()) {
+      errors.name = 'Verifier name is required';
     }
 
-    if (!validatorData.imageName.trim()) {
-      errors.imageName = 'Validator image name is required';
+    if (!verifierData.imageName.trim()) {
+      errors.imageName = 'Verifier image name is required';
     }
 
-    if (!validatorData.walletAddress.trim()) {
+    if (!verifierData.walletAddress.trim()) {
       errors.walletAddress = 'Wallet address is required';
-    } else if (!/^0x[a-fA-F0-9]{40}$/.test(validatorData.walletAddress)) {
+    } else if (!/^0x[a-fA-F0-9]{40}$/.test(verifierData.walletAddress)) {
       errors.walletAddress = 'Invalid wallet address format';
     }
 
-    if (!validatorData.verifierAddress.trim()) {
+    if (!verifierData.verifierAddress.trim()) {
       errors.verifierAddress = 'Verifier address is required';
-    } else if (!/^0x[a-fA-F0-9]{40}$/.test(validatorData.verifierAddress)) {
+    } else if (!/^0x[a-fA-F0-9]{40}$/.test(verifierData.verifierAddress)) {
       errors.verifierAddress = 'Invalid verifier address format';
     }
 
-    if (!validatorData.port.trim()) {
+    if (!verifierData.port.trim()) {
       errors.port = 'Port is required';
-    } else if (isNaN(Number(validatorData.port))) {
+    } else if (isNaN(Number(verifierData.port))) {
       errors.port = 'Port must be a valid number';
     } else {
-      const portNum = Number(validatorData.port);
+      const portNum = Number(verifierData.port);
       if (portNum < 1 || portNum > 65535) {
         errors.port = 'Port must be between 1 and 65535';
       }
@@ -167,13 +167,13 @@ export const CreateValidator = () => {
     // Validate volumes
     const nonEmptyVolumes = volumes.filter(volume => volume.trim() !== '');
     const invalidVolumes = nonEmptyVolumes.filter(volume => {
-      // Basic validation for Docker volume format (host_path:validator_path or just validator_path)
+      // Basic validation for Docker volume format (host_path:verifier_path or just verifier_path)
       const volumePattern = /^([a-zA-Z0-9._/-]+:)?[a-zA-Z0-9._/-]+$/;
       return !volumePattern.test(volume.trim());
     });
 
     if (invalidVolumes.length > 0) {
-      errors.volumes = 'Volume entries must follow the format "host_path:validator_path" or just "validator_path"';
+      errors.volumes = 'Volume entries must follow the format "host_path:verifier_path" or just "verifier_path"';
     }
 
     const duplicateVolumes = nonEmptyVolumes
@@ -223,23 +223,23 @@ export const CreateValidator = () => {
     }
 
     const submitData = {
-      ...validatorData,
-      port: validatorData.port ? Number(validatorData.port) : undefined,
-      name: validatorData.name || null,
-      walletAddress: validatorData.walletAddress,
-      verifierAddress: validatorData.verifierAddress,
-      imageName: validatorData.imageName,
-      command: validatorData.command || undefined,
+      ...verifierData,
+      port: verifierData.port ? Number(verifierData.port) : undefined,
+      name: verifierData.name || null,
+      walletAddress: verifierData.walletAddress,
+      verifierAddress: verifierData.verifierAddress,
+      imageName: verifierData.imageName,
+      command: verifierData.command || undefined,
       environmentVariables: convertEnvVariablesToString(environmentVariables) || undefined,
       volumes: convertVolumesToString(volumes) || undefined,
       payments: convertPaymentsToString(payments) || undefined
     };
 
-    dispatch(createValidator(submitData));
+    dispatch(createVerifier(submitData));
   };
 
   const handleReset = () => {
-    setValidatorData({
+    setVerifierData({
       name: '',
       walletAddress: '',
       verifierAddress: '',
@@ -254,12 +254,12 @@ export const CreateValidator = () => {
   };
 
   return (
-    <div className="create-validator validator-form-section">
-      <h2 className="text-center my-4">Create New Validator</h2>
+    <div className="create-verifier verifier-form-section">
+      <h2 className="text-center my-4">Create New Verifier</h2>
 
       {updateSuccess && (
         <Alert color="success">
-          Validator created successfully!
+          Verifier created successfully!
         </Alert>
       )}
 
@@ -269,17 +269,17 @@ export const CreateValidator = () => {
         </Alert>
       )}
 
-      <Form onSubmit={handleSubmit} className="validator-form">
+      <Form onSubmit={handleSubmit} className="verifier-form">
         <Row>
           <Col md={6}>
             <FormGroup>
-              <Label for="name">Validator Name *</Label>
+              <Label for="name">Verifier Name *</Label>
               <Input
                 type="text"
                 id="name"
                 name="name"
-                placeholder="Enter validator name"
-                value={validatorData.name}
+                placeholder="Enter verifier name"
+                value={verifierData.name}
                 onChange={handleInputChange}
                 invalid={!!validationErrors.name}
                 required
@@ -296,8 +296,8 @@ export const CreateValidator = () => {
                 type="text"
                 id="imageName"
                 name="imageName"
-                placeholder="Enter validator image name"
-                value={validatorData.imageName}
+                placeholder="Enter verifier image name"
+                value={verifierData.imageName}
                 onChange={handleInputChange}
                 invalid={!!validationErrors.imageName}
                 required
@@ -320,7 +320,7 @@ export const CreateValidator = () => {
                   placeholder="Enter port number"
                   min="1"
                   max="65535"
-                  value={validatorData.port}
+                  value={verifierData.port}
                   onChange={handleInputChange}
                   invalid={!!validationErrors.port}
                   required
@@ -340,7 +340,7 @@ export const CreateValidator = () => {
                 id="walletAddress"
                 name="walletAddress"
                 placeholder="0x..."
-                value={validatorData.walletAddress}
+                value={verifierData.walletAddress}
                 onChange={handleInputChange}
                 invalid={!!validationErrors.walletAddress}
                 required
@@ -360,7 +360,7 @@ export const CreateValidator = () => {
                 id="verifierAddress"
                 name="verifierAddress"
                 placeholder="0x..."
-                value={validatorData.verifierAddress}
+                value={verifierData.verifierAddress}
                 onChange={handleInputChange}
                 invalid={!!validationErrors.verifierAddress}
                 required
@@ -382,8 +382,8 @@ export const CreateValidator = () => {
                 type="text"
                 id="command"
                 name="command"
-                placeholder="Enter validator command"
-                value={validatorData.command}
+                placeholder="Enter verifier command"
+                value={verifierData.command}
                 onChange={handleInputChange}
               />
             </FormGroup>
@@ -472,7 +472,7 @@ export const CreateValidator = () => {
                         <Input
                           type="text"
                           id={`volume-${index}`}
-                          placeholder="e.g., /host/path:/validator/path or /validator/path"
+                          placeholder="e.g., /host/path:/verifier/path or /verifier/path"
                           value={volume}
                           onChange={(e) => handleVolumeChange(index, e.target.value)}
                         />
@@ -513,7 +513,7 @@ export const CreateValidator = () => {
                   <div className="text-muted small mt-2">
                     <strong>Examples:</strong>
                     <ul className="mb-0 mt-1">
-                      <li><code>/host/data:/app/data</code> - Bind mount host directory to validator</li>
+                      <li><code>/host/data:/app/data</code> - Bind mount host directory to verifier</li>
                       <li><code>myvolume:/app/data</code> - Named volume mount</li>
                       <li><code>/app/data</code> - Anonymous volume</li>
                     </ul>
@@ -605,7 +605,7 @@ export const CreateValidator = () => {
             disabled={loading}
             className="me-2"
           >
-            {loading ? 'Creating...' : 'Create Validator'}
+            {loading ? 'Creating...' : 'Create Verifier'}
           </Button>
           <Button
             type="button"
@@ -621,4 +621,4 @@ export const CreateValidator = () => {
   );
 };
 
-export default CreateValidator;
+export default CreateVerifier;

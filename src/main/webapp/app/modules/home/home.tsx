@@ -75,7 +75,7 @@ export const Home = () => {
                           })
                       }
                   >
-                    <Translate contentKey="global.menu.validator.title">Validator</Translate>
+                    <Translate contentKey="global.menu.verifier.title">Verifier</Translate>
                   </a>
                 </Alert>
               </div>

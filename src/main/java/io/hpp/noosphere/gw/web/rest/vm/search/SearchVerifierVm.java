@@ -4,7 +4,7 @@ import io.hpp.noosphere.gw.web.rest.vm.enumeration.StatusCode;
 import lombok.Data;
 
 @Data
-public class SearchValidatorVm {
+public class SearchVerifierVm {
 
     private String name;
     private String searchText;

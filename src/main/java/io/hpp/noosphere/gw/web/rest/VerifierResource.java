@@ -1,15 +1,13 @@
 package io.hpp.noosphere.gw.web.rest;
 
 import static io.hpp.noosphere.gw.config.Constants.API_URL_SLASH;
-import static io.hpp.noosphere.gw.config.Constants.SERVICE_API_CONTAINERS;
-import static io.hpp.noosphere.gw.config.Constants.SERVICE_API_VALIDATORS;
+import static io.hpp.noosphere.gw.config.Constants.SERVICE_API_VERIFIERS;
 import static io.hpp.noosphere.gw.config.Constants.SERVICE_API_PREFIX;
 import static io.hpp.noosphere.gw.config.Constants.SERVICE_API_SEARCH;
 
 import io.hpp.noosphere.gw.web.rest.errors.BadRequestAlertException;
-import io.hpp.noosphere.gw.web.rest.vm.ValidatorDTO;
-import io.hpp.noosphere.gw.web.rest.vm.ValidatorDTO;
-import io.hpp.noosphere.gw.web.rest.vm.search.SearchValidatorVm;
+import io.hpp.noosphere.gw.web.rest.vm.VerifierDTO;
+import io.hpp.noosphere.gw.web.rest.vm.search.SearchVerifierVm;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -30,69 +28,69 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api/validators")
-public class ValidatorResource extends BaseResource<ValidatorDTO> {
+@RequestMapping("/api/verifiers")
+public class VerifierResource extends BaseResource<VerifierDTO> {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ValidatorResource.class);
+  private static final Logger LOG = LoggerFactory.getLogger(VerifierResource.class);
 
-  private static final String ENTITY_NAME = "validator";
+  private static final String ENTITY_NAME = "verifier";
 
 
-  public ValidatorResource(
+  public VerifierResource(
     DiscoveryClient discoveryClient,
     ReactiveOAuth2AuthorizedClientManager clientManager,
     WebClient.Builder webClientBuilder
   ) {
-    super(ValidatorDTO.class, clientManager, discoveryClient, webClientBuilder);
+    super(VerifierDTO.class, clientManager, discoveryClient, webClientBuilder);
   }
 
 
   @PostMapping
-  public Mono<ResponseEntity<ValidatorDTO>> createValidator(
-    @Valid @RequestBody ValidatorDTO validatorDTO,
+  public Mono<ResponseEntity<VerifierDTO>> createVerifier(
+    @Valid @RequestBody VerifierDTO verifierDTO,
     ServerWebExchange exchange
   ) {
-    LOG.debug("REST request to create Validator : {}", validatorDTO);
+    LOG.debug("REST request to create Verifier : {}", verifierDTO);
 
-    if (validatorDTO.getId() != null) {
-      return Mono.error(new BadRequestAlertException("A new validator cannot already have an ID", ENTITY_NAME, "idexists"));
+    if (verifierDTO.getId() != null) {
+      return Mono.error(new BadRequestAlertException("A new verifier cannot already have an ID", ENTITY_NAME, "idexists"));
     }
 
     return Mono.defer(() -> {
       String serviceUrl = getNoosphereHubServiceUrl();
-      String requestUrl = serviceUrl + SERVICE_API_PREFIX + SERVICE_API_VALIDATORS;
+      String requestUrl = serviceUrl + SERVICE_API_PREFIX + SERVICE_API_VERIFIERS;
 
-      return executePost(exchange, requestUrl, validatorDTO)
-        .doOnSuccess(result -> LOG.debug("Created validator with ID: {}", result.getBody().getId()));
+      return executePost(exchange, requestUrl, verifierDTO)
+        .doOnSuccess(result -> LOG.debug("Created verifier with ID: {}", result.getBody().getId()));
     });
   }
 
   @PostMapping("/search")
-  public Mono<ResponseEntity<List<ValidatorDTO>>> search(
-    @Valid @RequestBody SearchValidatorVm searchCriteria,
+  public Mono<ResponseEntity<List<VerifierDTO>>> search(
+    @Valid @RequestBody SearchVerifierVm searchCriteria,
     Pageable pageable,
     ServerWebExchange exchange
   ) {
-    LOG.debug("REST request to search validators");
+    LOG.debug("REST request to search verifiers");
     return Mono.defer(() -> {
 
       String serviceUrl = getNoosphereHubServiceUrl();
-      String requestUrl = serviceUrl + SERVICE_API_PREFIX + SERVICE_API_VALIDATORS + SERVICE_API_SEARCH;
+      String requestUrl = serviceUrl + SERVICE_API_PREFIX + SERVICE_API_VERIFIERS + SERVICE_API_SEARCH;
       requestUrl = UrlUtils.buildRequestUrl(requestUrl, pageable);
       return executePostReturnList(exchange, requestUrl, searchCriteria);
     });
   }
 
   @GetMapping("/{id}")
-  public Mono<ResponseEntity<ValidatorDTO>> getValidator(
+  public Mono<ResponseEntity<VerifierDTO>> getVerifier(
     ServerWebExchange exchange,
     @PathVariable("id") UUID id
   ) {
-    LOG.debug("REST request to get Validator : {}", id);
+    LOG.debug("REST request to get Verifier : {}", id);
     return Mono.defer(() -> {
 
       String serviceUrl = getNoosphereHubServiceUrl();
-      String requestUrl = serviceUrl + SERVICE_API_PREFIX + SERVICE_API_VALIDATORS + API_URL_SLASH + id.toString();
+      String requestUrl = serviceUrl + SERVICE_API_PREFIX + SERVICE_API_VERIFIERS + API_URL_SLASH + id.toString();
 
       return executeGet(exchange, requestUrl);
     });

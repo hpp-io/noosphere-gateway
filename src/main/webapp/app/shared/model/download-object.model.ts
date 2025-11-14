@@ -11,9 +11,9 @@ export interface IDownloadContainer {
 export const defaultValueContainer: Readonly<IDownloadContainer> = {
 };
 
-export interface IDownloadValidator extends IDownloadContainer{
+export interface IDownloadVerifier extends IDownloadContainer{
   verifierAddress?: string;
 }
 
-export const defaultValueValidator: Readonly<IDownloadValidator> = {
+export const defaultValueValidator: Readonly<IDownloadVerifier> = {
 };

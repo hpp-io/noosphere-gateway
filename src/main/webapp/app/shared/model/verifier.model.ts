@@ -1,6 +1,6 @@
 import { StatusCode } from "app/shared/model/enumerations/status-code.model";
 
-export interface IValidator {
+export interface IVerifier {
   id?: string;
   name?: string | null;
   walletAddress?: string;
@@ -14,5 +14,5 @@ export interface IValidator {
   statusCode?: StatusCode;
 }
 
-export const defaultValue: Readonly<IValidator> = {
+export const defaultValue: Readonly<IVerifier> = {
 };

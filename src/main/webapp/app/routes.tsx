@@ -25,8 +25,8 @@ const Container = Loadable({
   loading: () => loading,
 });
 
-const Validator = Loadable({
-  loader: () => import( 'app/modules/validator'),
+const Verifier = Loadable({
+  loader: () => import( 'app/modules/verifier'),
   loading: () => loading,
 });
 
@@ -70,10 +70,10 @@ const AppRoutes = () => {
             }
         />
         <Route
-            path="validator/*"
+            path="verifier/*"
             element={
               <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
-                <Validator />
+                <Verifier />
               </PrivateRoute>
             }
         />

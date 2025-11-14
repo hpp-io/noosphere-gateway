@@ -1,6 +1,6 @@
 import { StatusCode } from "app/shared/model/enumerations/status-code.model";
 
-export interface ISearchValidator {
+export interface ISearchVerifier {
   name?: string | null;
   searchText?: string | null;
   walletAddress?: string | null;
@@ -13,7 +13,7 @@ export interface ISearchValidator {
 
 }
 
-export const defaultValue: Readonly<ISearchValidator> = {
+export const defaultValue: Readonly<ISearchVerifier> = {
   page: 0,
   size: 10,
   sort: '',

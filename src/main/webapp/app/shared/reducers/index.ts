@@ -3,7 +3,7 @@ import { loadingBarReducer as loadingBar } from 'react-redux-loading-bar';
 
 import administration from 'app/modules/administration/administration.reducer';
 import container from 'app/modules/container/container.reducer';
-import validator from 'app/modules/validator/validator.reducer';
+import verifier from 'app/modules/verifier/verifier.reducer';
 import locale from './locale';
 import authentication from './authentication';
 import userManagement from './user-management';
@@ -19,7 +19,7 @@ const rootReducer: ReducersMapObject = {
   administration,
   loadingBar,
   container,
-  validator,
+  verifier,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
 };
 

@@ -183,10 +183,10 @@
       "products": {
         "main": "Products"
       },
-      "validator": {
-        "add": "Add Validator",
-        "search": "Search Validators",
-        "title": "Validator"
+      "verifier": {
+        "add": "Add Verifier",
+        "search": "Search Verifiers",
+        "title": "Verifier"
       }
     },
     "messages": {
