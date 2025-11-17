@@ -199,7 +199,7 @@ public class KeystoreManager {
     }
   }
 
-  private static KeyStore loadKeyStore(Path path, String password)
+  public static KeyStore loadKeyStore(Path path, String password)
     throws IOException, GeneralSecurityException {
     KeyStore ks = KeyStore.getInstance(KEYSTORE_TYPE);
     try (InputStream fis = Files.newInputStream(path)) {
