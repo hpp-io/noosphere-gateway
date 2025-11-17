@@ -2,6 +2,7 @@ import { ReducersMapObject } from '@reduxjs/toolkit';
 import { loadingBarReducer as loadingBar } from 'react-redux-loading-bar';
 
 import administration from 'app/modules/administration/administration.reducer';
+import keystoreGenerator from 'app/modules/setting/keystore-generator/keystore-generator.reducer';
 import container from 'app/modules/container/container.reducer';
 import verifier from 'app/modules/verifier/verifier.reducer';
 import agentRequest from 'app/modules/agent-request/agent-request.reducer';
@@ -18,6 +19,7 @@ const rootReducer: ReducersMapObject = {
   applicationProfile,
   userManagement,
   administration,
+  keystoreGenerator,
   loadingBar,
   container,
   verifier,

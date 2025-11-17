@@ -146,6 +146,7 @@
     "item-count": "Showing {{first}} - {{second}} of {{total}} items.",
     "menu": {
       "account": {
+        "keystoreGenerator": "Keystore Generator",
         "login": "Sign in",
         "logout": "Sign out",
         "main": "Account",

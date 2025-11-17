@@ -106,6 +106,8 @@ jhipster:
 # ===================================================================
 
 application:
+  storage:
+    base-path: /tmp
   keycloak:
     auth-url: http://127.0.0.1:7080
     realm-id: noosphere

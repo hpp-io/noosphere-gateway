@@ -1,6 +1,5 @@
 import React from 'react';
-import {Route } from 'react-router';
-
+import { Route } from 'react-router-dom';
 import Loadable from 'react-loadable';
 
 import LoginRedirect from 'app/modules/login/login-redirect';
@@ -11,12 +10,16 @@ import PrivateRoute from 'app/shared/auth/private-route';
 import ErrorBoundaryRoutes from 'app/shared/error/error-boundary-routes';
 import PageNotFound from 'app/shared/error/page-not-found';
 import { AUTHORITIES } from 'app/config/constants';
-import Profile from "app/modules/setting/profile";
 
 const loading = <div>loading ...</div>;
 
 const Admin = Loadable({
   loader: () => import(/* webpackChunkName: "administration" */ 'app/modules/administration'),
+  loading: () => loading,
+});
+
+const Setting = Loadable({
+  loader: () => import(/* webpackChunkName: "setting" */ 'app/modules/setting'),
   loading: () => loading,
 });
 
@@ -26,7 +29,7 @@ const Container = Loadable({
 });
 
 const Verifier = Loadable({
-  loader: () => import( 'app/modules/verifier'),
+  loader: () => import('app/modules/verifier'),
   loading: () => loading,
 });
 
@@ -44,40 +47,39 @@ const AppRoutes = () => {
             </PrivateRoute>
           }
         />
+        <Route
+          path="setting/*"
+          element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
+              <Setting />
+            </PrivateRoute>
+          }
+        />
         <Route path="login" element={<LoginRedirect />} />
-         <Route
+        <Route
           path="entities/*"
           element={
             <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
               <EntitiesRoutes />
             </PrivateRoute>
           }
-         />
-        <Route
-            path="profile"
-            element={
-              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
-                <Profile />
-              </PrivateRoute>
-            }
         />
         <Route
-            path="container/*"
-            element={
-              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
-                <Container />
-              </PrivateRoute>
-            }
+          path="container/*"
+          element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
+              <Container />
+            </PrivateRoute>
+          }
         />
         <Route
-            path="verifier/*"
-            element={
-              <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
-                <Verifier />
-              </PrivateRoute>
-            }
+          path="verifier/*"
+          element={
+            <PrivateRoute hasAnyAuthorities={[AUTHORITIES.USER]}>
+              <Verifier />
+            </PrivateRoute>
+          }
         />
-        {/* <Route path="/oauth2/authorization/oidc" element={<LoginRedirect />}/>*/}
         <Route path="*" element={<PageNotFound />} />
       </ErrorBoundaryRoutes>
     </div>

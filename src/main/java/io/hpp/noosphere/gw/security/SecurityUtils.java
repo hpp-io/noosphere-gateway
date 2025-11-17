@@ -3,14 +3,25 @@ package io.hpp.noosphere.gw.security;
 import static io.hpp.noosphere.gw.config.Constants.PROPERTY_NAME_WALLET_ADDRESS;
 
 import io.hpp.noosphere.gw.config.Constants;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,6 +39,7 @@ import reactor.core.publisher.Mono;
 public final class SecurityUtils {
 
   public static final String CLAIMS_NAMESPACE = "https://www.jhipster.tech/";
+  private static final Logger LOG = LoggerFactory.getLogger(SecurityUtils.class);
 
   private SecurityUtils() {
   }
@@ -38,7 +50,8 @@ public final class SecurityUtils {
    * @return the login of the current user.
    */
   public static Mono<String> getCurrentUserLogin() {
-    return ReactiveSecurityContextHolder.getContext()
+    return ReactiveSecurityContextHolder
+      .getContext()
       .map(SecurityContext::getAuthentication)
       .flatMap(authentication -> Mono.justOrEmpty(extractPrincipal(authentication)));
   }
@@ -67,10 +80,12 @@ public final class SecurityUtils {
    * @return true if the user is authenticated, false otherwise.
    */
   public static Mono<Boolean> isAuthenticated() {
-    return ReactiveSecurityContextHolder.getContext()
+    return ReactiveSecurityContextHolder
+      .getContext()
       .map(SecurityContext::getAuthentication)
       .map(Authentication::getAuthorities)
-      .map(authorities -> authorities.stream().map(GrantedAuthority::getAuthority).noneMatch(AuthoritiesConstants.ANONYMOUS::equals));
+      .map(authorities -> authorities.stream().map(GrantedAuthority::getAuthority).noneMatch(AuthoritiesConstants.ANONYMOUS::equals)
+      );
   }
 
   /**
@@ -80,14 +95,12 @@ public final class SecurityUtils {
    * @return true if the current user has any of the authorities, false otherwise.
    */
   public static Mono<Boolean> hasCurrentUserAnyOfAuthorities(String... authorities) {
-    return ReactiveSecurityContextHolder.getContext()
+    return ReactiveSecurityContextHolder
+      .getContext()
       .map(SecurityContext::getAuthentication)
       .map(Authentication::getAuthorities)
       .map(authorityList ->
-        authorityList
-          .stream()
-          .map(GrantedAuthority::getAuthority)
-          .anyMatch(authority -> Arrays.asList(authorities).contains(authority))
+        authorityList.stream().map(GrantedAuthority::getAuthority).anyMatch(authority -> Arrays.asList(authorities).contains(authority))
       );
   }
 
@@ -135,10 +148,12 @@ public final class SecurityUtils {
     Optional.ofNullable(attributes.get(StandardClaimNames.FAMILY_NAME)).ifPresent(lastName -> details.put("lastName", lastName));
     Optional.ofNullable(attributes.get(StandardClaimNames.PICTURE)).ifPresent(imageUrl -> details.put("imageUrl", imageUrl));
 
-    Optional.ofNullable(attributes.get(StandardClaimNames.GIVEN_NAME)).ifPresentOrElse(
-      firstName -> details.put("firstName", firstName),
-      () -> Optional.ofNullable(attributes.get(StandardClaimNames.NAME)).ifPresent(firstName -> details.put("firstName", firstName))
-    );
+    Optional
+      .ofNullable(attributes.get(StandardClaimNames.GIVEN_NAME))
+      .ifPresentOrElse(
+        firstName -> details.put("firstName", firstName),
+        () -> Optional.ofNullable(attributes.get(StandardClaimNames.NAME)).ifPresent(firstName -> details.put("firstName", firstName))
+      );
 
     if (attributes.get(StandardClaimNames.EMAIL) != null) {
       details.put("email", attributes.get(StandardClaimNames.EMAIL));
@@ -174,5 +189,66 @@ public final class SecurityUtils {
     }
 
     return details;
+  }
+
+  public static void createKeyStore(Path keystoreFilePath, String keyAlias, String keystorePassword, String privateKey) {
+    String base64KeyValue = privateKey;
+
+    String keyAlgorithm = "AES";
+
+    char[] keystorePasswordBytes = keystorePassword.toCharArray();
+    // ------------------------
+
+    try {
+      byte[] keyBytes;
+      if (base64KeyValue != null) {
+        keyBytes = Base64.getEncoder().encode(base64KeyValue.getBytes(StandardCharsets.UTF_8));
+      } else {
+        LOG.error("Error: No key value provided.");
+        return;
+      }
+
+      SecretKey secretKey = new SecretKeySpec(keyBytes, keyAlgorithm);
+
+      KeyStore keyStore = KeyStore.getInstance("PKCS12");
+
+      keyStore.load(null, keystorePasswordBytes);
+
+      KeyStore.ProtectionParameter entryPassword = new KeyStore.PasswordProtection(keystorePasswordBytes);
+
+      KeyStore.SecretKeyEntry secretKeyEntry = new KeyStore.SecretKeyEntry(secretKey);
+
+      keyStore.setEntry(keyAlias, secretKeyEntry, entryPassword);
+
+      try (OutputStream fos = Files.newOutputStream(keystoreFilePath)) {
+        keyStore.store(fos, keystorePasswordBytes);
+      }
+
+      LOG.info("Successfully created '" + keystoreFilePath + "'");
+      LOG.info("Added secret key with alias: " + keyAlias);
+    } catch (Exception e) {
+      LOG.error("Failed to create keystore: " + keyAlias, e);
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static String validateKeyStore(InputStream keystoreInputStream, String keyAlias, String keystorePassword) {
+    try {
+      KeyStore keyStore = KeyStore.getInstance("PKCS12");
+      keyStore.load(keystoreInputStream, keystorePassword.toCharArray());
+
+      KeyStore.ProtectionParameter entryPassword = new KeyStore.PasswordProtection(keystorePassword.toCharArray());
+      KeyStore.SecretKeyEntry secretKeyEntry = (KeyStore.SecretKeyEntry) keyStore.getEntry(keyAlias, entryPassword);
+
+      if (secretKeyEntry != null) {
+        SecretKey secretKey = secretKeyEntry.getSecretKey();
+        return new String(Base64.getDecoder().decode(secretKey.getEncoded()), StandardCharsets.UTF_8);
+      } else {
+        return null;
+      }
+    } catch (Exception e) {
+      LOG.error("Failed to validate keystore", e);
+      throw new RuntimeException(e);
+    }
   }
 }
