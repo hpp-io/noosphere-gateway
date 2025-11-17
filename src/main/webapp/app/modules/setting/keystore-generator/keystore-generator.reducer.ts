@@ -20,12 +20,15 @@ const fileToBase64 = (file: File): Promise<string> =>
     reader.onerror = error => reject(new Error('Failed to read file'));
   });
 
-export const createKeystore = createAsyncThunk(
-  'keystore/create',
-  async (data: { keyAlias: string; password: string; privateKey: string }) => {
-    const response = await axios.post('/api/keystore/create', data, {
-      responseType: 'blob',
-    });
+export const generateKeystore = createAsyncThunk(
+  'keystore/generate',
+  async (data: { keyAlias: string; password: string; privateKey: string; isWallet: boolean }) => {
+    const response = await axios.post(
+      '/api/keystore/create', data,
+      {
+        responseType: 'blob',
+      }
+    );
     return {
       file: response.data,
       fileName: `${data.keyAlias}.p12`,
@@ -36,14 +39,15 @@ export const createKeystore = createAsyncThunk(
   }
 );
 
-export const validateKeystore = createAsyncThunk(
-  'keystore/validate',
-  async (data: { file: File; keyAlias: string; password: string }) => {
+export const readKeystore = createAsyncThunk(
+  'keystore/read',
+  async (data: { file: File; keyAlias: string; password: string; isWallet: boolean }) => {
     const fileContent = await fileToBase64(data.file);
-    const response = await axios.post('/api/keystore/validate', {
+    const response = await axios.post('/api/keystore/read', {
       fileContent,
       keyAlias: data.keyAlias,
       password: data.password,
+      isWallet: data.isWallet,
     });
     return response.data;
   },
@@ -66,23 +70,23 @@ export const KeystoreGeneratorSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(createKeystore.fulfilled, (state, action) => {
+      .addCase(generateKeystore.fulfilled, (state, action) => {
         state.loading = false;
         state.keystoreFile = action.payload.file;
         state.fileName = action.payload.fileName;
       })
-      .addCase(validateKeystore.fulfilled, (state, action) => {
+      .addCase(readKeystore.fulfilled, (state, action) => {
         state.loading = false;
         state.validatedValue = action.payload;
       })
-      .addMatcher(isPending(createKeystore, validateKeystore), state => {
+      .addMatcher(isPending(generateKeystore, readKeystore), state => {
         state.errorMessage = null;
         state.loading = true;
         state.keystoreFile = null;
         state.fileName = '';
         state.validatedValue = null;
       })
-      .addMatcher(isRejected(createKeystore, validateKeystore), (state, action) => {
+      .addMatcher(isRejected(generateKeystore, readKeystore), (state, action) => {
         state.loading = false;
         state.errorMessage = action.error.message;
       });

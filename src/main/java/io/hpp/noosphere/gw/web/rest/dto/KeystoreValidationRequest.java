@@ -6,6 +6,7 @@ import lombok.Data;
 public class KeystoreValidationRequest {
 
     private String keyAlias;
+    private Boolean isWallet;
     private String password;
     private String fileContent;
 }

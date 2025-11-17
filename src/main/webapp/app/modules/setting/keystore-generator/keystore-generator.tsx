@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, FormGroup, Label, Input, Card, CardBody, CardTitle, Row, Col } from 'reactstrap';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { createKeystore, validateKeystore, reset } from './keystore-generator.reducer';
+import { generateKeystore, readKeystore, reset } from './keystore-generator.reducer';
 
 const KeystoreGenerator = () => {
   const dispatch = useAppDispatch();
@@ -10,10 +10,12 @@ const KeystoreGenerator = () => {
   const [keyAlias, setKeyAlias] = useState('');
   const [password, setPassword] = useState('');
   const [privateKey, setPrivateKey] = useState('');
+  const [isWallet, setIsWallet] = useState(false);
 
-  const [validateFile, setValidateFile] = useState<File | null>(null);
-  const [validateKeyAlias, setValidateKeyAlias] = useState('');
-  const [validatePassword, setValidatePassword] = useState('');
+  const [readFile, setReadFile] = useState<File | null>(null);
+  const [readKeyAlias, setReadKeyAlias] = useState('');
+  const [readPassword, setReadPassword] = useState('');
+  const [readIsWallet, setReadIsWallet] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -36,12 +38,12 @@ const KeystoreGenerator = () => {
   }, [keystoreFile, fileName, dispatch]);
 
   const handleGenerate = () => {
-    dispatch(createKeystore({ keyAlias, password, privateKey }));
+    dispatch(generateKeystore({ keyAlias, password, privateKey, isWallet }));
   };
 
-  const handleValidate = () => {
-    if (validateFile) {
-      dispatch(validateKeystore({ file: validateFile, keyAlias: validateKeyAlias, password: validatePassword }));
+  const handleRead = () => {
+    if (readFile) {
+      dispatch(readKeystore({ file: readFile, keyAlias: readKeyAlias, password: readPassword, isWallet: readIsWallet }));
     }
   };
 
@@ -85,6 +87,14 @@ const KeystoreGenerator = () => {
                   required
                 />
               </FormGroup>
+              <br/>
+              <FormGroup check>
+                <Label check>
+                  <Input type="checkbox" checked={isWallet} onChange={() => setIsWallet(!isWallet)} /> Is this a wallet key?
+                </Label>
+              </FormGroup>
+              <br/>
+              <br/>
               <Button color="primary" onClick={handleGenerate} disabled={loading}>
                 {loading ? 'Generating...' : 'Generate Keystore'}
               </Button>
@@ -95,45 +105,53 @@ const KeystoreGenerator = () => {
       <Col md="6">
         <Card>
           <CardBody>
-            <CardTitle tag="h2">Validate Keystore</CardTitle>
+            <CardTitle tag="h2">Read Keystore</CardTitle>
             <div>
               <FormGroup>
-                <Label for="validateFile">Keystore File</Label>
-                <Input type="file" name="validateFile" id="validateFile" onChange={e => setValidateFile(e.target.files[0])} required />
+                <Label for="readFile">Keystore File</Label>
+                <Input type="file" name="readFile" id="readFile" onChange={e => setReadFile(e.target.files[0])} required />
               </FormGroup>
               <FormGroup>
-                <Label for="validateKeyAlias">Key Alias</Label>
+                <Label for="readKeyAlias">Key Alias</Label>
                 <Input
                   type="text"
-                  name="validateKeyAlias"
-                  id="validateKeyAlias"
-                  value={validateKeyAlias}
-                  onChange={e => setValidateKeyAlias(e.target.value)}
+                  name="readKeyAlias"
+                  id="readKeyAlias"
+                  value={readKeyAlias}
+                  onChange={e => setReadKeyAlias(e.target.value)}
                   required
                 />
               </FormGroup>
               <FormGroup>
-                <Label for="validatePassword">Keystore Password</Label>
+                <Label for="readPassword">Keystore Password</Label>
                 <Input
                   type="password"
-                  name="validatePassword"
-                  id="validatePassword"
-                  value={validatePassword}
-                  onChange={e => setValidatePassword(e.target.value)}
+                  name="readPassword"
+                  id="readPassword"
+                  value={readPassword}
+                  onChange={e => setReadPassword(e.target.value)}
                   required
                 />
               </FormGroup>
+              <br/>
+              <FormGroup check>
+                <Label check>
+                  <Input type="checkbox" checked={readIsWallet} onChange={() => setReadIsWallet(!readIsWallet)} /> Is this a wallet key?
+                </Label>
+              </FormGroup>
+              <br/>
+              <br/>
               {errorMessage && <p className="text-danger">{errorMessage}</p>}
               {validatedValue && (
                 <div className="alert alert-success">
-                  <p>Validation Successful!</p>
+                  <p>Read Successful!</p>
                   <p>
                     <strong>Retrieved Value:</strong> {validatedValue}
                   </p>
                 </div>
               )}
-              <Button color="primary" onClick={handleValidate} disabled={loading}>
-                {loading ? 'Validating...' : 'Validate Keystore'}
+              <Button color="primary" onClick={handleRead} disabled={loading}>
+                {loading ? 'Reading...' : 'Read Keystore'}
               </Button>
             </div>
           </CardBody>

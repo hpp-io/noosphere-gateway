@@ -3,23 +3,14 @@ package io.hpp.noosphere.gw.security;
 import static io.hpp.noosphere.gw.config.Constants.PROPERTY_NAME_WALLET_ADDRESS;
 
 import io.hpp.noosphere.gw.config.Constants;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.security.KeyStore;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -189,66 +180,5 @@ public final class SecurityUtils {
     }
 
     return details;
-  }
-
-  public static void createKeyStore(Path keystoreFilePath, String keyAlias, String keystorePassword, String privateKey) {
-    String base64KeyValue = privateKey;
-
-    String keyAlgorithm = "AES";
-
-    char[] keystorePasswordBytes = keystorePassword.toCharArray();
-    // ------------------------
-
-    try {
-      byte[] keyBytes;
-      if (base64KeyValue != null) {
-        keyBytes = Base64.getEncoder().encode(base64KeyValue.getBytes(StandardCharsets.UTF_8));
-      } else {
-        LOG.error("Error: No key value provided.");
-        return;
-      }
-
-      SecretKey secretKey = new SecretKeySpec(keyBytes, keyAlgorithm);
-
-      KeyStore keyStore = KeyStore.getInstance("PKCS12");
-
-      keyStore.load(null, keystorePasswordBytes);
-
-      KeyStore.ProtectionParameter entryPassword = new KeyStore.PasswordProtection(keystorePasswordBytes);
-
-      KeyStore.SecretKeyEntry secretKeyEntry = new KeyStore.SecretKeyEntry(secretKey);
-
-      keyStore.setEntry(keyAlias, secretKeyEntry, entryPassword);
-
-      try (OutputStream fos = Files.newOutputStream(keystoreFilePath)) {
-        keyStore.store(fos, keystorePasswordBytes);
-      }
-
-      LOG.info("Successfully created '" + keystoreFilePath + "'");
-      LOG.info("Added secret key with alias: " + keyAlias);
-    } catch (Exception e) {
-      LOG.error("Failed to create keystore: " + keyAlias, e);
-      throw new RuntimeException(e);
-    }
-  }
-
-  public static String validateKeyStore(InputStream keystoreInputStream, String keyAlias, String keystorePassword) {
-    try {
-      KeyStore keyStore = KeyStore.getInstance("PKCS12");
-      keyStore.load(keystoreInputStream, keystorePassword.toCharArray());
-
-      KeyStore.ProtectionParameter entryPassword = new KeyStore.PasswordProtection(keystorePassword.toCharArray());
-      KeyStore.SecretKeyEntry secretKeyEntry = (KeyStore.SecretKeyEntry) keyStore.getEntry(keyAlias, entryPassword);
-
-      if (secretKeyEntry != null) {
-        SecretKey secretKey = secretKeyEntry.getSecretKey();
-        return new String(Base64.getDecoder().decode(secretKey.getEncoded()), StandardCharsets.UTF_8);
-      } else {
-        return null;
-      }
-    } catch (Exception e) {
-      LOG.error("Failed to validate keystore", e);
-      throw new RuntimeException(e);
-    }
   }
 }
