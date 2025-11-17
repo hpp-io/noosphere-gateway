@@ -21,6 +21,14 @@ public class ApplicationProperties {
   private final Keycloak keycloak = new Keycloak();
   private AppKit appKit = new AppKit();
   private String environment;
+  private Storage storage = new Storage();
+
+  @Data
+  public static class Storage {
+
+    private String basePath;
+
+  }
 
   @Data
   public static class AppKit {

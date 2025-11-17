@@ -54,6 +54,7 @@ export const loadIcons = () => {
     faFlag,
     faHeart,
     faHome,
+    faLock,
     faList,
     faLock,
     faPencilAlt,

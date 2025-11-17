@@ -12,6 +12,9 @@ const accountMenuItemsAuthenticated = () => (
     <MenuItem icon="user-circle" to="/profile" data-cy="profile">
       <Translate contentKey="global.menu.account.profile">Profile</Translate>
     </MenuItem>
+    <MenuItem icon="lock" to="/setting/keystore-generator">
+      <Translate contentKey="global.menu.account.keystoreGenerator">Keystore GEnerator</Translate>
+    </MenuItem>
     <MenuItem icon="sign-out-alt" to="/logout" data-cy="logout">
       <Translate contentKey="global.menu.account.logout">Sign out</Translate>
     </MenuItem>

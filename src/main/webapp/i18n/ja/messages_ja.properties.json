@@ -146,6 +146,7 @@
     "item-count": "{{total}}件中 {{first}} - {{second}}件目を表示しています。",
     "menu": {
       "account": {
+        "keystoreGenerator": "Keystore Generator",
         "login": "ログイン",
         "logout": "ログアウト",
         "main": "アカウント",
