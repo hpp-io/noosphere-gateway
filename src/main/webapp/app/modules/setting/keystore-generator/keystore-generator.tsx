@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Button, FormGroup, Label, Input, Card, CardBody, CardTitle, Row, Col } from 'reactstrap';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { generateKeystore, readKeystore, reset } from './keystore-generator.reducer';
+import { createKeystore, readKeystore, reset } from './keystore-generator.reducer';
 
 const KeystoreGenerator = () => {
   const dispatch = useAppDispatch();
-  const { loading, errorMessage, keystoreFile, fileName, validatedValue } = useAppSelector(state => state.keystoreGenerator);
+  const { loading, errorMessage, keystoreFile, fileName, readValue } = useAppSelector(state => state.keystoreGenerator);
 
   const [keyAlias, setKeyAlias] = useState('');
   const [password, setPassword] = useState('');
   const [privateKey, setPrivateKey] = useState('');
-  const [isWallet, setIsWallet] = useState(false);
+  const [isWallet, setIsWallet] = useState(true);
+  const [createHppWallet, setCreateHppWallet] = useState(true);
 
   const [readFile, setReadFile] = useState<File | null>(null);
   const [readKeyAlias, setReadKeyAlias] = useState('');
   const [readPassword, setReadPassword] = useState('');
   const [readIsWallet, setReadIsWallet] = useState(false);
+  const [readIsHppWallet, setReadIsHppWallet] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -38,12 +40,12 @@ const KeystoreGenerator = () => {
   }, [keystoreFile, fileName, dispatch]);
 
   const handleGenerate = () => {
-    dispatch(generateKeystore({ keyAlias, password, privateKey, isWallet }));
+    dispatch(createKeystore({ keyAlias, password, privateKey, isWallet, createHppWallet }));
   };
 
   const handleRead = () => {
     if (readFile) {
-      dispatch(readKeystore({ file: readFile, keyAlias: readKeyAlias, password: readPassword, isWallet: readIsWallet }));
+      dispatch(readKeystore({ file: readFile, keyAlias: readKeyAlias, password: readPassword, isWallet: readIsWallet, isHppWallet: readIsHppWallet  }));
     }
   };
 
@@ -90,7 +92,14 @@ const KeystoreGenerator = () => {
               <br/>
               <FormGroup check>
                 <Label check>
-                  <Input type="checkbox" checked={isWallet} onChange={() => setIsWallet(!isWallet)} /> Is this a wallet key?
+                  <Input type="checkbox" checked={isWallet} onChange={() => setIsWallet(!isWallet)} /> Is this a wallet private key?
+                </Label>
+              </FormGroup>
+              <br/>
+              <br/>
+              <FormGroup check>
+                <Label check>
+                  <Input type="checkbox" checked={createHppWallet} onChange={() => setCreateHppWallet(!createHppWallet)} /> Create HPP wallet address?
                 </Label>
               </FormGroup>
               <br/>
@@ -136,17 +145,33 @@ const KeystoreGenerator = () => {
               <br/>
               <FormGroup check>
                 <Label check>
-                  <Input type="checkbox" checked={readIsWallet} onChange={() => setReadIsWallet(!readIsWallet)} /> Is this a wallet key?
+                  <Input type="checkbox" checked={readIsWallet} onChange={() => {
+                    setReadIsWallet(!readIsWallet);
+                    setReadIsHppWallet(readIsWallet);
+                  }
+                  } /> Read wallet private key?
+                </Label>
+              </FormGroup>
+              <br/>
+              <br/>
+              <FormGroup check>
+                <Label check>
+                  <Input type="checkbox" checked={readIsHppWallet} onChange={() =>
+                  {
+                    setReadIsHppWallet(!readIsHppWallet);
+                    setReadIsWallet(readIsHppWallet);
+                  }
+                  } /> Read HPP wallet address?
                 </Label>
               </FormGroup>
               <br/>
               <br/>
               {errorMessage && <p className="text-danger">{errorMessage}</p>}
-              {validatedValue && (
+              {readValue && (
                 <div className="alert alert-success">
                   <p>Read Successful!</p>
                   <p>
-                    <strong>Retrieved Value:</strong> {validatedValue}
+                    <strong>Retrieved Value:</strong> {readValue}
                   </p>
                 </div>
               )}

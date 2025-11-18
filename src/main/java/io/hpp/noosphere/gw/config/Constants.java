@@ -18,6 +18,7 @@ public final class Constants {
     public static final String SERVICE_API_VERIFIERS = "/verifiers";
     public static final String SERVICE_API_SEARCH = "/search";
     public static final String API_URL_SLASH = "/";
+    public static final String KEY_ALIAS_HPP_WALLET_ADDRESS = "hpp-wallet-addr";
 
     private Constants() {}
 }

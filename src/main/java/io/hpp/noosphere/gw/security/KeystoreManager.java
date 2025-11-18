@@ -39,11 +39,22 @@ public class KeystoreManager {
     Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
   }
 
-  public static void createKeyStore(Path path, String password)
+  public static KeyStore createKeyStore(String password)
     throws GeneralSecurityException, IOException {
     try {
       KeyStore ks = KeyStore.getInstance(KEYSTORE_TYPE);
       ks.load(null, password.toCharArray());
+      LOG.debug("Created new empty keystore");
+      return ks;
+    } catch (NoSuchAlgorithmException | CertificateException e) {
+      throw new GeneralSecurityException("Failed to create keystore", e);
+    }
+  }
+
+  public static void createKeyStore(Path path, String password)
+    throws GeneralSecurityException, IOException {
+    try {
+      KeyStore ks = createKeyStore(password);
       saveKeyStore(ks, path, password);
       LOG.debug("Created new empty keystore at: {}", path);
     } catch (NoSuchAlgorithmException | CertificateException e) {
@@ -77,16 +88,20 @@ public class KeystoreManager {
     }
   }
 
-  public static void createKeyStoreWithHexPrivateKey(Path path, String password, String alias, String hexPrivateKey)
+  public static Credentials createKeyStoreWithHexPrivateKey(Path path, String password, String alias, String hexPrivateKey)
     throws GeneralSecurityException, IOException {
+    Credentials credentials = null;
     try {
       KeyStore ks = KeyStore.getInstance(KEYSTORE_TYPE);
       ks.load(null, password.toCharArray());
 
-      addEthWalletV3WithHexPrivateKey(ks, password, alias, hexPrivateKey);
+      credentials = addEthWalletV3WithHexPrivateKey(ks, password, alias, hexPrivateKey);
 
       saveKeyStore(ks, path, password);
+
       LOG.debug("Created new keystore with private key at: {}", path);
+
+      return credentials;
     } catch (NoSuchAlgorithmException | CertificateException e) {
       throw new GeneralSecurityException("Failed to create keystore", e);
     }
@@ -167,36 +182,40 @@ public class KeystoreManager {
   }
 
 
-  public static void addEthWalletV3FromBytes(KeyStore ks, String password, String alias, byte[] privateKeyBytes)
+  public static Credentials addEthWalletV3FromBytes(KeyStore ks, String password, String alias, byte[] privateKeyBytes)
     throws GeneralSecurityException {
     BigInteger privateKey = new BigInteger(1, privateKeyBytes);
-    addEthWalletV3FromBigInteger(ks, password, alias, privateKey);
+    Credentials credentials = addEthWalletV3FromBigInteger(ks, password, alias, privateKey);
     LOG.debug("Added ETH wallet with alias '{}' to keystore.", alias);
+    return credentials;
   }
 
 
-  public static void addEthWalletV3FromBigInteger(KeyStore ks, String password, String alias, BigInteger privateKey)
+  public static Credentials addEthWalletV3FromBigInteger(KeyStore ks, String password, String alias, BigInteger privateKey)
     throws GeneralSecurityException {
     ECKeyPair ecKeyPair = ECKeyPair.create(privateKey);
     KeyStore.ProtectionParameter protection = new KeyStore.PasswordProtection(password.toCharArray());
     storeEthKeyAsSecret(ks, alias, ecKeyPair, protection);
     LOG.debug("Added ETH wallet with alias '{}' to keystore.", alias);
+    return Credentials.create(ecKeyPair);
   }
 
-  public static void addEthWalletV3WithHexPrivateKey(KeyStore ks, String password, String alias, String hexPrivateKey)
+  public static Credentials addEthWalletV3WithHexPrivateKey(KeyStore ks, String password, String alias, String hexPrivateKey)
     throws GeneralSecurityException {
+    Credentials credentials = null;
     if (hexPrivateKey != null) {
       if (hexPrivateKey.startsWith("0x")) {
         hexPrivateKey = hexPrivateKey.substring(2);
       }
 
       BigInteger privateKey = new BigInteger(hexPrivateKey, 16);
-      addEthWalletV3FromBigInteger(ks, password, alias, privateKey);
+      credentials = addEthWalletV3FromBigInteger(ks, password, alias, privateKey);
 
       LOG.debug("Added ETH wallet with alias '{}' to keystore.", alias);
     } else {
       LOG.error("Failed to add ETH wallet with alias '{}' to keystore because private key is null.", alias);
     }
+    return credentials;
   }
 
   public static KeyStore loadKeyStore(Path path, String password)

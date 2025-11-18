@@ -7,6 +7,7 @@ public class KeystoreRequest {
 
     private String keyAlias;
     private Boolean isWallet;
+    private Boolean createHppWallet;
     private String password;
     private String privateKey;
 }
