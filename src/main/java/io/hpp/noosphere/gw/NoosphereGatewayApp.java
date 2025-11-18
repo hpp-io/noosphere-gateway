@@ -14,12 +14,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.core.env.Environment;
+import reactivefeign.spring.config.EnableReactiveFeignClients;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = { FeignAutoConfiguration.class })
 @EnableConfigurationProperties({ ApplicationProperties.class })
+@EnableDiscoveryClient
+@EnableReactiveFeignClients(basePackages = "io.hpp.noosphere.gw.client")
 public class NoosphereGatewayApp {
 
     private static final Logger LOG = LoggerFactory.getLogger(NoosphereGatewayApp.class);

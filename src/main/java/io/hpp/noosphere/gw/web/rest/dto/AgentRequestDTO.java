@@ -1,4 +1,4 @@
-package io.hpp.noosphere.gw.web.rest.vm;
+package io.hpp.noosphere.gw.web.rest.dto;
 
 import io.hpp.noosphere.gw.web.rest.vm.enumeration.StatusCode;
 import java.io.Serializable;
@@ -9,6 +9,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @SuppressWarnings("common-java:DuplicatedBlocks")
 @Data
 public class AgentRequestDTO implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   private UUID id;
 

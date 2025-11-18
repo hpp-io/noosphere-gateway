@@ -27,6 +27,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.oauth2.client.InMemoryReactiveOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcReactiveOAuth2UserService;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -77,6 +79,11 @@ public class SecurityConfiguration {
     public SecurityConfiguration(ReactiveClientRegistrationRepository clientRegistrationRepository, JHipsterProperties jHipsterProperties) {
         this.clientRegistrationRepository = clientRegistrationRepository;
         this.jHipsterProperties = jHipsterProperties;
+    }
+
+    @Bean
+    public ReactiveOAuth2AuthorizedClientService authorizedClientService() {
+        return new InMemoryReactiveOAuth2AuthorizedClientService(clientRegistrationRepository);
     }
 
     @Bean

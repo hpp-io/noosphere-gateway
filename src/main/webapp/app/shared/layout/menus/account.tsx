@@ -9,7 +9,7 @@ import { NavDropdown } from './menu-components';
 
 const accountMenuItemsAuthenticated = () => (
   <>
-    <MenuItem icon="user-circle" to="/profile" data-cy="profile">
+    <MenuItem icon="user-circle" to="/setting/profile" data-cy="profile">
       <Translate contentKey="global.menu.account.profile">Profile</Translate>
     </MenuItem>
     <MenuItem icon="lock" to="/setting/keystore-generator">

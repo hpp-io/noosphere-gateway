@@ -1,4 +1,4 @@
-package io.hpp.noosphere.gw.web.rest.vm;
+package io.hpp.noosphere.gw.web.rest.dto;
 
 import java.io.Serializable;
 import lombok.Data;

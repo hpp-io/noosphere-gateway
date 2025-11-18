@@ -1,4 +1,4 @@
-package io.hpp.noosphere.gw.web.rest.vm;
+package io.hpp.noosphere.gw.web.rest.dto;
 
 import io.hpp.noosphere.gw.web.rest.vm.enumeration.PeriodType;
 import io.hpp.noosphere.gw.web.rest.vm.enumeration.StatusCode;
@@ -11,6 +11,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @SuppressWarnings("common-java:DuplicatedBlocks")
 @Data
 public class UserSubscriptionDTO implements Serializable {
+
+  private static final long serialVersionUID = 1L;
 
   private UUID id;
 
