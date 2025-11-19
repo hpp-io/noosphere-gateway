@@ -1,13 +1,20 @@
 package io.hpp.noosphere.gw.client;
 
+import io.hpp.noosphere.gw.web.rest.dto.AgentContainerDTO;
+import io.hpp.noosphere.gw.web.rest.dto.AgentDTO;
 import io.hpp.noosphere.gw.web.rest.dto.AgentRequestDTO;
 import io.hpp.noosphere.gw.web.rest.dto.ContainerDTO;
 import io.hpp.noosphere.gw.web.rest.dto.CreateWalletRequest;
 import io.hpp.noosphere.gw.web.rest.dto.UserDTO;
+import io.hpp.noosphere.gw.web.rest.dto.UserSubscriptionDTO;
 import io.hpp.noosphere.gw.web.rest.dto.VerifierDTO;
-import io.hpp.noosphere.gw.web.rest.vm.UpdateWalletVm;
+import io.hpp.noosphere.gw.web.rest.vm.KeepAliveResponse;
 import io.hpp.noosphere.gw.web.rest.vm.PageableVm;
+import io.hpp.noosphere.gw.web.rest.vm.RegisterAgentVm;
+import io.hpp.noosphere.gw.web.rest.vm.UpdateWalletVm;
+import io.hpp.noosphere.gw.web.rest.vm.search.SearchAgentContainerVm;
 import io.hpp.noosphere.gw.web.rest.vm.search.SearchAgentRequestVm;
+import io.hpp.noosphere.gw.web.rest.vm.search.SearchAgentVm;
 import io.hpp.noosphere.gw.web.rest.vm.search.SearchContainerVm;
 import io.hpp.noosphere.gw.web.rest.vm.search.SearchVerifierVm;
 import java.util.UUID;
@@ -21,6 +28,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import reactivefeign.FallbackFactory;
 import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Flux;
@@ -85,6 +94,46 @@ public interface NoosphereHubClient {
 
   @PutMapping("/api/users/profile")
   Mono<Void> updateUserProfile(@RequestBody UserDTO userDTO);
+
+  @PutMapping("/api/agents/{id}")
+  Mono<AgentDTO> updateAgent(@PathVariable("id") UUID id, @RequestBody AgentDTO agentDTO);
+
+  @PostMapping("/api/agents/search")
+  Flux<AgentDTO> searchAgents(@RequestBody SearchAgentVm searchVm, @SpringQueryMap PageableVm pageable);
+
+  @GetMapping("/api/agents/{id}")
+  Mono<AgentDTO> getAgent(@PathVariable("id") UUID id);
+
+  @DeleteMapping("/api/agents/{id}")
+  Mono<Void> deleteAgent(@PathVariable("id") UUID id);
+
+  @PostMapping("/api/agents/register")
+  Mono<AgentDTO> registerAgent(@RequestBody RegisterAgentVm agentVm);
+
+  @GetMapping("/api/agents/{id}/subscriptions")
+  Flux<UserSubscriptionDTO> getSubscriptions(@PathVariable("id") UUID id, @RequestParam("size") Integer size);
+
+  @PutMapping("/api/agents/{agentId}/containers/{containerId}")
+  Mono<AgentContainerDTO> createAgentContainer(@PathVariable("agentId") UUID agentId, @PathVariable("containerId") UUID containerId);
+
+  @PostMapping("/api/agents/{agentId}/containers/search")
+  Flux<AgentContainerDTO> searchAgentContainers(
+    @PathVariable("agentId") UUID agentId,
+    @RequestBody SearchAgentContainerVm searchVm,
+    @SpringQueryMap PageableVm pageable
+  );
+
+  @GetMapping("/api/agents/{agentId}/containers/{containerId}")
+  Mono<AgentContainerDTO> getAgentContainer(@PathVariable("agentId") UUID agentId, @PathVariable("containerId") UUID containerId);
+
+  @DeleteMapping("/api/agents/{agentId}/containers/{containerId}")
+  Mono<Void> deleteAgentContainer(@PathVariable("agentId") UUID agentId, @PathVariable("containerId") UUID containerId);
+
+  @PutMapping("/api/agents/{agentId}/keep-alive")
+  Mono<KeepAliveResponse> keepAlive(@PathVariable("agentId") UUID agentId);
+
+  @GetMapping("/api/users/from-api-key")
+  Mono<UserDTO> getUserFromApiKey(@RequestHeader("X-API-KEY") String apiKey);
 
   @Component
   class NoosphereHubClientFallbackFactory implements FallbackFactory<NoosphereHubClient> {
@@ -182,6 +231,70 @@ public interface NoosphereHubClient {
 
         @Override
         public Mono<Void> updateUserProfile(UserDTO userDTO) {
+          return Mono.empty();
+        }
+
+        @Override
+        public Mono<AgentDTO> updateAgent(UUID id, AgentDTO agentDTO) {
+          return Mono.empty();
+        }
+
+        @Override
+        public Flux<AgentDTO> searchAgents(SearchAgentVm searchVm, PageableVm pageable) {
+          return Flux.empty();
+        }
+
+        @Override
+        public Mono<AgentDTO> getAgent(UUID id) {
+          return Mono.empty();
+        }
+
+        @Override
+        public Mono<Void> deleteAgent(UUID id) {
+          return Mono.empty();
+        }
+
+        @Override
+        public Mono<AgentDTO> registerAgent(RegisterAgentVm agentVm) {
+          return Mono.empty();
+        }
+
+        @Override
+        public Flux<UserSubscriptionDTO> getSubscriptions(UUID id, Integer size) {
+          return Flux.empty();
+        }
+
+        @Override
+        public Mono<AgentContainerDTO> createAgentContainer(UUID agentId, UUID containerId) {
+          return Mono.empty();
+        }
+
+        @Override
+        public Flux<AgentContainerDTO> searchAgentContainers(
+          UUID agentId,
+          SearchAgentContainerVm searchVm,
+          PageableVm pageable
+        ) {
+          return Flux.empty();
+        }
+
+        @Override
+        public Mono<AgentContainerDTO> getAgentContainer(UUID agentId, UUID containerId) {
+          return Mono.empty();
+        }
+
+        @Override
+        public Mono<Void> deleteAgentContainer(UUID agentId, UUID containerId) {
+          return Mono.empty();
+        }
+
+        @Override
+        public Mono<KeepAliveResponse> keepAlive(UUID agentId) {
+          return Mono.empty();
+        }
+
+        @Override
+        public Mono<UserDTO> getUserFromApiKey(String apiKey) {
           return Mono.empty();
         }
       };

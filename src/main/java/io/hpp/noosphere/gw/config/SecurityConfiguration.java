@@ -8,6 +8,8 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import io.hpp.noosphere.gw.security.AuthoritiesConstants;
 import io.hpp.noosphere.gw.security.SecurityUtils;
+import io.hpp.noosphere.gw.security.apikey.ApiKeyAuthenticationConverter;
+import io.hpp.noosphere.gw.security.apikey.ApiKeyAuthenticationWebFilter;
 import io.hpp.noosphere.gw.security.oauth2.AudienceValidator;
 import io.hpp.noosphere.gw.web.filter.SpaWebFilter;
 import java.time.Duration;
@@ -20,8 +22,10 @@ import java.util.function.Consumer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -51,6 +55,7 @@ import org.springframework.security.web.server.header.ReferrerPolicyServerHttpHe
 import org.springframework.security.web.server.header.XFrameOptionsServerHttpHeadersWriter.Mode;
 import org.springframework.security.web.server.util.matcher.NegatedServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.OrServerWebExchangeMatcher;
+import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -67,6 +72,7 @@ public class SecurityConfiguration {
     private String issuerUri;
 
     private final ReactiveClientRegistrationRepository clientRegistrationRepository;
+    private final ApiKeyAuthenticationWebFilter apiKeyAuthenticationWebFilter;
 
     // See https://github.com/jhipster/generator-jhipster/issues/18868
     // We don't use a distributed cache or the user selected cache implementation here on purpose
@@ -76,9 +82,14 @@ public class SecurityConfiguration {
         .recordStats()
         .build();
 
-    public SecurityConfiguration(ReactiveClientRegistrationRepository clientRegistrationRepository, JHipsterProperties jHipsterProperties) {
+    public SecurityConfiguration(
+        ReactiveClientRegistrationRepository clientRegistrationRepository,
+        JHipsterProperties jHipsterProperties,
+        @Lazy ApiKeyAuthenticationWebFilter apiKeyAuthenticationWebFilter
+    ) {
         this.clientRegistrationRepository = clientRegistrationRepository;
         this.jHipsterProperties = jHipsterProperties;
+        this.apiKeyAuthenticationWebFilter = apiKeyAuthenticationWebFilter;
     }
 
     @Bean
@@ -98,10 +109,24 @@ public class SecurityConfiguration {
             .csrf(csrf ->
                 csrf
                     .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
+                    .requireCsrfProtectionMatcher(
+                        new NegatedServerWebExchangeMatcher(
+                            new OrServerWebExchangeMatcher(
+                                exchange -> {
+                                    if (exchange.getRequest().getHeaders().containsKey(ApiKeyAuthenticationConverter.API_KEY_HEADER)) {
+                                        return ServerWebExchangeMatcher.MatchResult.match();
+                                    }
+                                    return ServerWebExchangeMatcher.MatchResult.notMatch();
+                                },
+                                pathMatchers("/api/authenticate", "/login/oauth2/**", "/oauth2/**")
+                            )
+                        )
+                    )
                     // See https://stackoverflow.com/q/74447118/65681
                     .csrfTokenRequestHandler(new ServerCsrfTokenRequestAttributeHandler())
             )
             // See https://github.com/spring-projects/spring-security/issues/5766
+            .addFilterBefore(apiKeyAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
             .addFilterAt(new CookieCsrfFilter(), SecurityWebFiltersOrder.REACTOR_CONTEXT)
             .addFilterAfter(new SpaWebFilter(), SecurityWebFiltersOrder.HTTPS_REDIRECT)
             .headers(headers ->
@@ -125,6 +150,8 @@ public class SecurityConfiguration {
                     .pathMatchers("/api/authenticate").permitAll()
                     .pathMatchers("/api/auth-info").permitAll()
                     .pathMatchers("/api/server/info").permitAll()
+                    .pathMatchers(HttpMethod.POST, "/api/agents/register").permitAll()
+                    .pathMatchers(HttpMethod.POST, "/api/verifiers/register").permitAll()
                     .pathMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
                     .pathMatchers("/api/**").authenticated()
                     // microfrontend resources are loaded by webpack without authentication, they need to be public
