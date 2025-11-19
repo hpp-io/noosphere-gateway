@@ -26,7 +26,11 @@ import reactivefeign.spring.config.ReactiveFeignClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@ReactiveFeignClient(name = "noosphere-hub", fallbackFactory = NoosphereHubClient.NoosphereHubClientFallbackFactory.class)
+@ReactiveFeignClient(
+  name = "noosphere-hub",
+  fallbackFactory = NoosphereHubClient.NoosphereHubClientFallbackFactory.class,
+  configuration = NoosphereHubFeignConfiguration.class
+)
 public interface NoosphereHubClient {
   @PostMapping("/api/wallets")
   Mono<String> createWallet(@RequestBody CreateWalletRequest createWalletRequest);

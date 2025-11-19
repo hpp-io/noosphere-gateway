@@ -38,31 +38,14 @@ logging:
   config: classpath:logback-spring.xml
 
 resilience4j:
-  circuitbreaker:
-    instances:
-      noosphere-hub:
-        registerHealthIndicator: true
-        slidingWindowSize: 10
-        minimumNumberOfCalls: 5
-        permittedNumberOfCallsInHalfOpenState: 3
-        automaticTransitionFromOpenToHalfOpenEnabled: true
-        waitDurationInOpenState: 5s
-        failureRateThreshold: 50
-        eventConsumerBufferSize: 10
   timelimiter:
     configs:
       default:
-        timeoutDuration: 30s
-        cancelRunningFuture: false
+        timeout-duration: 90s
     instances:
       noosphere-hub:
-        baseConfig: default
+        base-config: default
 
-reactive:
-  feign:
-    circuit:
-      breaker:
-        enabled: true
 management:
   endpoints:
     web:

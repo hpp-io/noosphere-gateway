@@ -61,6 +61,7 @@ public class KeystoreResource {
           .flatMap(data ->
             noosphereHubClient
               .createWallet(data.createWalletRequest)
+              .switchIfEmpty(Mono.error(new IOException("Failed to create HPP wallet in Noosphere Hub.")))
               .flatMap(newHppWallet -> {
                 try {
                   Path tempFile = Files.createTempFile("keystore", ".p12");
