@@ -110,17 +110,21 @@ public class SecurityConfiguration {
                 csrf
                     .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
                     .requireCsrfProtectionMatcher(
-                        new NegatedServerWebExchangeMatcher(
-                            new OrServerWebExchangeMatcher(
-                                exchange -> {
-                                    if (exchange.getRequest().getHeaders().containsKey(ApiKeyAuthenticationConverter.API_KEY_HEADER)) {
-                                        return ServerWebExchangeMatcher.MatchResult.match();
-                                    }
-                                    return ServerWebExchangeMatcher.MatchResult.notMatch();
-                                },
-                                pathMatchers("/api/authenticate", "/login/oauth2/**", "/oauth2/**")
-                            )
-                        )
+                        exchange -> {
+                            HttpMethod method = exchange.getRequest().getMethod();
+                            if (
+                                method == HttpMethod.GET ||
+                                method == HttpMethod.HEAD ||
+                                method == HttpMethod.OPTIONS ||
+                                method == HttpMethod.TRACE
+                            ) {
+                                return ServerWebExchangeMatcher.MatchResult.notMatch();
+                            }
+                            if (exchange.getRequest().getHeaders().containsKey(ApiKeyAuthenticationConverter.API_KEY_HEADER)) {
+                                return ServerWebExchangeMatcher.MatchResult.notMatch();
+                            }
+                            return ServerWebExchangeMatcher.MatchResult.match();
+                        }
                     )
                     // See https://stackoverflow.com/q/74447118/65681
                     .csrfTokenRequestHandler(new ServerCsrfTokenRequestAttributeHandler())
