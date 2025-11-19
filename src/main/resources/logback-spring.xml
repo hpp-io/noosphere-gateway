@@ -23,6 +23,12 @@
     </appender>
 
     <logger name="io.hpp.noosphere" level="INFO"/>
+    <!--    WebClient/HTTP Request Logging -->
+    <logger name="org.springframework.web.reactive.function.client" level="INFO"/>
+    <!--    Reactor Netty's connection logging (shows the resolved host:port) -->
+    <logger name="reactor.netty.http.client" level="DEBUG"/>
+    <!--    Enable TRACE for even more detailed connection information -->
+    <logger name="reactor.netty.transport.logging" level="WARN"/>
     <logger name="javax.activation" level="WARN"/>
     <logger name="springfox" level="WARN"/>
     <logger name="com.querydsl" level="WARN"/>
