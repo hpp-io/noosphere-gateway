@@ -42,11 +42,11 @@ reactive:
     circuit:
       breaker:
         enabled: true
-  # client:
-  #   config:
-  #     default:
-  #       connectTimeout: 5000
-  #       readTimeout: 5000
+    client:
+      config:
+        noosphere-hub:
+          connectTimeout: 10000
+          readTimeout: 10000
 management:
   endpoints:
     web:
@@ -116,12 +116,6 @@ spring:
   application:
     name: NoosphereGateway
   cloud:
-    circuitbreaker:
-      resilience4j:
-        timelimiter:
-          configs:
-            default:
-              timeout-duration: 10s
     consul:
       discovery:
         prefer-ip-address: false
