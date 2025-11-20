@@ -86,6 +86,8 @@ module.exports = async options => {
             url: require.resolve('url'),
             assert: require.resolve('assert'),
             process: require.resolve('process'),
+            'porto': false,
+            'porto/internal': false,
           },
         },
         module: {
