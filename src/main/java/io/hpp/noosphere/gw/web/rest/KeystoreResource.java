@@ -14,7 +14,6 @@ import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,8 +31,8 @@ public class KeystoreResource {
   private final NoosphereHubClient noosphereHubClient;
   private final Logger log = LoggerFactory.getLogger(KeystoreResource.class);
 
-  public KeystoreResource(ApplicationContext context) {
-    this.noosphereHubClient = context.getBean(NoosphereHubClient.class);
+  public KeystoreResource(NoosphereHubClient noosphereHubClient) {
+    this.noosphereHubClient = noosphereHubClient;
   }
 
   @PostMapping("/create")
