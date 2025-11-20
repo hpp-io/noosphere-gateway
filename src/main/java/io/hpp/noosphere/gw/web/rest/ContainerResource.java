@@ -1,19 +1,15 @@
 package io.hpp.noosphere.gw.web.rest;
 
-import feign.FeignException;
 import io.hpp.noosphere.gw.client.NoosphereHubClient;
 import io.hpp.noosphere.gw.web.rest.dto.ContainerDTO;
 import io.hpp.noosphere.gw.web.rest.errors.BadRequestAlertException;
 import io.hpp.noosphere.gw.web.rest.vm.PageableVm;
 import io.hpp.noosphere.gw.web.rest.vm.search.SearchContainerVm;
 import jakarta.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -46,19 +43,13 @@ public class ContainerResource {
    * already an ID.
    */
   @PostMapping
-  public Mono<ResponseEntity<ContainerDTO>> createContainer(@Valid @RequestBody ContainerDTO containerDTO) {
+  public Mono<ContainerDTO> createContainer(@Valid @RequestBody ContainerDTO containerDTO) {
     LOG.debug("REST request to create Container : {}", containerDTO);
     if (containerDTO.getId() != null) {
       return Mono.error(new BadRequestAlertException("A new container cannot already have an ID", ENTITY_NAME, "idexists"));
     }
     // The client call returns a Mono<ContainerDTO>, which we map to a ResponseEntity.
-    return noosphereHubClient.createContainer(containerDTO)
-      .map(createdDto -> {
-        LOG.debug("Successfully created container with ID: {}", createdDto.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdDto);
-      })
-      .onErrorResume(FeignException.InternalServerError.class, e -> Mono.just(ResponseEntity.internalServerError().build()))
-      .onErrorResume(FeignException.BadRequest.class, e -> Mono.just(ResponseEntity.badRequest().build()));
+    return noosphereHubClient.createContainer(containerDTO);
   }
 
   /**
@@ -68,16 +59,9 @@ public class ContainerResource {
    * @return the {@link Mono} with status {@code 200 (OK)} and with body the container, or with status {@code 404 (Not Found)}.
    */
   @GetMapping("/{id}")
-  public Mono<ResponseEntity<ContainerDTO>> getContainer(@PathVariable("id") UUID id) {
+  public Mono<ContainerDTO> getContainer(@PathVariable("id") UUID id) {
     LOG.debug("REST request to get Container : {}", id);
-    return noosphereHubClient
-      .getContainer(id) // Returns Mono<ContainerDTO>
-      .map(ResponseEntity::ok) // On success, wrap the DTO in a 200 OK ResponseEntity
-      .onErrorResume(FeignException.NotFound.class, e -> {
-        LOG.debug("Container not found from downstream service for ID: {}", id);
-        return Mono.just(ResponseEntity.notFound().build());
-      })
-      .onErrorResume(FeignException.InternalServerError.class, e -> Mono.just(ResponseEntity.internalServerError().build()));
+    return noosphereHubClient.getContainer(id);
   }
 
   /**
@@ -87,18 +71,9 @@ public class ContainerResource {
    * @return the {@link Mono} with status {@code 204 (No Content)}, or status {@code 404 (Not Found)}.
    */
   @DeleteMapping("/{id}")
-  public Mono<ResponseEntity<Void>> deleteContainer(@PathVariable("id") UUID id) {
+  public Mono<Void> deleteContainer(@PathVariable("id") UUID id) {
     LOG.debug("REST request to delete Container : {}", id);
-    return noosphereHubClient
-      .deleteContainer(id) // Returns Mono<Void>
-      .then(Mono.just(ResponseEntity.noContent().<Void>build())) // On success, return 204 No Content
-      .onErrorResume(FeignException.NotFound.class, e -> {
-        // If the resource is already gone, the goal is achieved.
-        // Returning 404 is often clearer for the client than returning 204.
-        LOG.debug("Container not found for deletion from downstream service for ID: {}", id);
-        return Mono.just(ResponseEntity.notFound().build());
-      })
-      .onErrorResume(FeignException.InternalServerError.class, e -> Mono.just(ResponseEntity.internalServerError().build()));
+    return noosphereHubClient.deleteContainer(id);
   }
 
   /**
@@ -110,7 +85,7 @@ public class ContainerResource {
    * @return the {@link Mono} with status {@code 200 (OK)} and with body a list of containers, and pagination headers.
    */
   @PostMapping("/search")
-  public Mono<ResponseEntity<List<ContainerDTO>>> searchContainers(
+  public Flux<ContainerDTO> searchContainers(
     @Valid @RequestBody SearchContainerVm searchCriteria,
     Pageable pageable,
     ServerWebExchange exchange
@@ -118,18 +93,6 @@ public class ContainerResource {
     LOG.debug("REST request to search for a page of Containers with criteria: {}", searchCriteria);
     // The Feign client returns a Flux of containers. We collect them into a list.
     // Note: With this client signature, we cannot relay pagination headers from the downstream service.
-    return noosphereHubClient
-      .searchContainers(searchCriteria, new PageableVm(pageable))
-      .collectList()
-      .map(ResponseEntity::ok)
-      .onErrorResume(
-        FeignException.Unauthorized.class,
-        e -> {
-          LOG.error("Unauthorized error during container search", e);
-          return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).<List<ContainerDTO>>build());
-        }
-      )
-      .onErrorResume(FeignException.BadRequest.class, e -> Mono.just(ResponseEntity.badRequest().<List<ContainerDTO>>build()))
-      .onErrorResume(FeignException.InternalServerError.class, e -> Mono.just(ResponseEntity.internalServerError().<List<ContainerDTO>>build()));
+    return noosphereHubClient.searchContainers(searchCriteria, new PageableVm(pageable));
   }
 }
