@@ -166,6 +166,7 @@
         "logs": "ログ",
         "main": "管理",
         "metrics": "メトリクス",
+        "rateLimiting": "Rate Limiting",
         "tracker": "ユーザートラッカー",
         "userManagement": "ユーザー管理"
       },

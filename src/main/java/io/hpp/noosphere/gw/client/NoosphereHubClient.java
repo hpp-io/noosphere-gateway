@@ -1,5 +1,6 @@
 package io.hpp.noosphere.gw.client;
 
+import io.hpp.noosphere.gw.service.dto.RateLimitConfig;
 import io.hpp.noosphere.gw.web.rest.dto.AgentContainerDTO;
 import io.hpp.noosphere.gw.web.rest.dto.AgentDTO;
 import io.hpp.noosphere.gw.web.rest.dto.AgentRequestDTO;
@@ -16,7 +17,9 @@ import io.hpp.noosphere.gw.web.rest.vm.search.SearchAgentContainerVm;
 import io.hpp.noosphere.gw.web.rest.vm.search.SearchAgentRequestVm;
 import io.hpp.noosphere.gw.web.rest.vm.search.SearchAgentVm;
 import io.hpp.noosphere.gw.web.rest.vm.search.SearchContainerVm;
+import io.hpp.noosphere.gw.web.rest.vm.search.SearchUserVm;
 import io.hpp.noosphere.gw.web.rest.vm.search.SearchVerifierVm;
+import java.util.Map;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +44,18 @@ import reactor.core.publisher.Mono;
   configuration = NoosphereHubFeignConfiguration.class
 )
 public interface NoosphereHubClient {
+  @PostMapping("/api/users/search")
+  Flux<UserDTO> searchUsers(@RequestBody SearchUserVm searchVm, @SpringQueryMap PageableVm pageable);
+
+  @GetMapping("/api/rate-limit-configs")
+  Flux<RateLimitConfig> getRateLimitConfigs(@SpringQueryMap PageableVm pageable);
+
+  @GetMapping("/api/rate-limit-configs/{key}")
+  Mono<RateLimitConfig> getRateLimitConfig(@PathVariable("key") String key);
+
+  @PutMapping("/api/rate-limit-configs/{key}")
+  Mono<Void> updateRateLimitConfig(@PathVariable("key") String key, @RequestBody RateLimitConfig config);
+
   @PostMapping("/api/wallets")
   Mono<String> createWallet(@RequestBody CreateWalletRequest createWalletRequest);
 
@@ -144,6 +159,26 @@ public interface NoosphereHubClient {
     public NoosphereHubClient apply(Throwable cause) {
       log.error("NoosphereHubClient fallback; original cause: {}", cause.getMessage());
       return new NoosphereHubClient() {
+        @Override
+        public Flux<UserDTO> searchUsers(SearchUserVm searchVm, PageableVm pageable) {
+          return Flux.empty();
+        }
+
+        @Override
+        public Flux<RateLimitConfig> getRateLimitConfigs(PageableVm pageable) {
+          return Flux.empty();
+        }
+
+        @Override
+        public Mono<RateLimitConfig> getRateLimitConfig(String key) {
+          return Mono.empty();
+        }
+
+        @Override
+        public Mono<Void> updateRateLimitConfig(String key, RateLimitConfig config) {
+          return Mono.empty();
+        }
+
         @Override
         public Mono<String> createWallet(CreateWalletRequest createWalletRequest) {
           return Mono.empty();

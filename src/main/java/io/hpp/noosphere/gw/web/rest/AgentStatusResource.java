@@ -1,6 +1,7 @@
 package io.hpp.noosphere.gw.web.rest;
 
 import io.hpp.noosphere.gw.client.NoosphereHubClient;
+import io.hpp.noosphere.gw.config.RateLimited;
 import io.hpp.noosphere.gw.web.rest.vm.KeepAliveResponse;
 import java.util.UUID;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,14 +14,15 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api/agents")
 public class AgentStatusResource {
 
-    private final NoosphereHubClient noosphereHubClient;
+  private final NoosphereHubClient noosphereHubClient;
 
-    public AgentStatusResource(NoosphereHubClient noosphereHubClient) {
-        this.noosphereHubClient = noosphereHubClient;
-    }
+  public AgentStatusResource(NoosphereHubClient noosphereHubClient) {
+    this.noosphereHubClient = noosphereHubClient;
+  }
 
-    @PutMapping("/{agentId}/keep-alive")
-    public Mono<KeepAliveResponse> keepAlive(@PathVariable("agentId") UUID agentId) {
-        return noosphereHubClient.keepAlive(agentId);
-    }
+  @PutMapping("/{agentId}/keep-alive")
+  @RateLimited
+  public Mono<KeepAliveResponse> keepAlive(@PathVariable("agentId") UUID agentId) {
+    return noosphereHubClient.keepAlive(agentId);
+  }
 }

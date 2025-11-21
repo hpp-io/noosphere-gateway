@@ -1,6 +1,7 @@
 package io.hpp.noosphere.gw.web.rest;
 
 import io.hpp.noosphere.gw.config.ApplicationProperties;
+import io.hpp.noosphere.gw.config.RateLimited;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -13,31 +14,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/server")
 public class ServerInfoResource {
 
-    private final ApplicationProperties applicationProperties;
+  private final ApplicationProperties applicationProperties;
 
-    public ServerInfoResource(
-      ApplicationProperties applicationProperties
-    ) {
-        this.applicationProperties = applicationProperties;
+  public ServerInfoResource(ApplicationProperties applicationProperties) {
+    this.applicationProperties = applicationProperties;
+  }
 
-    }
-    @GetMapping("/info")
-    public ServerInfoVM getServerInfo() {
+  @GetMapping("/info")
+  @RateLimited
+  public ServerInfoVM getServerInfo() {
+    return new ServerInfoVM(applicationProperties.getAppKit().getProjectId(), applicationProperties.getEnvironment());
+  }
 
-        return new ServerInfoVM(
-          applicationProperties.getAppKit().getProjectId(),
-          applicationProperties.getEnvironment()
-        );
-    }
+  @Data
+  @AllArgsConstructor
+  class ServerInfoVM {
 
-    @Data
-    @AllArgsConstructor
-    class ServerInfoVM {
-
-        private String projectId;
-        private String envValue;
-
-
-
-    }
+    private String projectId;
+    private String envValue;
+  }
 }

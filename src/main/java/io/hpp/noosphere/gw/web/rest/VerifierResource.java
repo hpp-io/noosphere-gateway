@@ -1,6 +1,7 @@
 package io.hpp.noosphere.gw.web.rest;
 
 import io.hpp.noosphere.gw.client.NoosphereHubClient;
+import io.hpp.noosphere.gw.config.RateLimited;
 import io.hpp.noosphere.gw.web.rest.dto.VerifierDTO;
 import io.hpp.noosphere.gw.web.rest.errors.BadRequestAlertException;
 import io.hpp.noosphere.gw.web.rest.vm.PageableVm;
@@ -35,6 +36,7 @@ public class VerifierResource {
   }
 
   @PostMapping
+  @RateLimited
   public Mono<VerifierDTO> createVerifier(@Valid @RequestBody VerifierDTO verifierDTO) {
     LOG.debug("REST request to create Verifier : {}", verifierDTO);
     if (verifierDTO.getId() != null) {
@@ -44,6 +46,7 @@ public class VerifierResource {
   }
 
   @PostMapping("/search")
+  @RateLimited
   public Flux<VerifierDTO> searchVerifiers(
     @Valid @RequestBody SearchVerifierVm searchCriteria,
     Pageable pageable,
@@ -54,6 +57,7 @@ public class VerifierResource {
   }
 
   @GetMapping("/{id}")
+  @RateLimited
   public Mono<VerifierDTO> getVerifier(@PathVariable("id") UUID id) {
     LOG.debug("REST request to get Verifier : {}", id);
     return noosphereHubClient.getVerifier(id);

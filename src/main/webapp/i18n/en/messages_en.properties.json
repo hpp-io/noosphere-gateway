@@ -166,6 +166,7 @@
         "logs": "Logs",
         "main": "Administration",
         "metrics": "Metrics",
+        "rateLimiting": "Rate Limiting",
         "tracker": "User tracker",
         "userManagement": "User management"
       },

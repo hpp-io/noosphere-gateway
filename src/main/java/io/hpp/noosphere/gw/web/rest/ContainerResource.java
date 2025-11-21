@@ -1,6 +1,7 @@
 package io.hpp.noosphere.gw.web.rest;
 
 import io.hpp.noosphere.gw.client.NoosphereHubClient;
+import io.hpp.noosphere.gw.config.RateLimited;
 import io.hpp.noosphere.gw.web.rest.dto.ContainerDTO;
 import io.hpp.noosphere.gw.web.rest.errors.BadRequestAlertException;
 import io.hpp.noosphere.gw.web.rest.vm.PageableVm;
@@ -43,6 +44,7 @@ public class ContainerResource {
    * already an ID.
    */
   @PostMapping
+  @RateLimited
   public Mono<ContainerDTO> createContainer(@Valid @RequestBody ContainerDTO containerDTO) {
     LOG.debug("REST request to create Container : {}", containerDTO);
     if (containerDTO.getId() != null) {
@@ -59,6 +61,7 @@ public class ContainerResource {
    * @return the {@link Mono} with status {@code 200 (OK)} and with body the container, or with status {@code 404 (Not Found)}.
    */
   @GetMapping("/{id}")
+  @RateLimited
   public Mono<ContainerDTO> getContainer(@PathVariable("id") UUID id) {
     LOG.debug("REST request to get Container : {}", id);
     return noosphereHubClient.getContainer(id);
@@ -71,6 +74,7 @@ public class ContainerResource {
    * @return the {@link Mono} with status {@code 204 (No Content)}, or status {@code 404 (Not Found)}.
    */
   @DeleteMapping("/{id}")
+  @RateLimited
   public Mono<Void> deleteContainer(@PathVariable("id") UUID id) {
     LOG.debug("REST request to delete Container : {}", id);
     return noosphereHubClient.deleteContainer(id);
@@ -85,6 +89,7 @@ public class ContainerResource {
    * @return the {@link Mono} with status {@code 200 (OK)} and with body a list of containers, and pagination headers.
    */
   @PostMapping("/search")
+  @RateLimited
   public Flux<ContainerDTO> searchContainers(
     @Valid @RequestBody SearchContainerVm searchCriteria,
     Pageable pageable,

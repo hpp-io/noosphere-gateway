@@ -1,6 +1,7 @@
 package io.hpp.noosphere.gw.web.rest;
 
 import io.hpp.noosphere.gw.client.NoosphereHubClient;
+import io.hpp.noosphere.gw.config.RateLimited;
 import io.hpp.noosphere.gw.web.rest.dto.AgentDTO;
 import io.hpp.noosphere.gw.web.rest.dto.UserSubscriptionDTO;
 import io.hpp.noosphere.gw.web.rest.vm.PageableVm;
@@ -23,42 +24,47 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api/agents")
 public class AgentResource {
 
-    private final NoosphereHubClient noosphereHubClient;
+  private final NoosphereHubClient noosphereHubClient;
 
-    public AgentResource(NoosphereHubClient noosphereHubClient) {
-        this.noosphereHubClient = noosphereHubClient;
-    }
+  public AgentResource(NoosphereHubClient noosphereHubClient) {
+    this.noosphereHubClient = noosphereHubClient;
+  }
 
-    @PutMapping("/{id}")
-    public Mono<AgentDTO> updateAgent(@PathVariable("id") UUID id, @RequestBody AgentDTO agentDTO) {
-        return noosphereHubClient.updateAgent(id, agentDTO);
-    }
+  @PutMapping("/{id}")
+  @RateLimited
+  public Mono<AgentDTO> updateAgent(@PathVariable("id") UUID id, @RequestBody AgentDTO agentDTO) {
+    return noosphereHubClient.updateAgent(id, agentDTO);
+  }
 
-    @PostMapping("/search")
-    public Flux<AgentDTO> searchAgents(@RequestBody SearchAgentVm searchVm, PageableVm pageable) {
-        return noosphereHubClient.searchAgents(searchVm, pageable);
-    }
+  @PostMapping("/search")
+  @RateLimited
+  public Flux<AgentDTO> searchAgents(@RequestBody SearchAgentVm searchVm, PageableVm pageable) {
+    return noosphereHubClient.searchAgents(searchVm, pageable);
+  }
 
-    @GetMapping("/{id}")
-    public Mono<AgentDTO> getAgent(@PathVariable("id") UUID id) {
-        return noosphereHubClient.getAgent(id);
-    }
+  @GetMapping("/{id}")
+  @RateLimited
+  public Mono<AgentDTO> getAgent(@PathVariable("id") UUID id) {
+    return noosphereHubClient.getAgent(id);
+  }
 
-    @DeleteMapping("/{id}")
-    public Mono<Void> deleteAgent(@PathVariable("id") UUID id) {
-        return noosphereHubClient.deleteAgent(id);
-    }
+  @DeleteMapping("/{id}")
+  @RateLimited
+  public Mono<Void> deleteAgent(@PathVariable("id") UUID id) {
+    return noosphereHubClient.deleteAgent(id);
+  }
 
-    @PostMapping("/register")
-    public Mono<AgentDTO> registerAgent(@RequestBody RegisterAgentVm agentVm) {
-        return noosphereHubClient.registerAgent(agentVm);
-    }
+  @PostMapping("/register")
+  public Mono<AgentDTO> registerAgent(@RequestBody RegisterAgentVm agentVm) {
+    return noosphereHubClient.registerAgent(agentVm);
+  }
 
-    @GetMapping("/{id}/subscriptions")
-    public Flux<UserSubscriptionDTO> getSubscriptions(
-        @PathVariable("id") UUID id,
-        @RequestParam(value = "size", required = true) final Integer size
-    ) {
-        return noosphereHubClient.getSubscriptions(id, size);
-    }
+  @GetMapping("/{id}/subscriptions")
+  @RateLimited
+  public Flux<UserSubscriptionDTO> getSubscriptions(
+    @PathVariable("id") UUID id,
+    @RequestParam(value = "size", required = true) final Integer size
+  ) {
+    return noosphereHubClient.getSubscriptions(id, size);
+  }
 }

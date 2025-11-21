@@ -1,6 +1,7 @@
 package io.hpp.noosphere.gw.web.rest;
 
 import io.hpp.noosphere.gw.client.NoosphereHubClient;
+import io.hpp.noosphere.gw.config.RateLimited;
 import io.hpp.noosphere.gw.web.rest.dto.AgentRequestDTO;
 import io.hpp.noosphere.gw.web.rest.errors.BadRequestAlertException;
 import io.hpp.noosphere.gw.web.rest.vm.PageableVm;
@@ -35,6 +36,7 @@ public class AgentRequestResource {
   }
 
   @PostMapping
+  @RateLimited
   public Mono<AgentRequestDTO> createAgentRequest(@Valid @RequestBody AgentRequestDTO agentRequestDTO) {
     LOG.debug("REST request to create AgentRequest : {}", agentRequestDTO);
     if (agentRequestDTO.getId() != null) {
@@ -44,6 +46,7 @@ public class AgentRequestResource {
   }
 
   @PostMapping("/search")
+  @RateLimited
   public Flux<AgentRequestDTO> searchAgentRequests(
     @Valid @RequestBody SearchAgentRequestVm searchCriteria,
     Pageable pageable,
@@ -54,6 +57,7 @@ public class AgentRequestResource {
   }
 
   @GetMapping("/{id}")
+  @RateLimited
   public Mono<AgentRequestDTO> getAgentRequest(@PathVariable("id") UUID id) {
     LOG.debug("REST request to get AgentRequest : {}", id);
     return noosphereHubClient.getAgentRequest(id);

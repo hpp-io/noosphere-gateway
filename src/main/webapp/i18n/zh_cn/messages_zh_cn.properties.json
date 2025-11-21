@@ -166,6 +166,7 @@
         "logs": "日志",
         "main": "管理",
         "metrics": "资源监控",
+        "rateLimiting": "Rate Limiting",
         "tracker": "追踪使用者",
         "userManagement": "用户管理"
       },

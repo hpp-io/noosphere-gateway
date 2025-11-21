@@ -1,6 +1,7 @@
 package io.hpp.noosphere.gw.web.rest;
 
 import io.hpp.noosphere.gw.client.NoosphereHubClient;
+import io.hpp.noosphere.gw.config.RateLimited;
 import io.hpp.noosphere.gw.web.rest.dto.UserDTO;
 import io.hpp.noosphere.gw.web.rest.vm.UpdateWalletVm;
 import jakarta.validation.Valid;
@@ -27,42 +28,49 @@ public class UserResource {
   }
 
   @PostMapping("/mine/wallet")
+  @RateLimited
   public Mono<String> createWallet(@Valid @RequestBody UpdateWalletVm updateWalletVm) {
     LOG.debug("REST request to create wallet");
     return noosphereHubClient.createWallet(updateWalletVm);
   }
 
   @PutMapping("/mine/wallet")
+  @RateLimited
   public Mono<String> updateWallet(@Valid @RequestBody UpdateWalletVm updateWalletVm) {
     LOG.debug("REST request to update wallet");
     return noosphereHubClient.updateWallet(updateWalletVm);
   }
 
   @GetMapping("/mine/wallet")
+  @RateLimited
   public Mono<String> getWallet() {
     LOG.debug("REST request to get wallet");
     return noosphereHubClient.getWallet();
   }
 
   @GetMapping("/mine/api-key")
+  @RateLimited
   public Mono<String> getApiKey() {
     LOG.debug("REST request to get apiKey");
     return noosphereHubClient.getApiKey();
   }
 
   @PostMapping("/mine/api-key")
+  @RateLimited
   public Mono<String> createApiKey() {
     LOG.debug("REST request to create apiKey");
     return noosphereHubClient.createApiKey();
   }
 
   @GetMapping("/profile")
+  @RateLimited
   public Mono<UserDTO> getUserProfile() {
     LOG.debug("REST request to get User Profile");
     return noosphereHubClient.getUserProfile();
   }
 
   @PutMapping("/profile")
+  @RateLimited
   public Mono<Void> updateUserProfile(@RequestBody UserDTO userDTO) {
     LOG.debug("REST request to update User Profile");
     return noosphereHubClient.updateUserProfile(userDTO);

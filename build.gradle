@@ -126,6 +126,7 @@ configurations {
 }
 
 dependencies {
+    implementation "com.bucket4j:bucket4j-core:8.1.0"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
     implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
     implementation "com.github.ben-manes.caffeine:caffeine"

@@ -3,6 +3,7 @@ package io.hpp.noosphere.gw.web.rest;
 import static io.hpp.noosphere.gw.config.Constants.KEY_ALIAS_HPP_WALLET_ADDRESS;
 
 import io.hpp.noosphere.gw.client.NoosphereHubClient;
+import io.hpp.noosphere.gw.config.RateLimited;
 import io.hpp.noosphere.gw.security.KeystoreManager;
 import io.hpp.noosphere.gw.web.rest.dto.CreateWalletRequest;
 import io.hpp.noosphere.gw.web.rest.dto.KeystoreReadRequest;
@@ -36,6 +37,7 @@ public class KeystoreResource {
   }
 
   @PostMapping("/create")
+  @RateLimited
   public Mono<Resource> createKeystore(@RequestBody KeystoreRequest request) {
     Mono<Path> tempFileMono = Mono
       .fromCallable(() -> Files.createTempFile("keystore", ".p12"))
@@ -118,6 +120,7 @@ public class KeystoreResource {
   }
 
   @PostMapping("/read")
+  @RateLimited
   public Mono<String> readKeystore(@RequestBody KeystoreReadRequest request) {
     return Mono
       .fromCallable(() -> {
