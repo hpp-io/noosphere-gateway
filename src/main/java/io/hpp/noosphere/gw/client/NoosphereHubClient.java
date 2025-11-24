@@ -161,147 +161,147 @@ public interface NoosphereHubClient {
       return new NoosphereHubClient() {
         @Override
         public Flux<UserDTO> searchUsers(SearchUserVm searchVm, PageableVm pageable) {
-          return Flux.empty();
+          return Flux.error(cause);
         }
 
         @Override
         public Flux<RateLimitConfig> getRateLimitConfigs(PageableVm pageable) {
-          return Flux.empty();
+          return Flux.error(cause);
         }
 
         @Override
         public Mono<RateLimitConfig> getRateLimitConfig(String key) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<Void> updateRateLimitConfig(String key, RateLimitConfig config) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<String> createWallet(CreateWalletRequest createWalletRequest) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Flux<ContainerDTO> searchContainers(SearchContainerVm searchVm, PageableVm pageable) {
-          return Flux.empty();
+          return Flux.error(cause);
         }
 
         @Override
         public Mono<ContainerDTO> createContainer(ContainerDTO containerDTO) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<ContainerDTO> getContainer(UUID id) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<Void> deleteContainer(UUID id) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Flux<VerifierDTO> searchVerifiers(SearchVerifierVm searchVm, PageableVm pageable) {
-          return Flux.empty();
+          return Flux.error(cause);
         }
 
         @Override
         public Mono<VerifierDTO> createVerifier(VerifierDTO verifierDTO) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<VerifierDTO> getVerifier(UUID id) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Flux<AgentRequestDTO> searchAgentRequests(SearchAgentRequestVm searchVm, PageableVm pageable) {
-          return Flux.empty();
+          return Flux.error(cause);
         }
 
         @Override
         public Mono<AgentRequestDTO> createAgentRequest(AgentRequestDTO agentRequestDTO) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<AgentRequestDTO> getAgentRequest(UUID id) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<String> createWallet(UpdateWalletVm updateWalletVm) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<String> updateWallet(UpdateWalletVm updateWalletVm) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<String> getWallet() {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<String> getApiKey() {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<String> createApiKey() {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<UserDTO> getUserProfile() {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<Void> updateUserProfile(UserDTO userDTO) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<AgentDTO> updateAgent(UUID id, AgentDTO agentDTO) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Flux<AgentDTO> searchAgents(SearchAgentVm searchVm, PageableVm pageable) {
-          return Flux.empty();
+          return Flux.error(cause);
         }
 
         @Override
         public Mono<AgentDTO> getAgent(UUID id) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<Void> deleteAgent(UUID id) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<AgentDTO> registerAgent(RegisterAgentVm agentVm) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Flux<UserSubscriptionDTO> getSubscriptions(UUID id, Integer size) {
-          return Flux.empty();
+          return Flux.error(cause);
         }
 
         @Override
         public Mono<AgentContainerDTO> createAgentContainer(UUID agentId, UUID containerId) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
@@ -310,27 +310,27 @@ public interface NoosphereHubClient {
           SearchAgentContainerVm searchVm,
           PageableVm pageable
         ) {
-          return Flux.empty();
+          return Flux.error(cause);
         }
 
         @Override
         public Mono<AgentContainerDTO> getAgentContainer(UUID agentId, UUID containerId) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<Void> deleteAgentContainer(UUID agentId, UUID containerId) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<KeepAliveResponse> keepAlive(UUID agentId) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
 
         @Override
         public Mono<UserDTO> getUserFromApiKey(String apiKey) {
-          return Mono.empty();
+          return Mono.error(cause);
         }
       };
     }
