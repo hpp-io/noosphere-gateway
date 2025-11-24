@@ -19,7 +19,6 @@ import io.hpp.noosphere.gw.web.rest.vm.search.SearchAgentVm;
 import io.hpp.noosphere.gw.web.rest.vm.search.SearchContainerVm;
 import io.hpp.noosphere.gw.web.rest.vm.search.SearchUserVm;
 import io.hpp.noosphere.gw.web.rest.vm.search.SearchVerifierVm;
-import java.util.Map;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

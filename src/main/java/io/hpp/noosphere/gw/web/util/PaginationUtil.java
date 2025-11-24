@@ -11,7 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  *
  * <p>
  * Pagination uses the same principles as the <a href="https://docs.github.com/en/rest/guides/using-pagination-in-the-rest-api">GitHub API</a>,
- * and follow <a href="http://tools.ietf.org/html/rfc5988">RFC 5988 (Link header)</a>.
+ * and follow <a href="https://tools.ietf.org/html/rfc5988">RFC 5988 (Link header)</a>.
  * </p>
  */
 @Component
