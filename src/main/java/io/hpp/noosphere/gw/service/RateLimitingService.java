@@ -36,7 +36,16 @@ public class RateLimitingService {
       .getRateLimitConfig(key)
       .map(this::newBucket)
       .doOnNext(bucket -> cache.put(key, bucket))
-      .switchIfEmpty(Mono.fromCallable(() -> newBucket(defaultConfig)));
+      .switchIfEmpty(Mono.fromCallable(() -> {
+        Bucket defaultBucket = newBucket(defaultConfig);
+        cache.put(key, defaultBucket);
+        return defaultBucket;
+      }))
+      .onErrorResume(throwable -> {
+        Bucket defaultBucket = newBucket(defaultConfig);
+        cache.put(key, defaultBucket);
+        return Mono.just(defaultBucket);
+      });
   }
 
   private Bucket newBucket(RateLimitConfig config) {
