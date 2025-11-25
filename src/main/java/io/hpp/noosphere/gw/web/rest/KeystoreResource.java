@@ -4,7 +4,7 @@ import static io.hpp.noosphere.gw.config.Constants.KEY_ALIAS_HPP_WALLET_ADDRESS;
 
 import io.hpp.noosphere.gw.client.NoosphereHubClient;
 import io.hpp.noosphere.gw.config.RateLimited;
-import io.hpp.noosphere.gw.security.KeystoreManager;
+import io.hpp.noosphere.common.security.KeystoreManager;
 import io.hpp.noosphere.gw.web.rest.dto.CreateWalletRequest;
 import io.hpp.noosphere.gw.web.rest.dto.KeystoreReadRequest;
 import io.hpp.noosphere.gw.web.rest.dto.KeystoreRequest;

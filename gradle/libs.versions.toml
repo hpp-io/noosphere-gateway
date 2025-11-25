@@ -4,6 +4,7 @@ gatling-highcharts = "3.13.5"
 jacoco = "0.8.13"
 checkstyle = "10.23.1"
 # jhipster-needle-gradle-dependency-catalog-version - JHipster will add additional versions for convention plugins heref
+web3j = "4.10.3"
 
 [libraries]
 jhipster-framework = { module = "tech.jhipster:jhipster-framework", version = "8.11.0" }
@@ -12,6 +13,13 @@ springdoc-openapi-starter-webflux-api = { module = "org.springdoc:springdoc-open
 feign-reactor-bom = { module = "com.playtika.reactivefeign:feign-reactor-bom", version = "4.2.1" }
 cucumber-bom = { module = "io.cucumber:cucumber-bom", version = "7.22.1" }
 testng = { module = "org.testng:testng", version = "7.11.0" }
+web3j-core = { module = "org.web3j:core", version.ref = "web3j" }
+web3j-crypto = { module = "org.web3j:crypto", version.ref = "web3j" }
+web3j-contracts = { module = "org.web3j:contracts", version.ref = "web3j" }
+web3j-utils = { module = "org.web3j:utils", version.ref = "web3j" }
+web3j-abi = { module = "org.web3j:abi", version.ref = "web3j" }
+web3j-codegen = { module = "org.web3j:codegen", version.ref = "web3j" }
+
 # jhipster-needle-gradle-dependency-catalog-libraries - JHipster will add additional libraries versions
 
 [plugins]
