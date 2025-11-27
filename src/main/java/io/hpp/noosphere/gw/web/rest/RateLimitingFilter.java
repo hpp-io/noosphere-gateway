@@ -4,8 +4,8 @@ import static io.hpp.noosphere.common.config.Constants.HTTP_HEADER_API_KEY;
 
 import io.github.bucket4j.ConsumptionProbe;
 import io.hpp.noosphere.gw.service.RateLimitingService;
-import io.hpp.noosphere.gw.service.UsageStatisticService;
-import io.hpp.noosphere.gw.web.rest.dto.UsageStatisticDTO;
+import io.hpp.noosphere.gw.service.UsageStatisticsService;
+import io.hpp.noosphere.gw.service.dto.UsageStatisticsDTO;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
@@ -22,11 +22,11 @@ import reactor.core.publisher.Mono;
 public class RateLimitingFilter implements WebFilter {
 
   private final RateLimitingService rateLimitingService;
-  private final UsageStatisticService usageStatisticService;
+  private final UsageStatisticsService usageStatisticsService;
 
-  public RateLimitingFilter(RateLimitingService rateLimitingService, UsageStatisticService usageStatisticService) {
+  public RateLimitingFilter(RateLimitingService rateLimitingService, UsageStatisticsService usageStatisticsService) {
     this.rateLimitingService = rateLimitingService;
-    this.usageStatisticService = usageStatisticService;
+    this.usageStatisticsService = usageStatisticsService;
   }
 
   @Override
@@ -66,7 +66,7 @@ public class RateLimitingFilter implements WebFilter {
       long duration = Duration.between(startTime, endTime).toMillis();
       Integer status = exchange.getResponse().getStatusCode() != null ? exchange.getResponse().getStatusCode().value() : null;
 
-      UsageStatisticDTO statisticDTO = new UsageStatisticDTO(
+      UsageStatisticsDTO statisticDTO = new UsageStatisticsDTO(
         startTime,
         userId,
         apiKey,
@@ -76,7 +76,7 @@ public class RateLimitingFilter implements WebFilter {
         status,
         duration
       );
-      usageStatisticService.save(statisticDTO).subscribe(); // Save asynchronously
+      usageStatisticsService.save(statisticDTO).subscribe(); // Save asynchronously
     });
   }
 }

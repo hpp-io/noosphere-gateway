@@ -1,8 +1,8 @@
-package io.hpp.noosphere.gw.web.rest.dto;
+package io.hpp.noosphere.gw.service.dto;
 
 import java.time.Instant;
 
-public class UsageStatisticDTO {
+public class UsageStatisticsDTO {
 
     private Instant timestamp;
     private String userId;
@@ -14,10 +14,10 @@ public class UsageStatisticDTO {
     private Long duration; // in milliseconds
 
     // Constructors
-    public UsageStatisticDTO() {
+    public UsageStatisticsDTO() {
     }
 
-    public UsageStatisticDTO(Instant timestamp, String userId, String apiKey, String apiGroup, String endpoint, String method, Integer status, Long duration) {
+    public UsageStatisticsDTO(Instant timestamp, String userId, String apiKey, String apiGroup, String endpoint, String method, Integer status, Long duration) {
         this.timestamp = timestamp;
         this.userId = userId;
         this.apiKey = apiKey;
@@ -95,7 +95,7 @@ public class UsageStatisticDTO {
 
     @Override
     public String toString() {
-        return "UsageStatisticDTO{" +
+        return "UsageStatisticsDTO{" +
                "timestamp=" + timestamp +
                ", userId='" + userId + '\'' +
                ", apiKey='" + apiKey + '\'' +

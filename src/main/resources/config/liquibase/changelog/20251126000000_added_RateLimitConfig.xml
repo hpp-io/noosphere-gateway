@@ -4,8 +4,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <changeSet id="20251126000000-1" author="jungsoo">
-        <createTable tableName="usage_statistic">
+    <changeSet id="20251127000000-1" author="jungsoo">
+        <createTable tableName="usage_statistics">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -19,17 +19,6 @@
             <column name="method" type="varchar(255)"/>
             <column name="status" type="int"/>
             <column name="duration" type="bigint"/>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="20251126000000-2" author="jungsoo">
-        <createTable tableName="rate_limit_config">
-            <column name="api_key" type="varchar(255)">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="calls_per_second" type="bigint">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
     </changeSet>
 

@@ -19,6 +19,15 @@ public class RateLimitConfig {
     @Column(name = "api_key", nullable = false)
     private String apiKey;
 
-    @Column(name = "calls_per_second", nullable = false)
+    @Column(name = "calls_per_second")
     private Long callsPerSecond;
+
+    @Column(name = "calls_per_minute")
+    private Long callsPerMinute;
+
+    @Column(name = "calls_per_hour")
+    private Long callsPerHour;
+
+    @Column(name = "calls_per_day")
+    private Long callsPerDay;
 }

@@ -45,15 +45,29 @@ public class RateLimitingService {
     }
 
     private Bucket newBucket(RateLimitConfig config) {
-        return new LocalBucketBuilder()
-            .addLimit(Bandwidth.classic(config.getCallsPerSecond(), Refill.greedy(config.getCallsPerSecond(), Duration.ofSeconds(1))))
-            .build();
+        LocalBucketBuilder builder = new LocalBucketBuilder();
+        if (config.getCallsPerSecond() != null) {
+            builder.addLimit(Bandwidth.classic(config.getCallsPerSecond(), Refill.greedy(config.getCallsPerSecond(), Duration.ofSeconds(1))));
+        }
+        if (config.getCallsPerMinute() != null) {
+            builder.addLimit(Bandwidth.classic(config.getCallsPerMinute(), Refill.greedy(config.getCallsPerMinute(), Duration.ofMinutes(1))));
+        }
+        if (config.getCallsPerHour() != null) {
+            builder.addLimit(Bandwidth.classic(config.getCallsPerHour(), Refill.greedy(config.getCallsPerHour(), Duration.ofHours(1))));
+        }
+        if (config.getCallsPerDay() != null) {
+            builder.addLimit(Bandwidth.classic(config.getCallsPerDay(), Refill.greedy(config.getCallsPerDay(), Duration.ofDays(1))));
+        }
+        return builder.build();
     }
 
     private RateLimitConfig createDefaultConfig(String apiKey) {
         RateLimitConfig defaultConfig = new RateLimitConfig();
         defaultConfig.setApiKey(apiKey);
         defaultConfig.setCallsPerSecond(10L); // Default to 10 calls per second
+        defaultConfig.setCallsPerMinute(100L); // Default to 100 calls per minute
+        defaultConfig.setCallsPerHour(1000L); // Default to 1000 calls per hour
+        defaultConfig.setCallsPerDay(10000L); // Default to 10000 calls per day
         return defaultConfig;
     }
 

@@ -7,10 +7,10 @@ import java.time.Instant;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
-@Table(name = "usage_statistic")
+@Table(name = "usage_statistics")
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Data
-public class UsageStatistic {
+public class UsageStatistics {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

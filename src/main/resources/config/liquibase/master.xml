@@ -17,5 +17,6 @@
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251126000000_added_RateLimitConfig.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251127000000_added_UsageStatistics.xml" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>
