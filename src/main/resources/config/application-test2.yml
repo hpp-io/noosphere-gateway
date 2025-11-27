@@ -1,5 +1,5 @@
 # ===================================================================
-# Spring Boot configuration for the "prod" profile.
+# Spring Boot configuration for the "test2" profile.
 #
 # This configuration overrides the application.yml file.
 #
@@ -17,6 +17,7 @@ logging:
   level:
     ROOT: INFO
     tech.jhipster: INFO
+    org.hibernate.SQL: INFO
     io.hpp.noosphere.gw: INFO
 
 management:
@@ -26,7 +27,7 @@ management:
         enabled: false
   zipkin: # Use the "zipkin" Maven profile to have the Spring Cloud Zipkin dependencies
     tracing:
-      endpoint: http://localhost:9411/api/v2/spans
+      endpoint: http://host.docker.docker.internal:9411/api/v2/spans
   tracing:
     sampling:
       probability: 1.0 # report 100% of traces
@@ -34,20 +35,45 @@ management:
 spring:
   devtools:
     restart:
-      enabled: false
+      enabled: true
+      additional-exclude: static/**
     livereload:
-      enabled: false
+      enabled: false # we use Webpack dev server + BrowserSync for livereload
+  jackson:
+    serialization:
+      indent-output: true
   cloud:
     consul:
+      config:
+        fail-fast: false # if not in "prod" profile, do not force to use Spring Cloud Config
+        format: yaml
+        profile-separator: '-'
       discovery:
         instanceId: noosphere-gateway:${spring.application.instance-id:${random.value}}
-        service-name: noosphere-gateway
         scheme: https
-        hostname: ngtest.hpp.io
+        hostname: nstest.hpp.io
         port: 443
       host: noosphere-consul
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3356/nsgw?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+  liquibase:
+    contexts: test
+
+  messages:
+    cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
-    cache: true
+    cache: false
 
 # ===================================================================
 # To enable TLS in production, generate a certificate using:
@@ -87,6 +113,10 @@ jhipster:
   http:
     cache: # Used by the CachingHttpHeadersFilter
       timeToLiveInDays: 1461
+  cache: # Cache configuration
+    hazelcast: # Hazelcast distributed cache
+      time-to-live-seconds: 3600
+      backup-count: 1
   cors:
     allowed-origins: "https://nstest.hpp.io,https://nshubtest.hpp.io,https://authtest.hpp.io"
     allowed-methods: "*"
@@ -102,7 +132,13 @@ jhipster:
       port: 5000
       ring-buffer-size: 512
   security:
-    content-security-policy: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src * 'self' data: blob: https://walletconnect.org https://walletconnect.com https://secure.walletconnect.com https://secure.walletconnect.org https://tokens-data.1inch.io https://tokens.1inch.io https://ipfs.io https://cdn.zerion.io; font-src 'self' data: https://fonts.gstatic.com https://fonts.reown.com; connect-src 'self' https://nstest.hpp.io https://nshubtest.hpp.io https://authtest.hpp.io https://rpc.walletconnect.com https://rpc.walletconnect.org https://relay.walletconnect.com https://relay.walletconnect.org wss://relay.walletconnect.com wss://relay.walletconnect.org https://pulse.walletconnect.com https://pulse.walletconnect.org https://api.web3modal.com https://api.web3modal.org https://keys.walletconnect.com https://keys.walletconnect.org https://notify.walletconnect.com https://notify.walletconnect.org https://echo.walletconnect.com https://echo.walletconnect.org https://push.walletconnect.com https://push.walletconnect.org wss://www.walletlink.org https://cca-lite.coinbase.com; frame-src 'self' data: https://verify.walletconnect.com https://verify.walletconnect.org https://secure.walletconnect.com https://secure.walletconnect.org"
+    content-security-policy: "default-src 'self'; \
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; \
+    style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; \
+    img-src * 'self' data: blob: https://walletconnect.org https://walletconnect.com https://secure.walletconnect.com https://secure.walletconnect.org https://tokens-data.1inch.io https://tokens.1inch.io https://ipfs.io https://cdn.zerion.io; \
+    font-src 'self' data: https://fonts.gstatic.com https://fonts.reown.com; \
+    connect-src 'self' https://nstest.hpp.io https://nshubtest.hpp.io https://authtest.hpp.io https://rpc.walletconnect.com https://rpc.walletconnect.org https://relay.walletconnect.com https://relay.walletconnect.org wss://relay.walletconnect.com wss://relay.walletconnect.org https://pulse.walletconnect.com https://pulse.walletconnect.org https://api.web3modal.com https://api.web3modal.org https://keys.walletconnect.com https://keys.walletconnect.org https://notify.walletconnect.com https://notify.walletconnect.org https://echo.walletconnect.com https://echo.walletconnect.org https://push.walletconnect.com https://push.walletconnect.org wss://www.walletlink.org https://cca-lite.coinbase.com; \ 
+    frame-src 'self' data: https://verify.walletconnect.com https://verify.walletconnect.org https://secure.walletconnect.com https://secure.walletconnect.org;"
 
 # ===================================================================
 # Application specific properties
@@ -121,3 +157,16 @@ application:
     realm-id: noosphere
     admin-client-id: admin-cli
     admin-client-secret: '${HPP_AUTH_ADMIN_CLI_SECRET}'
+  keystore:
+    path: ./hpp-keystore.p12
+    store-password: '${HPP_KEYSTORE_PASSWORD}'
+    keys:
+      eth: '${HPP_ETH_KEY_ALIAS}'
+  blockchain:
+    rpc-url: http://host.docker.internal:8545
+    router-address: '${HPP_ROUTER_ADDRESS}'
+    connection-timeout: 30000 # in milliseconds
+    read-timeout: 30000 # in milliseconds
+    write-timeout: 30000 # in milliseconds
+    gas-price-ratio: 1.2
+    gas-limit-ratio: 1.2

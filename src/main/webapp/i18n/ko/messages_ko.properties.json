@@ -168,6 +168,7 @@
         "metrics": "메트릭스",
         "rateLimiting": "Rate Limiting",
         "tracker": "사용자 트랙커",
+        "usageStatistics": "Usage Statistics",
         "userManagement": "사용자 관리"
       },
       "container": {
@@ -503,7 +504,7 @@
         "lastname": {
           "maxlength": "성은 최대 50자 까지입니다",
           "minlength": "성은 최소 1자 이상이어야 합니다",
-          "required": "성을 입력해 주세요."
+          "required": "성을 입력해 주세요。"
         }
       }
     },

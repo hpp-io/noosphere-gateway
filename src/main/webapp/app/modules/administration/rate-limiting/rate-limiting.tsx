@@ -10,7 +10,7 @@ const RateLimiting = () => {
   const configs = useAppSelector(state => state.rateLimiting.configs);
   const updateSuccess = useAppSelector(state => state.rateLimiting.updateSuccess);
 
-  const [localConfigs, setLocalConfigs] = useState(new Map());
+  const [localConfigs, setLocalConfigs] = useState({});
 
   useEffect(() => {
     dispatch(getBuckets());
@@ -28,7 +28,7 @@ const RateLimiting = () => {
   }, [updateSuccess]);
 
   useEffect(() => {
-    setLocalConfigs(new Map(configs));
+    setLocalConfigs(configs);
   }, [configs]);
 
   const handleConfigUpdate = (key, config) => {
@@ -36,10 +36,13 @@ const RateLimiting = () => {
   };
 
   const handleInputChange = (key, field, value) => {
-    const newConfigs = new Map(localConfigs);
-    const config = newConfigs.get(key);
-    newConfigs.set(key, { ...config, [field]: value });
-    setLocalConfigs(newConfigs);
+    setLocalConfigs({
+      ...localConfigs,
+      [key]: {
+        ...localConfigs[key],
+        [field]: value,
+      },
+    });
   };
 
   return (
@@ -55,7 +58,7 @@ const RateLimiting = () => {
           </tr>
         </thead>
         <tbody>
-          {Array.from(buckets.entries()).map(([key, bucket]) => (
+          {Object.entries(buckets).map(([key, bucket]: [string, any]) => (
             <tr key={key}>
               <td>{key}</td>
               <td>{bucket.availableTokens}</td>
@@ -76,7 +79,7 @@ const RateLimiting = () => {
           </tr>
         </thead>
         <tbody>
-          {Array.from(localConfigs.entries()).map(([key, config]) => (
+          {Object.entries(localConfigs).map(([key, config]: [string, any]) => (
             <tr key={key}>
               <td>{key}</td>
               <td>

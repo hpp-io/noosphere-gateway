@@ -168,6 +168,7 @@
         "metrics": "Metrics",
         "rateLimiting": "Rate Limiting",
         "tracker": "User tracker",
+        "usageStatistics": "Usage Statistics",
         "userManagement": "User management"
       },
       "container": {

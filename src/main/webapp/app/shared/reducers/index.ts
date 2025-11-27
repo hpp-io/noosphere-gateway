@@ -7,6 +7,7 @@ import container from 'app/modules/container/container.reducer';
 import verifier from 'app/modules/verifier/verifier.reducer';
 import agentRequest from 'app/modules/agent-request/agent-request.reducer';
 import rateLimiting from 'app/modules/administration/rate-limiting/rate-limiting.reducer';
+import usageStatistics from 'app/modules/administration/usage-statistics/usage-statistics.reducer'; // Import the new reducer
 import locale from './locale';
 import authentication from './authentication';
 import userManagement from './user-management';
@@ -26,6 +27,7 @@ const rootReducer: ReducersMapObject = {
   verifier,
   agentRequest,
   rateLimiting,
+  usageStatistics, // Add the new reducer
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
 };
 

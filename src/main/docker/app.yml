@@ -16,7 +16,7 @@ services:
       - APPLICATION_KEYCLOAK_AUTH_URL=https://authtest.hpp.io
       - LOGGING_FILE_PATH=/app/logs
     volumes:
-      - /data/noosphere/logs/nshub-logs/:/app/logs/
+      - ./logs:/app/logs
     ports:
       - 127.0.0.1:8280:8280
     healthcheck:

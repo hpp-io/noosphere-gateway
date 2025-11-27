@@ -14,7 +14,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * A DTO for the {@link io.hpp.noosphere.hub.domain.AgentContainer} entity.
+ * A DTO for the {@link io.hpp.noosphere.gw.domain.AgentContainer} entity.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
 @Data

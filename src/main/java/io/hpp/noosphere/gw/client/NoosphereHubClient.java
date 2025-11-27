@@ -1,6 +1,5 @@
 package io.hpp.noosphere.gw.client;
 
-import io.hpp.noosphere.gw.service.dto.RateLimitConfig;
 import io.hpp.noosphere.gw.web.rest.dto.AgentContainerDTO;
 import io.hpp.noosphere.gw.web.rest.dto.AgentDTO;
 import io.hpp.noosphere.gw.web.rest.dto.AgentRequestDTO;
@@ -43,17 +42,9 @@ import reactor.core.publisher.Mono;
   configuration = NoosphereHubFeignConfiguration.class
 )
 public interface NoosphereHubClient {
+
   @PostMapping("/api/users/search")
   Flux<UserDTO> searchUsers(@RequestBody SearchUserVm searchVm, @SpringQueryMap PageableVm pageable);
-
-  @GetMapping("/api/rate-limit-configs")
-  Flux<RateLimitConfig> getRateLimitConfigs(@SpringQueryMap PageableVm pageable);
-
-  @GetMapping("/api/rate-limit-configs/{key}")
-  Mono<RateLimitConfig> getRateLimitConfig(@PathVariable("key") String key);
-
-  @PutMapping("/api/rate-limit-configs/{key}")
-  Mono<Void> updateRateLimitConfig(@PathVariable("key") String key, @RequestBody RateLimitConfig config);
 
   @PostMapping("/api/wallets")
   Mono<String> createWallet(@RequestBody CreateWalletRequest createWalletRequest);
@@ -161,21 +152,6 @@ public interface NoosphereHubClient {
         @Override
         public Flux<UserDTO> searchUsers(SearchUserVm searchVm, PageableVm pageable) {
           return Flux.error(cause);
-        }
-
-        @Override
-        public Flux<RateLimitConfig> getRateLimitConfigs(PageableVm pageable) {
-          return Flux.error(cause);
-        }
-
-        @Override
-        public Mono<RateLimitConfig> getRateLimitConfig(String key) {
-          return Mono.error(cause);
-        }
-
-        @Override
-        public Mono<Void> updateRateLimitConfig(String key, RateLimitConfig config) {
-          return Mono.error(cause);
         }
 
         @Override

@@ -4,8 +4,8 @@ import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected } fro
 const initialState = {
   loading: false,
   errorMessage: null,
-  buckets: new Map(),
-  configs: new Map(),
+  buckets: {},
+  configs: {},
   updating: false,
   updateSuccess: false,
 };
@@ -42,11 +42,11 @@ export const RateLimitingSlice = createSlice({
     builder
       .addCase(getBuckets.fulfilled, (state, action) => {
         state.loading = false;
-        state.buckets = new Map(Object.entries(action.payload.data));
+        state.buckets = action.payload.data;
       })
       .addCase(getConfigs.fulfilled, (state, action) => {
         state.loading = false;
-        state.configs = new Map(Object.entries(action.payload.data));
+        state.configs = action.payload.data;
       })
       .addCase(updateConfig.fulfilled, (state, action) => {
         state.loading = false;

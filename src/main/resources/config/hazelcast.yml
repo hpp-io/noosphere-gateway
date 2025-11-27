@@ -1,0 +1,14 @@
+hazelcast:
+  instance-name: noosphere-gateway
+  network:
+    port:
+      port: 5701
+      port-count: 100
+      auto-increment: true
+    join:
+      multicast:
+        enabled: false
+      tcp-ip: # For Kubernetes, we use DNS lookup
+        enabled: true # Set to false if using Kubernetes discovery
+        member-list:
+          - noosphere-gateway

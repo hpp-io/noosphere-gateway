@@ -6,12 +6,10 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
-import org.springframework.stereotype.Component;
 import reactivefeign.client.ReactiveHttpRequest;
 import reactivefeign.client.ReactiveHttpRequestInterceptor;
 import reactor.core.publisher.Mono;
 
-@Component
 public class OAuth2FeignRequestInterceptor implements ReactiveHttpRequestInterceptor {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
@@ -29,8 +27,7 @@ public class OAuth2FeignRequestInterceptor implements ReactiveHttpRequestInterce
             .getContext()
             .map(SecurityContext::getAuthentication)
             .flatMap(authentication -> {
-                if (authentication instanceof OAuth2AuthenticationToken) {
-                    OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
+                if (authentication instanceof OAuth2AuthenticationToken oauthToken) {
                     String clientRegistrationId = oauthToken.getAuthorizedClientRegistrationId();
                     return clientService
                         .loadAuthorizedClient(clientRegistrationId, oauthToken.getName())

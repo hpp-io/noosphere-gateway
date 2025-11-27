@@ -168,6 +168,7 @@
         "metrics": "メトリクス",
         "rateLimiting": "Rate Limiting",
         "tracker": "ユーザートラッカー",
+        "usageStatistics": "Usage Statistics",
         "userManagement": "ユーザー管理"
       },
       "container": {

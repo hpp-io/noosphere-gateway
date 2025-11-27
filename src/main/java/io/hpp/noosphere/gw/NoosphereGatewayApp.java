@@ -12,19 +12,24 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;
+import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import reactivefeign.spring.config.EnableReactiveFeignClients;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
 
-@SpringBootApplication(exclude = { FeignAutoConfiguration.class })
-@EnableConfigurationProperties({ ApplicationProperties.class })
+@SpringBootApplication(exclude = { FeignAutoConfiguration.class, HazelcastAutoConfiguration.class })
+@EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
 @EnableDiscoveryClient
 @EnableReactiveFeignClients(basePackages = "io.hpp.noosphere.gw.client")
+@ComponentScan(basePackages = { "io.hpp.noosphere.gw", "io.hpp.noosphere.common" })
 public class NoosphereGatewayApp {
 
     private static final Logger LOG = LoggerFactory.getLogger(NoosphereGatewayApp.class);
@@ -70,6 +75,7 @@ public class NoosphereGatewayApp {
      */
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(NoosphereGatewayApp.class);
+        app.setWebApplicationType(WebApplicationType.REACTIVE);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);

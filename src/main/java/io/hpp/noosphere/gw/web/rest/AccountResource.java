@@ -1,20 +1,14 @@
 package io.hpp.noosphere.gw.web.rest;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import io.hpp.noosphere.gw.config.RateLimited;
-import io.hpp.noosphere.gw.security.SecurityUtils;
+import io.hpp.noosphere.gw.service.UserService;
+import io.hpp.noosphere.gw.service.dto.UserDTO;
 import java.security.Principal;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,14 +19,10 @@ import reactor.core.publisher.Mono;
 public class AccountResource {
 
   private static final Logger LOG = LoggerFactory.getLogger(AccountResource.class);
+  private final UserService userService;
 
-  private static class AccountResourceException extends RuntimeException {
-
-    private static final long serialVersionUID = 1L;
-
-    private AccountResourceException(String message) {
-      super(message);
-    }
+  public AccountResource(UserService userService) {
+    this.userService = userService;
   }
 
   /**
@@ -44,9 +34,9 @@ public class AccountResource {
    */
   @GetMapping("/account")
   @RateLimited
-  public Mono<UserVM> getAccount(Principal principal) {
+  public Mono<UserDTO> getAccount(Principal principal) {
     if (principal instanceof AbstractAuthenticationToken) {
-      return Mono.just(getUserFromAuthentication((AbstractAuthenticationToken) principal));
+      return Mono.just(userService.getUserFromAuthentication((AbstractAuthenticationToken) principal));
     } else {
       throw new AccountResourceException("User could not be found");
     }
@@ -55,8 +45,7 @@ public class AccountResource {
   /**
    * {@code GET  /authenticate} : check if the user is authenticated.
    *
-   * @return the {@link ResponseEntity} with status {@code 204 (No Content)},
-   * or with status {@code 401 (Unauthorized)} if not authenticated.
+   * @return the {@link ResponseEntity} with status {@code 204 (No Content)}, or with status {@code 401 (Unauthorized)} if not authenticated.
    */
   @GetMapping("/authenticate")
   public ResponseEntity<Void> isAuthenticated(Principal principal) {
@@ -64,50 +53,13 @@ public class AccountResource {
     return ResponseEntity.status(principal == null ? HttpStatus.UNAUTHORIZED : HttpStatus.NO_CONTENT).build();
   }
 
-  private static class UserVM {
+  private static class AccountResourceException extends RuntimeException {
 
-    private String login;
-    private Set<String> authorities;
-    private Map<String, Object> details;
+    private static final long serialVersionUID = 1L;
 
-    UserVM(String login, Set<String> authorities, Map<String, Object> details) {
-      this.login = login;
-      this.authorities = authorities;
-      this.details = details;
-    }
-
-    public boolean isActivated() {
-      return true;
-    }
-
-    public Set<String> getAuthorities() {
-      return authorities;
-    }
-
-    public String getLogin() {
-      return login;
-    }
-
-    @JsonAnyGetter
-    public Map<String, Object> getDetails() {
-      return details;
+    private AccountResourceException(String message) {
+      super(message);
     }
   }
 
-  private static UserVM getUserFromAuthentication(AbstractAuthenticationToken authToken) {
-    Map<String, Object> attributes;
-    if (authToken instanceof JwtAuthenticationToken) {
-      attributes = ((JwtAuthenticationToken) authToken).getTokenAttributes();
-    } else if (authToken instanceof OAuth2AuthenticationToken) {
-      attributes = ((OAuth2AuthenticationToken) authToken).getPrincipal().getAttributes();
-    } else {
-      throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
-    }
-
-    return new UserVM(
-      authToken.getName(),
-      authToken.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()),
-      SecurityUtils.extractDetailsFromTokenAttributes(attributes)
-    );
-  }
 }

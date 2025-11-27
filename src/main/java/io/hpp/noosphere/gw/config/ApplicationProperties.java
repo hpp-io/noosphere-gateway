@@ -19,9 +19,17 @@ public class ApplicationProperties extends SharedApplicationProperties {
 
     // jhipster-needle-application-properties-property-class
 
+  private final Liquibase liquibase = new Liquibase();
   private AppKit appKit = new AppKit();
   private String environment;
   private Storage storage = new Storage();
+
+  @Data
+  public static class Liquibase {
+
+    private Boolean asyncStart = true;
+
+  }
 
   @Data
   public static class Storage {
