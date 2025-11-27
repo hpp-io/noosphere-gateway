@@ -162,42 +162,43 @@ public class UserService {
     String imageUrl,
     String walletAddress
   ) {
-    Optional<String> currentUserLogin = Optional.ofNullable(SecurityUtils.getCurrentUserLogin().block());
-    if (currentUserLogin.isEmpty()) {
-      return;
-    }
-    Optional<User> optionalUser = userRepository.findOneByEmail(currentUserLogin.get());
-    if (optionalUser.isEmpty()) {
-      return;
-    }
-    User user = optionalUser.get();
-    user.setFirstName(firstName);
-    user.setLastName(lastName);
-    if (CommonUtils.isValid(email)) {
-      user.setEmail(email.trim().toLowerCase());
-    }
-    if (CommonUtils.isValid(apiKey)) {
-      user.setApiKey(apiKey.trim());
-    }
-    user.setLangKey(langKey);
-    user.setImageUrl(imageUrl);
-    if (CommonUtils.isValid(walletAddress)) {
-      user.setWalletAddress(walletAddress.trim());
-    }
-    keycloakService.updateKeycloakUser(
-      user.getId(),
-      user.getEmail(),
-      firstName,
-      lastName,
-      email,
-      apiKey,
-      langKey,
-      imageUrl,
-      walletAddress
-    );
-    userRepository.save(user);
-    this.clearUserCaches(user);
-    LOG.debug("Changed Information for User: {}", user);
+    // Chain the logic: Get Login -> Find User -> Update
+    Optional.ofNullable(SecurityUtils.getCurrentUserLogin().block())
+      .flatMap(userRepository::findOneByEmail)
+      .ifPresent(user -> {
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+
+        if (CommonUtils.isValid(email)) {
+          user.setEmail(email.trim().toLowerCase());
+        }
+        if (CommonUtils.isValid(apiKey)) {
+          user.setApiKey(apiKey.trim());
+        }
+
+        user.setLangKey(langKey);
+        user.setImageUrl(imageUrl);
+
+        if (CommonUtils.isValid(walletAddress)) {
+          user.setWalletAddress(walletAddress.trim());
+        }
+
+        keycloakService.updateKeycloakUser(
+          user.getId(),
+          user.getEmail(),
+          firstName,
+          lastName,
+          email,
+          apiKey,
+          langKey,
+          imageUrl,
+          walletAddress
+        );
+
+        userRepository.save(user);
+        this.clearUserCaches(user);
+        LOG.debug("Changed Information for User: {}", user);
+      });
   }
 
   @Transactional(readOnly = true)
