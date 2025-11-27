@@ -2,6 +2,7 @@ package io.hpp.noosphere.gw.security;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.hpp.noosphere.common.security.AuthoritiesConstants;
 import java.util.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
