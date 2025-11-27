@@ -1,7 +1,7 @@
 package io.hpp.noosphere.gw.web.rest;
 
 import io.hpp.noosphere.gw.config.RateLimited;
-import io.hpp.noosphere.gw.security.AuthoritiesConstants;
+import io.hpp.noosphere.common.security.AuthoritiesConstants;
 import io.hpp.noosphere.gw.web.rest.vm.RouteVM;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ import org.springframework.http.*;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * REST controller for managing Gateway configuration.
@@ -36,28 +37,29 @@ public class GatewayResource {
   /**
    * {@code GET  /routes} : get the active routes.
    *
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the list of routes.
+   * @return the {@link Mono} with status {@code 200 (OK)} and with body the list of routes.
    */
   @GetMapping("/routes")
   @Secured(AuthoritiesConstants.ADMIN)
   @RateLimited
-  public ResponseEntity<List<RouteVM>> activeRoutes() {
-    Flux<Route> routes = routeLocator.getRoutes();
-    List<RouteVM> routeVMs = new ArrayList<>();
-    routes.subscribe(route -> {
-      RouteVM routeVM = new RouteVM();
-      // Manipulate strings to make Gateway routes look like Zuul's
-      String predicate = route.getPredicate().toString();
-      String path = predicate.substring(predicate.indexOf("[") + 1, predicate.indexOf("]"));
-      routeVM.setPath(path);
-      String serviceId = route.getId().substring(route.getId().indexOf("_") + 1).toLowerCase();
-      routeVM.setServiceId(serviceId);
-      // Exclude gateway app from routes
-      if (!serviceId.equalsIgnoreCase(appName)) {
-        routeVM.setServiceInstances(discoveryClient.getInstances(serviceId));
-        routeVMs.add(routeVM);
-      }
-    });
-    return ResponseEntity.ok(routeVMs);
+  public Mono<ResponseEntity<List<RouteVM>>> activeRoutes() {
+    return routeLocator.getRoutes()
+        .map(route -> {
+            RouteVM routeVM = new RouteVM();
+            // Manipulate strings to make Gateway routes look like Zuul's
+            String predicate = route.getPredicate().toString();
+            String path = predicate.substring(predicate.indexOf("[") + 1, predicate.indexOf("]"));
+            routeVM.setPath(path);
+            String serviceId = route.getId().substring(route.getId().indexOf("_") + 1).toLowerCase();
+            routeVM.setServiceId(serviceId);
+            // Exclude gateway app from routes
+            if (!serviceId.equalsIgnoreCase(appName)) {
+                routeVM.setServiceInstances(discoveryClient.getInstances(serviceId));
+            }
+            return routeVM;
+        })
+        .filter(routeVM -> !routeVM.getServiceId().equalsIgnoreCase(appName))
+        .collectList()
+        .map(ResponseEntity::ok);
   }
 }

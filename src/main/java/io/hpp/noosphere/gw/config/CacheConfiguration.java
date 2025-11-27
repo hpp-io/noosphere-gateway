@@ -10,6 +10,8 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import jakarta.annotation.PreDestroy;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,11 +63,11 @@ public class CacheConfiguration {
         this.registration = registration;
     }
 
-    @PreDestroy
-    public void destroy() {
-        LOG.info("Closing Cache Manager");
-        Hazelcast.shutdownAll();
-    }
+//    @PreDestroy
+//    public void destroy() {
+//        LOG.info("Closing Cache Manager");
+//        Hazelcast.shutdownAll();
+//    }
 
     @Bean
     public CacheManager cacheManager(HazelcastInstance hazelcastInstance) {
@@ -96,17 +98,24 @@ public class CacheConfiguration {
                 LOG.debug(
                   "Application is running with the \"dev\" profile, Hazelcast " + "cluster will only work with localhost instances"
                 );
-
+                Set<String> members = new HashSet<>();
                 for (ServiceInstance instance : discoveryClient.getInstances(serviceId)) {
                     String clusterMember = "127.0.0.1:" + (instance.getPort());
-                    LOG.debug("Adding Hazelcast (" + profile + ") cluster member {}", clusterMember);
-                    config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(clusterMember);
+                    members.add(clusterMember);
+                }
+                for (String member : members) {
+                    LOG.debug("Adding Hazelcast (" + profile + ") cluster member {}", member);
+                    config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(member);
                 }
             } else { // Production configuration, one host per instance all using port 5701
+                Set<String> members = new HashSet<>();
                 for (ServiceInstance instance : discoveryClient.getInstances(serviceId)) {
                     String clusterMember = instance.getHost() + ":5701";
-                    LOG.debug("Adding Hazelcast (" + profile + ") cluster member {}", clusterMember);
-                    config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(clusterMember);
+                    members.add(clusterMember);
+                }
+                for (String member : members) {
+                    LOG.debug("Adding Hazelcast (" + profile + ") cluster member {}", member);
+                    config.getNetworkConfig().getJoin().getTcpIpConfig().addMember(member);
                 }
             }
         }

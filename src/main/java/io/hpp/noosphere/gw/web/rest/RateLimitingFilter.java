@@ -3,6 +3,8 @@ package io.hpp.noosphere.gw.web.rest;
 import static io.hpp.noosphere.common.config.Constants.HTTP_HEADER_API_KEY;
 
 import io.github.bucket4j.ConsumptionProbe;
+import io.hpp.noosphere.common.service.util.CommonUtils;
+import io.hpp.noosphere.gw.security.SecurityUtils;
 import io.hpp.noosphere.gw.service.RateLimitingService;
 import io.hpp.noosphere.gw.service.UsageStatisticsService;
 import io.hpp.noosphere.gw.service.dto.UsageStatisticsDTO;
@@ -32,51 +34,65 @@ public class RateLimitingFilter implements WebFilter {
   @Override
   public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
     Instant startTime = Instant.now();
-
     String apiKey = exchange.getRequest().getHeaders().getFirst(HTTP_HEADER_API_KEY);
-    String userId = exchange.getRequest().getHeaders().getFirst("X-User-ID"); // Assuming User ID can be passed in a header
     String apiGroup = exchange.getRequest().getHeaders().getFirst("X-API-Group"); // Assuming API Group can be passed in a header
     String endpoint = exchange.getRequest().getPath().value();
     String method = exchange.getRequest().getMethod().name();
 
-    Mono<Void> chainMono;
+    Mono<String> userIdMono = Mono.defer(() -> {
+      String userIdFromHeader = exchange.getRequest().getHeaders().getFirst("X-User-ID");
+      if (CommonUtils.isValid(userIdFromHeader)) {
+        return Mono.just(userIdFromHeader);
+      } else {
+        String userId = SecurityUtils.getCurrentUserLoginWithSecurityContext().orElse(null);
+        if (CommonUtils.isValid(userId)) {
+          return Mono.just(userId);
+        }
+      }
+      return SecurityUtils.getCurrentUserLogin();
+    }).defaultIfEmpty("anonymous");
 
-    if (apiKey == null || apiKey.isEmpty()) {
-      chainMono = chain.filter(exchange);
-    } else {
-      chainMono = rateLimitingService
-        .resolveBucket(apiKey)
-        .flatMap(bucket -> {
-          ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
+    return userIdMono.flatMap(userId -> {
+      Mono<Void> chainMono;
 
-          if (probe.isConsumed()) {
-            exchange.getResponse().getHeaders().add("X-Rate-Limit-Remaining", String.valueOf(probe.getRemainingTokens()));
-            return chain.filter(exchange);
-          } else {
-            long waitForRefill = TimeUnit.NANOSECONDS.toMillis(probe.getNanosToWaitForRefill());
-            exchange.getResponse().getHeaders().add("X-Rate-Limit-Retry-After-Milliseconds", String.valueOf(waitForRefill));
-            exchange.getResponse().setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
-            return exchange.getResponse().setComplete();
-          }
-        });
-    }
+      if (apiKey == null || apiKey.isEmpty()) {
+        chainMono = chain.filter(exchange);
+      } else {
+        chainMono = rateLimitingService
+          .resolveBucket(apiKey)
+          .flatMap(bucket -> {
+            ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
 
-    return chainMono.doFinally(signalType -> {
-      Instant endTime = Instant.now();
-      long duration = Duration.between(startTime, endTime).toMillis();
-      Integer status = exchange.getResponse().getStatusCode() != null ? exchange.getResponse().getStatusCode().value() : null;
+            if (probe.isConsumed()) {
+              exchange.getResponse().getHeaders().add("X-Rate-Limit-Remaining", String.valueOf(probe.getRemainingTokens()));
+              return chain.filter(exchange);
+            } else {
+              long waitForRefill = TimeUnit.NANOSECONDS.toMillis(probe.getNanosToWaitForRefill());
+              exchange.getResponse().getHeaders().add("X-Rate-Limit-Retry-After-Milliseconds", String.valueOf(waitForRefill));
+              exchange.getResponse().setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
+              return exchange.getResponse().setComplete();
+            }
+          });
+      }
 
-      UsageStatisticsDTO statisticDTO = new UsageStatisticsDTO(
-        startTime,
-        userId,
-        apiKey,
-        apiGroup,
-        endpoint,
-        method,
-        status,
-        duration
-      );
-      usageStatisticsService.save(statisticDTO).subscribe(); // Save asynchronously
+      return chainMono.doFinally(signalType -> {
+        Instant endTime = Instant.now();
+        long duration = Duration.between(startTime, endTime).toMillis();
+        Integer status = exchange.getResponse().getStatusCode() != null ? exchange.getResponse().getStatusCode().value() : null;
+
+        UsageStatisticsDTO statisticDTO = new UsageStatisticsDTO(
+          startTime,
+          userId,
+          apiKey,
+          apiGroup,
+          endpoint,
+          method,
+          status,
+          duration
+        );
+        usageStatisticsService.save(statisticDTO).subscribe(); // Save asynchronously
+      });
     });
   }
+
 }

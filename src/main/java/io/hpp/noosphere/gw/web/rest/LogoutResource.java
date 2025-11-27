@@ -2,6 +2,8 @@ package io.hpp.noosphere.gw.web.rest;
 
 import io.hpp.noosphere.gw.config.RateLimited;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
@@ -21,6 +23,7 @@ import reactor.core.publisher.Mono;
 @RestController
 public class LogoutResource {
 
+  private final Logger log = LoggerFactory.getLogger(LogoutResource.class);
   private final ReactiveClientRegistrationRepository registrationRepository;
 
   public LogoutResource(ReactiveClientRegistrationRepository registrationRepository) {
@@ -50,7 +53,9 @@ public class LogoutResource {
         registrationRepository
           .findByRegistrationId(oAuth2AuthenticationToken.getAuthorizedClientRegistrationId())
           .map(oidc -> prepareLogoutUri(request, oidc, (oidcUser.getIdToken())))
-      );
+          .map(Mono::just)
+      )
+      .flatMap(mono -> mono);
   }
 
   private Map<String, String> prepareLogoutUri(ServerHttpRequest request, ClientRegistration clientRegistration, OidcIdToken idToken) {
@@ -62,6 +67,8 @@ public class LogoutResource {
 
     logoutUrl.append("?id_token_hint=").append(idToken.getTokenValue()).append("&post_logout_redirect_uri=").append(originUrl);
 
-    return Map.of("logoutUrl", logoutUrl.toString());
+    Map<String, String> logoutDetails = Map.of("logoutUrl", logoutUrl.toString());
+    log.debug("Logout details: {}", logoutDetails);
+    return logoutDetails;
   }
 }

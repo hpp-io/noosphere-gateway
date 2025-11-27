@@ -6,11 +6,11 @@ import static org.springframework.security.web.server.util.matcher.ServerWebExch
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import io.hpp.noosphere.gw.security.AuthoritiesConstants;
+import io.hpp.noosphere.common.security.AuthoritiesConstants;
 import io.hpp.noosphere.gw.security.SecurityUtils;
 import io.hpp.noosphere.gw.security.apikey.ApiKeyAuthenticationConverter;
 import io.hpp.noosphere.gw.security.apikey.ApiKeyAuthenticationWebFilter;
-import io.hpp.noosphere.gw.security.oauth2.AudienceValidator;
+import io.hpp.noosphere.common.security.oauth2.AudienceValidator;
 import io.hpp.noosphere.gw.web.filter.SpaWebFilter;
 import java.time.Duration;
 import java.util.Arrays;
@@ -282,6 +282,10 @@ public class SecurityConfiguration {
                                 .claims(claims -> claims.putAll(jwt.getClaims()))
                                 .build()
                         )
+                        .onErrorResume(e -> {
+                            // if fetching the user info fails, just return the original token
+                            return Mono.just(jwt);
+                        })
                         // Put user info into the `users` cache
                         .doOnNext(newJwt -> users.put(jwt.getSubject(), Mono.just(newJwt)))
                 );

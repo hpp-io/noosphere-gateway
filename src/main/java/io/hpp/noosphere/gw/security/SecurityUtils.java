@@ -2,6 +2,7 @@ package io.hpp.noosphere.gw.security;
 
 import static io.hpp.noosphere.gw.config.Constants.PROPERTY_NAME_WALLET_ADDRESS;
 
+import io.hpp.noosphere.common.security.AuthoritiesConstants;
 import io.hpp.noosphere.gw.config.Constants;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +19,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.oidc.StandardClaimNames;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
@@ -45,6 +47,11 @@ public final class SecurityUtils {
       .getContext()
       .map(SecurityContext::getAuthentication)
       .flatMap(authentication -> Mono.justOrEmpty(extractPrincipal(authentication)));
+  }
+
+  public static Optional<String> getCurrentUserLoginWithSecurityContext() {
+    SecurityContext securityContext = SecurityContextHolder.getContext();
+    return Optional.ofNullable(extractPrincipal(securityContext.getAuthentication()));
   }
 
   private static String extractPrincipal(Authentication authentication) {

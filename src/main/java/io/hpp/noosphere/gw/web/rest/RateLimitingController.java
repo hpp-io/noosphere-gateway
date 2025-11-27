@@ -1,7 +1,7 @@
 package io.hpp.noosphere.gw.web.rest;
 
 import io.github.bucket4j.Bucket;
-import io.hpp.noosphere.gw.security.AuthoritiesConstants;
+import io.hpp.noosphere.common.security.AuthoritiesConstants;
 import io.hpp.noosphere.gw.service.RateLimitingService;
 import io.hpp.noosphere.gw.service.dto.RateLimitConfigDTO;
 import java.util.Map;
@@ -27,8 +27,8 @@ public class RateLimitingController {
   }
 
   @GetMapping("/buckets")
-  public Map<String, Bucket> getBuckets() {
-    return rateLimitingService.getCache();
+  public Mono<Map<String, Bucket>> getBuckets() {
+    return Mono.just(rateLimitingService.getCache());
   }
 
   @PostMapping("/configs/{key}")

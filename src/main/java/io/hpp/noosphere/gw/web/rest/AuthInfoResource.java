@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 /**
  * Resource to return information about OIDC properties
@@ -21,8 +22,8 @@ public class AuthInfoResource {
 
   @GetMapping("/auth-info")
   @RateLimited
-  public AuthInfoVM getAuthInfo() {
-    return new AuthInfoVM(issuer, clientId);
+  public Mono<AuthInfoVM> getAuthInfo() {
+    return Mono.just(new AuthInfoVM(issuer, clientId));
   }
 
   class AuthInfoVM {

@@ -5,7 +5,7 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.hpp.noosphere.gw.domain.QUser;
 import io.hpp.noosphere.gw.domain.User;
-import io.hpp.noosphere.gw.repository.util.QuerydslUtil;
+import io.hpp.noosphere.common.repository.QuerydslUtil;
 import io.hpp.noosphere.common.service.util.CommonUtils;
 import jakarta.persistence.EntityManager;
 import java.util.Optional;

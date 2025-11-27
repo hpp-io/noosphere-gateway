@@ -7,16 +7,19 @@ import java.util.Collection;
 
 public class ApiKeyAuthenticationToken extends AbstractAuthenticationToken {
 
+    private final Object principal;
     private final String apiKey;
 
     public ApiKeyAuthenticationToken(String apiKey) {
         super(null);
+        this.principal = null;
         this.apiKey = apiKey;
         setAuthenticated(false);
     }
 
-    public ApiKeyAuthenticationToken(String apiKey, Collection<? extends GrantedAuthority> authorities) {
+    public ApiKeyAuthenticationToken(Object principal, String apiKey, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
+        this.principal = principal;
         this.apiKey = apiKey;
         setAuthenticated(true);
     }
@@ -28,6 +31,6 @@ public class ApiKeyAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getPrincipal() {
-        return apiKey;
+        return principal;
     }
 }

@@ -1,8 +1,7 @@
 package io.hpp.noosphere.gw.security.apikey;
 
 import io.hpp.noosphere.gw.client.NoosphereHubClient;
-import io.hpp.noosphere.gw.security.AuthoritiesConstants;
-import io.hpp.noosphere.gw.web.rest.dto.UserDTO;
+import io.hpp.noosphere.common.security.AuthoritiesConstants;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,6 +27,7 @@ public class ApiKeyAuthenticationManager implements ReactiveAuthenticationManage
             .cast(String.class)
             .flatMap(apiKey -> noosphereHubClient.getUserFromApiKey(apiKey)
                 .map(userDTO -> new ApiKeyAuthenticationToken(
+                    userDTO,
                     userDTO.getApiKey(),
                     Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER))
                 ))

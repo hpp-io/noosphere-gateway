@@ -5,7 +5,7 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.hpp.noosphere.gw.domain.QUsageStatistics;
 import io.hpp.noosphere.gw.domain.UsageStatistics;
-import io.hpp.noosphere.gw.repository.util.QuerydslUtil;
+import io.hpp.noosphere.common.repository.QuerydslUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
