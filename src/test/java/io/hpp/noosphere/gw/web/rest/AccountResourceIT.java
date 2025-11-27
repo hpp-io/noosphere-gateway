@@ -6,7 +6,7 @@ import static io.hpp.noosphere.gw.test.util.OAuth2TestUtil.registerAuthenticatio
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.*;
 
 import io.hpp.noosphere.gw.IntegrationTest;
-import io.hpp.noosphere.gw.security.AuthoritiesConstants;
+import io.hpp.noosphere.common.security.AuthoritiesConstants;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

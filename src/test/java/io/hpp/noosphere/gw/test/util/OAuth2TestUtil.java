@@ -1,6 +1,6 @@
 package io.hpp.noosphere.gw.test.util;
 
-import io.hpp.noosphere.gw.security.AuthoritiesConstants;
+import io.hpp.noosphere.common.security.AuthoritiesConstants;
 import io.hpp.noosphere.gw.security.SecurityUtils;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;

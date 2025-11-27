@@ -1,7 +1,7 @@
 package io.hpp.noosphere.gw.web.filter;
 
 import io.hpp.noosphere.gw.IntegrationTest;
-import io.hpp.noosphere.gw.security.AuthoritiesConstants;
+import io.hpp.noosphere.common.security.AuthoritiesConstants;
 import java.time.Duration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
