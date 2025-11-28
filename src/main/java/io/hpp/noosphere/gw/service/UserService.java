@@ -1,5 +1,8 @@
 package io.hpp.noosphere.gw.service;
 
+import static io.hpp.noosphere.common.config.Constants.PROPERTY_NAME_EMAIL;
+import static io.hpp.noosphere.common.config.Constants.PROPERTY_NAME_LOCALE;
+import static io.hpp.noosphere.common.config.Constants.PROPERTY_NAME_NAME;
 import static io.hpp.noosphere.common.config.Constants.SYSTEM;
 import static io.hpp.noosphere.gw.config.Constants.PROPERTY_NAME_API_KEY;
 import static io.hpp.noosphere.gw.config.Constants.PROPERTY_NAME_IMAGE_URL;
@@ -94,8 +97,8 @@ public class UserService {
     }
     if (details.get("given_name") != null) {
       user.setFirstName((String) details.get("given_name"));
-    } else if (details.get("name") != null) {
-      user.setFirstName((String) details.get("name"));
+    } else if (details.get(PROPERTY_NAME_NAME) != null) {
+      user.setFirstName((String) details.get(PROPERTY_NAME_NAME));
     }
     if (details.get("family_name") != null) {
       user.setLastName((String) details.get("family_name"));
@@ -103,19 +106,19 @@ public class UserService {
     if (details.get("email_verified") != null) {
       activated = (Boolean) details.get("email_verified");
     }
-    if (details.get("email") != null) {
-      user.setEmail(((String) details.get("email")).toLowerCase());
+    if (details.get(PROPERTY_NAME_EMAIL) != null) {
+      user.setEmail(((String) details.get(PROPERTY_NAME_EMAIL)).toLowerCase());
     } else if (sub.contains("|") && (username != null && username.contains("@"))) {
       // special handling for Auth0
       user.setEmail(username);
     } else {
       user.setEmail(sub);
     }
-    if (details.get("langKey") != null) {
-      user.setLangKey((String) details.get("langKey"));
-    } else if (details.get("locale") != null) {
+    if (details.get(PROPERTY_NAME_LANG_KEY) != null) {
+      user.setLangKey((String) details.get(PROPERTY_NAME_LANG_KEY));
+    } else if (details.get(PROPERTY_NAME_LOCALE) != null) {
       // trim off country code if it exists
-      String locale = (String) details.get("locale");
+      String locale = (String) details.get(PROPERTY_NAME_LOCALE);
       if (locale.contains("_")) {
         locale = locale.substring(0, locale.indexOf('_'));
       } else if (locale.contains("-")) {
@@ -129,8 +132,11 @@ public class UserService {
     if (details.get("picture") != null) {
       user.setImageUrl((String) details.get("picture"));
     }
-    if (details.get("api_key") != null) {
-      user.setApiKey((String) details.get("api_key"));
+    if (details.get(PROPERTY_NAME_API_KEY) != null) {
+      user.setApiKey((String) details.get(PROPERTY_NAME_API_KEY));
+    }
+    if (details.get(PROPERTY_NAME_WALLET_ADDRESS) != null) {
+      user.setWalletAddress((String) details.get(PROPERTY_NAME_WALLET_ADDRESS));
     }
     user.setActivated(activated);
     return user;
@@ -241,6 +247,8 @@ public class UserService {
             user.getImageUrl(),
             user.getWalletAddress()
           );
+          userRepository.save(user);
+          this.clearUserCaches(user);
         }
         // no last updated info, blindly update
       } else {
@@ -254,6 +262,8 @@ public class UserService {
           user.getImageUrl(),
           user.getWalletAddress()
         );
+        userRepository.save(user);
+        this.clearUserCaches(user);
       }
     } else {
       LOG.debug("Saving user '{}' in local database", user.getLogin());
