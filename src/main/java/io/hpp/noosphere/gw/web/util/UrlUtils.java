@@ -1,8 +1,6 @@
-package io.hpp.noosphere.gw.web.rest;
+package io.hpp.noosphere.gw.web.util;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
 
 public class UrlUtils {

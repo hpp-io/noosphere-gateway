@@ -1,4 +1,4 @@
-package io.hpp.noosphere.gw.web.rest;
+package io.hpp.noosphere.gw.web.filter;
 
 import static io.hpp.noosphere.common.config.Constants.HTTP_HEADER_API_KEY;
 

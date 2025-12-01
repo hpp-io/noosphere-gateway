@@ -55,6 +55,7 @@ public class AgentResource {
   }
 
   @PostMapping("/register")
+  @RateLimited
   public Mono<AgentDTO> registerAgent(@RequestBody RegisterAgentVm agentVm) {
     return noosphereHubClient.registerAgent(agentVm);
   }

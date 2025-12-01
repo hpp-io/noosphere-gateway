@@ -41,7 +41,6 @@ public class GatewayResource {
    */
   @GetMapping("/routes")
   @Secured(AuthoritiesConstants.ADMIN)
-  @RateLimited
   public Mono<ResponseEntity<List<RouteVM>>> activeRoutes() {
     return routeLocator.getRoutes()
         .map(route -> {

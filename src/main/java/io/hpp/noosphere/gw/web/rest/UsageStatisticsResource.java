@@ -1,9 +1,11 @@
 package io.hpp.noosphere.gw.web.rest;
 
+import io.hpp.noosphere.common.security.AuthoritiesConstants;
 import io.hpp.noosphere.gw.service.UsageStatisticsService;
 import io.hpp.noosphere.gw.service.dto.UsageStatisticsDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -12,6 +14,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 @RestController
+@PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
 @RequestMapping("/api/usage-statistics")
 public class UsageStatisticsResource {
 
