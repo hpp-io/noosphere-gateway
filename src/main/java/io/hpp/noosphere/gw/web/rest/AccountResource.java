@@ -52,6 +52,7 @@ public class AccountResource {
    * @return the {@link Mono} with status {@code 204 (No Content)} if the user is authenticated, or with status {@code 401 (Unauthorized)} if not.
    */
   @GetMapping("/authenticate")
+  @RateLimited
   public Mono<ResponseEntity<Void>> isAuthenticated() {
     LOG.debug("REST request to check if the current user is authenticated");
     return ReactiveSecurityContextHolder.getContext()
