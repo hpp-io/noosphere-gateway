@@ -1,5 +1,6 @@
 package io.hpp.noosphere.gw.config;
 
+// TODO: Move these constants to the common library
 public class Constants extends io.hpp.noosphere.common.config.Constants {
 
   public static final String PROPERTY_NAME_VERIFIED = "verified";
@@ -21,4 +22,8 @@ public class Constants extends io.hpp.noosphere.common.config.Constants {
   public static final String SERVICE_API_SEARCH = "/search";
   public static final String API_URL_SLASH = "/";
 
+  public static final String HTTP_HEADER_API_GROUP = "X-API-Group";
+  public static final String HTTP_HEADER_USER_ID = "X-User-ID";
+  public static final String HTTP_HEADER_RATE_LIMIT_REMAINING = "X-Rate-Limit-Remaining";
+  public static final String HTTP_HEADER_RATE_LIMIT_RETRY_AFTER_MILLISECONDS = "X-Rate-Limit-Retry-After-Milliseconds";
 }

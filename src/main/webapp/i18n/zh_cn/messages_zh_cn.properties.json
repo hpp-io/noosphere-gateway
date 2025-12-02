@@ -166,7 +166,7 @@
         "logs": "日志",
         "main": "管理",
         "metrics": "资源监控",
-        "rateLimiting": "Rate Limiting",
+        "rateLimit": "Rate Limit",
         "tracker": "追踪使用者",
         "usageStatistics": "Usage Statistics",
         "userManagement": "用户管理"
@@ -410,6 +410,29 @@
     },
     "title": "应用程序资源监控",
     "updating": "更新中..."
+  },
+  "nsgw": {
+    "rateLimit": {
+      "apiKey": "API Key",
+      "availableTokens": "Available Tokens",
+      "callsPerDay": "Calls Per Day",
+      "callsPerHour": "Calls Per Hour",
+      "callsPerMinute": "Calls Per Minute",
+      "callsPerSecond": "Calls Per Second",
+      "delete": {
+        "question": "Delete Rate Limit for {{apiKey}}?"
+      },
+      "detail": {
+        "title": "Rate Limit"
+      },
+      "home": {
+        "createLabel": "Add",
+        "createOrEditLabel": "Update",
+        "notFound": "Rate Limit Not Found",
+        "search": "Search",
+        "title": "Rate Limit"
+      }
+    }
   },
   "password": {
     "form": {

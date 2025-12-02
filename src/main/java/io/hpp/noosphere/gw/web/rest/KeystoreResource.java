@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
@@ -109,6 +110,7 @@ public class KeystoreResource {
     }
 
     return keystoreMono
+      .filter(Objects::nonNull)
       .flatMap(path ->
         Mono.fromCallable(() -> {
           ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
@@ -148,6 +150,7 @@ public class KeystoreResource {
         }
         return value;
       })
+      .filter(Objects::nonNull)
       .subscribeOn(Schedulers.boundedElastic())
       .doOnError(e -> log.error("Failed to read keystore", e));
   }

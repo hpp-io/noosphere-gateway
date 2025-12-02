@@ -166,7 +166,7 @@
         "logs": "Logs",
         "main": "Administration",
         "metrics": "Metrics",
-        "rateLimiting": "Rate Limiting",
+        "rateLimit": "Rate Limit",
         "tracker": "User tracker",
         "usageStatistics": "Usage Statistics",
         "userManagement": "User management"
@@ -410,6 +410,29 @@
     },
     "title": "Application Metrics",
     "updating": "Updating..."
+  },
+  "nsgw": {
+    "rateLimit": {
+      "apiKey": "API Key",
+      "availableTokens": "Available Tokens",
+      "callsPerDay": "Calls Per Day",
+      "callsPerHour": "Calls Per Hour",
+      "callsPerMinute": "Calls Per Minute",
+      "callsPerSecond": "Calls Per Second",
+      "delete": {
+        "question": "Delete Rate Limit for {{apiKey}}?"
+      },
+      "detail": {
+        "title": "Rate Limit"
+      },
+      "home": {
+        "createLabel": "Add",
+        "createOrEditLabel": "Update",
+        "notFound": "Rate Limit Not Found",
+        "search": "Search",
+        "title": "Rate Limit"
+      }
+    }
   },
   "password": {
     "form": {

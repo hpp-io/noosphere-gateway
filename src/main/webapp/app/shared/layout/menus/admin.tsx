@@ -21,8 +21,8 @@ const adminMenuItems = () => (
     <MenuItem icon="tasks" to="/admin/logs">
       <Translate contentKey="global.menu.admin.logs">Logs</Translate>
     </MenuItem>
-    <MenuItem icon="tachometer-alt" to="/admin/rate-limiting">
-      <Translate contentKey="global.menu.admin.rateLimulate">Rate Limiting</Translate>
+    <MenuItem icon="tachometer-alt" to="/admin/rate-limit">
+      <Translate contentKey="global.menu.admin.rateLimit">Rate Limit</Translate>
     </MenuItem>
     <MenuItem icon="chart-line" to="/admin/usage-statistics">
       <Translate contentKey="global.menu.admin.usageStatistics">Usage Statistics</Translate>

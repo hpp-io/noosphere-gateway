@@ -166,7 +166,7 @@
         "logs": "로그",
         "main": "관리자",
         "metrics": "메트릭스",
-        "rateLimiting": "Rate Limiting",
+        "rateLimit": "Rate Limit",
         "tracker": "사용자 트랙커",
         "usageStatistics": "Usage Statistics",
         "userManagement": "사용자 관리"
@@ -410,6 +410,29 @@
     },
     "title": "애플리케이션 메트릭스",
     "updating": "업데이트..."
+  },
+  "nsgw": {
+    "rateLimit": {
+      "apiKey": "API Key",
+      "availableTokens": "Available Tokens",
+      "callsPerDay": "Calls Per Day",
+      "callsPerHour": "Calls Per Hour",
+      "callsPerMinute": "Calls Per Minute",
+      "callsPerSecond": "Calls Per Second",
+      "delete": {
+        "question": "Delete Rate Limit for {{apiKey}}?"
+      },
+      "detail": {
+        "title": "Rate Limit"
+      },
+      "home": {
+        "createLabel": "Add",
+        "createOrEditLabel": "Update",
+        "notFound": "Rate Limit Not Found",
+        "search": "Search",
+        "title": "Rate Limit"
+      }
+    }
   },
   "password": {
     "form": {

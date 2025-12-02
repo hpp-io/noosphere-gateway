@@ -104,6 +104,15 @@ springBoot {
     mainClass = "io.hpp.noosphere.gw.NoosphereGatewayApp"
 }
 
+bootRun {
+    jvmArgs = [
+        "-Xms512m",
+        "-Xmx2048m",
+        "-XX:+HeapDumpOnOutOfMemoryError",
+        "-Dspring.output.ansi.enabled=always",
+    ]
+}
+
 tasks.withType(Test).configureEach {
     useJUnitPlatform()
     testLogging {
