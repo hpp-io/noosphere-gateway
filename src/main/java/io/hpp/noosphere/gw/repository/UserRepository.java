@@ -40,9 +40,9 @@ interface UserRepositoryCustom {
 
     Optional<User> findOneByEmailAndWalletAddressOrApiKey(String email, String walletAddress, String apiKey, Boolean activated);
 
-    User findOneActiveById(String id);
+    Optional<User>  findOneActiveById(String id);
 
-    User findOneById(String id);
+    Optional<User>  findOneById(String id);
 
     Page<User> search(String name, Boolean activated, Pageable pageable);
 }
@@ -132,20 +132,20 @@ class UserRepositoryCustomImpl implements UserRepositoryCustom {
 
 
     @Override
-    public User findOneActiveById(String id) {
+    public Optional<User> findOneActiveById(String id) {
         QUser qUser = QUser.user;
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qUser.id.eq(id));
         builder.and(qUser.activated.eq(Boolean.TRUE));
-        return jpaQueryFactory.selectFrom(qUser).where(builder).fetchOne();
+        return Optional.ofNullable(jpaQueryFactory.selectFrom(qUser).where(builder).fetchOne());
     }
 
     @Override
-    public User findOneById(String id) {
+    public Optional<User> findOneById(String id) {
         QUser qUser = QUser.user;
         BooleanBuilder builder = new BooleanBuilder();
         builder.and(qUser.id.eq(id));
-        return jpaQueryFactory.selectFrom(qUser).where(builder).fetchOne();
+        return Optional.ofNullable(jpaQueryFactory.selectFrom(qUser).where(builder).fetchOne());
     }
 
     @Override

@@ -49,6 +49,16 @@ public final class SecurityUtils {
       .flatMap(authentication -> Mono.justOrEmpty(extractPrincipal(authentication)));
   }
 
+
+  public static Mono<String> getCurrentUserId() {
+    return ReactiveSecurityContextHolder
+      .getContext()
+      .map(SecurityContext::getAuthentication)
+      .flatMap(authentication -> Mono.justOrEmpty(extractUserId(authentication)));
+  }
+
+
+
   public static Optional<String> getCurrentUserLoginWithSecurityContext() {
     SecurityContext securityContext = SecurityContextHolder.getContext();
     return Optional.ofNullable(extractPrincipal(securityContext.getAuthentication()));
@@ -72,6 +82,20 @@ public final class SecurityUtils {
     return null;
   }
 
+
+  private static String extractUserId(Authentication authentication) {
+    if (authentication == null) {
+      return null;
+    } else if (authentication.getPrincipal() instanceof UserDetails springSecurityUser) {
+      return (String) ((JwtAuthenticationToken) authentication).getToken().getClaims().get("sub");
+    } else if (authentication.getPrincipal() instanceof DefaultOidcUser) {
+      Map<String, Object> attributes = ((DefaultOidcUser) authentication.getPrincipal()).getAttributes();
+      if (attributes.containsKey("sub")) {
+        return (String) attributes.get("sub");
+      }
+    }
+    return null;
+  }
   /**
    * Check if a user is authenticated.
    *

@@ -195,7 +195,7 @@ spring:
       hibernate.cache.hazelcast.instance_name: noosphere-gateway
       hibernate.cache.use_minimal_puts: true
       hibernate.cache.hazelcast.use_lite_member: true
-      hibernate.cache.hazelcast.shutdown_on_session_factory_close: false
+      hibernate.cache.hazelcast.shutdown_on_session_factory_close: true
     hibernate:
       ddl-auto: none
       naming:

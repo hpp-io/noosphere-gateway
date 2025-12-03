@@ -1,5 +1,6 @@
 package io.hpp.noosphere.gw.client;
 
+import io.hpp.noosphere.common.service.dto.IUserDTO;
 import io.hpp.noosphere.gw.web.rest.dto.AgentContainerDTO;
 import io.hpp.noosphere.gw.web.rest.dto.AgentDTO;
 import io.hpp.noosphere.gw.web.rest.dto.AgentRequestDTO;
@@ -80,25 +81,25 @@ public interface NoosphereHubClient {
   Mono<AgentRequestDTO> getAgentRequest(@PathVariable("id") UUID id);
 
   @PostMapping("/api/users/mine/wallet")
-  Mono<String> createWallet(@RequestBody UpdateWalletVm updateWalletVm);
+  Mono<String> createMyWallet(@RequestBody UpdateWalletVm updateWalletVm);
 
   @PutMapping("/api/users/mine/wallet")
-  Mono<String> updateWallet(@RequestBody UpdateWalletVm updateWalletVm);
+  Mono<String> updateMyWallet(@RequestBody UpdateWalletVm updateWalletVm);
 
   @GetMapping("/api/users/mine/wallet")
-  Mono<String> getWallet();
+  Mono<String> getMyWallet();
 
   @GetMapping("/api/users/mine/api-key")
-  Mono<String> getApiKey();
+  Mono<String> getMyApiKey();
 
   @PostMapping("/api/users/mine/api-key")
-  Mono<String> createApiKey();
+  Mono<String> createMyApiKey();
 
   @GetMapping("/api/users/profile")
   Mono<UserDTO> getUserProfile();
 
   @PutMapping("/api/users/profile")
-  Mono<Void> updateUserProfile(@RequestBody UserDTO userDTO);
+  Mono<Void> updateUserProfile(@RequestBody IUserDTO userDTO);
 
   @PutMapping("/api/agents/{id}")
   Mono<AgentDTO> updateAgent(@PathVariable("id") UUID id, @RequestBody AgentDTO agentDTO);
@@ -210,27 +211,27 @@ public interface NoosphereHubClient {
         }
 
         @Override
-        public Mono<String> createWallet(UpdateWalletVm updateWalletVm) {
+        public Mono<String> createMyWallet(UpdateWalletVm updateWalletVm) {
           return Mono.error(cause);
         }
 
         @Override
-        public Mono<String> updateWallet(UpdateWalletVm updateWalletVm) {
+        public Mono<String> updateMyWallet(UpdateWalletVm updateWalletVm) {
           return Mono.error(cause);
         }
 
         @Override
-        public Mono<String> getWallet() {
+        public Mono<String> getMyWallet() {
           return Mono.error(cause);
         }
 
         @Override
-        public Mono<String> getApiKey() {
+        public Mono<String> getMyApiKey() {
           return Mono.error(cause);
         }
 
         @Override
-        public Mono<String> createApiKey() {
+        public Mono<String> createMyApiKey() {
           return Mono.error(cause);
         }
 
@@ -240,7 +241,7 @@ public interface NoosphereHubClient {
         }
 
         @Override
-        public Mono<Void> updateUserProfile(UserDTO userDTO) {
+        public Mono<Void> updateUserProfile(IUserDTO userDTO) {
           return Mono.error(cause);
         }
 

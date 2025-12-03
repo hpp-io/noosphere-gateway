@@ -100,7 +100,7 @@ public class CacheConfiguration {
                 );
                 Set<String> members = new HashSet<>();
                 for (ServiceInstance instance : discoveryClient.getInstances(serviceId)) {
-                    String clusterMember = "127.0.0.1:" + (instance.getPort());
+                    String clusterMember = "127.0.0.1:" + (config.getNetworkConfig().getPort());
                     members.add(clusterMember);
                 }
                 for (String member : members) {
@@ -110,7 +110,7 @@ public class CacheConfiguration {
             } else { // Production configuration, one host per instance all using port 5701
                 Set<String> members = new HashSet<>();
                 for (ServiceInstance instance : discoveryClient.getInstances(serviceId)) {
-                    String clusterMember = instance.getHost() + ":5701";
+                    String clusterMember = instance.getHost() + ":" + (config.getNetworkConfig().getPort());
                     members.add(clusterMember);
                 }
                 for (String member : members) {

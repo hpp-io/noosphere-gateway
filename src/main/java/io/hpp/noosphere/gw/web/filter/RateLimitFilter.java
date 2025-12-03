@@ -51,7 +51,7 @@ public class RateLimitFilter implements WebFilter {
           return Mono.just(userId);
         }
       }
-      return SecurityUtils.getCurrentUserLogin();
+      return SecurityUtils.getCurrentUserId();
     }).defaultIfEmpty("anonymous");
 
     return userIdMono.flatMap(userId -> {

@@ -10,15 +10,16 @@ import static io.hpp.noosphere.gw.config.Constants.PROPERTY_NAME_LANG_KEY;
 import static io.hpp.noosphere.gw.config.Constants.PROPERTY_NAME_WALLET_ADDRESS;
 
 import io.hpp.noosphere.common.service.KeycloakService;
+import io.hpp.noosphere.common.service.util.CommonUtils;
+import io.hpp.noosphere.gw.client.NoosphereHubClient;
 import io.hpp.noosphere.gw.config.Constants;
 import io.hpp.noosphere.gw.domain.Authority;
 import io.hpp.noosphere.gw.domain.User;
 import io.hpp.noosphere.gw.repository.AuthorityRepository;
 import io.hpp.noosphere.gw.repository.UserRepository;
-import io.hpp.noosphere.gw.security.SecurityUtils;
 import io.hpp.noosphere.gw.service.dto.UserDTO;
 import io.hpp.noosphere.gw.service.mapper.UserMapper;
-import io.hpp.noosphere.common.service.util.CommonUtils;
+import io.hpp.noosphere.gw.web.rest.vm.UpdateWalletVm;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
 import java.util.Collection;
@@ -39,6 +40,8 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 /**
  * Service class for managing users.
@@ -58,6 +61,7 @@ public class UserService {
   private final UserMapper userMapper;
 
   private final KeycloakService keycloakService;
+  private final NoosphereHubClient noosphereHubClient;
 
   public UserService(
     UserRepository userRepository,
@@ -65,6 +69,7 @@ public class UserService {
     CacheManager cacheManager,
     UserMapper userMapper,
     KeycloakService keycloakService,
+    NoosphereHubClient noosphereHubClient,
     EntityManager entityManager
   ) {
     this.userRepository = userRepository;
@@ -72,6 +77,7 @@ public class UserService {
     this.cacheManager = cacheManager;
     this.userMapper = userMapper;
     this.keycloakService = keycloakService;
+    this.noosphereHubClient = noosphereHubClient;
     this.entityManager = entityManager;
   }
 
@@ -149,17 +155,8 @@ public class UserService {
     LOG.debug("Created User: {}", user);
   }
 
-  /**
-   * Update basic information (first name, last name, email, language) for the current user.
-   *
-   * @param firstName first name of user.
-   * @param lastName  last name of user.
-   * @param email     email id of user.
-   * @param langKey   language key.
-   * @param imageUrl  image URL of user.
-   */
-  @Transactional
   public void updateUser(
+    String userId,
     String firstName,
     String lastName,
     String email,
@@ -168,9 +165,7 @@ public class UserService {
     String imageUrl,
     String walletAddress
   ) {
-    // Chain the logic: Get Login -> Find User -> Update
-    Optional.ofNullable(SecurityUtils.getCurrentUserLogin().block())
-      .flatMap(userRepository::findOneByEmail)
+    userRepository.findById(userId)
       .ifPresent(user -> {
         user.setFirstName(firstName);
         user.setLastName(lastName);
@@ -189,18 +184,6 @@ public class UserService {
           user.setWalletAddress(walletAddress.trim());
         }
 
-        keycloakService.updateKeycloakUser(
-          user.getId(),
-          user.getEmail(),
-          firstName,
-          lastName,
-          email,
-          apiKey,
-          langKey,
-          imageUrl,
-          walletAddress
-        );
-
         userRepository.save(user);
         this.clearUserCaches(user);
         LOG.debug("Changed Information for User: {}", user);
@@ -210,6 +193,42 @@ public class UserService {
   @Transactional(readOnly = true)
   public List<String> getAuthorities() {
     return authorityRepository.findAll().stream().map(Authority::getName).toList();
+  }
+
+  public Mono<Void> updateUserProfile(String userId, String firstName, String lastName, String langKey, String imageUrl, Instant timestamp) {
+    if (!CommonUtils.isValid(userId)) {
+      return Mono.empty();
+    }
+
+    return Mono.fromCallable(() -> {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+          User user = userOptional.get();
+          if (CommonUtils.isValid(firstName)) {
+            user.setFirstName(firstName.trim());
+          }
+          if (CommonUtils.isValid(lastName)) {
+            user.setLastName(lastName.trim());
+          }
+          if (CommonUtils.isValid(firstName) || CommonUtils.isValid(lastName)) {
+            user.setName(CommonUtils.buildFullName(langKey, firstName, lastName));
+          }
+          if (CommonUtils.isValid(langKey)) {
+            user.setLangKey(langKey.trim());
+          }
+          if (CommonUtils.isValid(imageUrl)) {
+            user.setImageUrl(imageUrl.trim());
+          }
+          user.setLastModifiedDate(timestamp);
+          noosphereHubClient.updateUserProfile(userMapper.userToUserDTO(user));
+          userRepository.save(user);
+          clearUserCaches(user);
+          return user;
+        }
+        return null;
+      })
+      .subscribeOn(Schedulers.boundedElastic())
+      .then();
   }
 
   private User syncUserWithIdP(Map<String, Object> details, User user) {
@@ -225,11 +244,12 @@ public class UserService {
       }
     }
     // save account in to sync users between IdP and JHipster's local database
-    Optional<User> existingUser = userRepository.findOneByEmail(user.getEmail());
-    if (existingUser.isPresent()) {
+    Optional<User> existingUserOptional = userRepository.findOneByEmail(user.getEmail());
+    if (existingUserOptional.isPresent()) {
+      User existingUser = existingUserOptional.get();
       // if IdP sends last updated information, use it to determine if an update should happen
       if (details.get("updated_at") != null) {
-        Instant dbModifiedDate = existingUser.orElseThrow().getLastModifiedDate();
+        Instant dbModifiedDate = existingUser.getLastModifiedDate();
         Instant idpModifiedDate;
         if (details.get("updated_at") instanceof Instant) {
           idpModifiedDate = (Instant) details.get("updated_at");
@@ -239,6 +259,7 @@ public class UserService {
         if (idpModifiedDate.isAfter(dbModifiedDate)) {
           LOG.debug("Updating user '{}' in local database", user.getLogin());
           updateUser(
+            user.getId(),
             user.getFirstName(),
             user.getLastName(),
             user.getEmail(),
@@ -254,6 +275,7 @@ public class UserService {
       } else {
         LOG.debug("Updating user '{}' in local database", user.getLogin());
         updateUser(
+          user.getId(),
           user.getFirstName(),
           user.getLastName(),
           user.getEmail(),
@@ -267,7 +289,7 @@ public class UserService {
       }
     } else {
       LOG.debug("Saving user '{}' in local database", user.getLogin());
-      if (!CommonUtils.isValid(user.getCreatedBy())){
+      if (!CommonUtils.isValid(user.getCreatedBy())) {
         user.setCreatedBy(SYSTEM);
       }
       userRepository.save(user);
@@ -367,5 +389,69 @@ public class UserService {
     entityManager.flush();
     this.clearUserCaches(userDTO.getEmail(), userDTO.getApiKey());
     return userDTO;
+  }
+
+  public void updateMyWalletAddress(String userId, String walletAddress, Instant timestamp) {
+    if (CommonUtils.isValid(userId) && CommonUtils.isValid(walletAddress)) {
+      this.findOptionalEntityById(userId).ifPresent(user -> {
+        user.setWalletAddress(walletAddress);
+        user.setLastModifiedDate(timestamp);
+//        keycloakService.updateKeycloakUser(user.getId(), user.getEmail(), null, null, null, null, null, null, walletAddress);
+        userRepository.save(user);
+        this.clearUserCaches(user);
+      });
+    }
+  }
+
+  public void updateMyApiKey(String userId, String apiKey, Instant timestamp) {
+    if (CommonUtils.isValid(userId) && CommonUtils.isValid(apiKey)) {
+      this.findOptionalEntityById(userId).ifPresent(user -> {
+        user.setApiKey(apiKey);
+        user.setLastModifiedDate(timestamp);
+//        keycloakService.updateKeycloakUser(user.getId(), user.getEmail(), null, null, null, apiKey, null, null, null);
+        userRepository.save(user);
+        this.clearUserCaches(user);
+      });
+    }
+  }
+
+  public Mono<String> updateWithNewMyWallet(String userId, String ownerAddress, Instant timestamp) {
+    UpdateWalletVm updateWalletVm = new UpdateWalletVm();
+    updateWalletVm.setOwnerAddress(ownerAddress);
+    return noosphereHubClient
+      .createMyWallet(updateWalletVm)
+      .publishOn(Schedulers.boundedElastic())
+      .doOnNext(walletAddress -> {
+        if (CommonUtils.isValid(walletAddress)) {
+          this.updateMyWalletAddress(userId, walletAddress, timestamp);
+        } else {
+          throw new IllegalStateException("Failed to extract wallet address from receipt for user ID: " + userId);
+        }
+      });
+  }
+
+  public Mono<String> createAndUpdateMyWallet(String userId, String ownerAddress, Instant timestamp) {
+    //    UserDTO userDTO = this.findById(userId);
+    //    if (CommonUtils.isValid(userDTO.getWalletAddress())) {
+    //      throw new InvalidDataException(PROPERTY_NAME_USER, "wallet exists");
+    //    }
+    return this.updateWithNewMyWallet(userId, ownerAddress, timestamp);
+  }
+
+  public Mono<String> updateWithNewMyApiKey(String userId, Instant timestamp) {
+    return noosphereHubClient
+      .createMyApiKey()
+      .publishOn(Schedulers.boundedElastic())
+      .doOnNext(newApiKey -> {
+        if (CommonUtils.isValid(newApiKey)) {
+          this.updateMyApiKey(userId, newApiKey, timestamp);
+        } else {
+          throw new IllegalStateException("Failed to create api key for user ID: " + userId);
+        }
+      });
+  }
+
+  public Mono<String> createAndUpdateMyApiKey(String userId, Instant timestamp) {
+    return this.updateWithNewMyApiKey(userId, timestamp);
   }
 }

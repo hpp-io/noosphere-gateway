@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 @RestController
 @RequestMapping("/api")
@@ -39,7 +40,8 @@ public class AccountResource {
         .map(SecurityContext::getAuthentication)
         .flatMap(authentication -> {
             if (authentication instanceof AbstractAuthenticationToken) {
-                return Mono.just(userService.getUserFromAuthentication((AbstractAuthenticationToken) authentication));
+                return Mono.fromCallable(() -> userService.getUserFromAuthentication((AbstractAuthenticationToken) authentication))
+                    .subscribeOn(Schedulers.boundedElastic());
             }
             return Mono.error(new AccountResourceException("User could not be found"));
         })
@@ -58,7 +60,7 @@ public class AccountResource {
     return ReactiveSecurityContextHolder.getContext()
         .map(SecurityContext::getAuthentication)
         .map(authentication -> ResponseEntity.noContent().<Void>build())
-        .defaultIfEmpty(ResponseEntity.status(HttpStatus.UNAUTHORIZED).<Void>build());
+        .defaultIfEmpty(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
   }
 
   private static class AccountResourceException extends RuntimeException {
