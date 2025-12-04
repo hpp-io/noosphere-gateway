@@ -121,7 +121,7 @@ public class SecurityConfiguration {
             )
             // See https://github.com/spring-projects/spring-security/issues/5766
             .addFilterBefore(apiKeyAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
-            .addFilterAt(new CookieCsrfFilter(), SecurityWebFiltersOrder.REACTOR_CONTEXT)
+            .addFilterAfter(new CookieCsrfFilter(), SecurityWebFiltersOrder.CSRF)
             .addFilterAfter(new SpaWebFilter(), SecurityWebFiltersOrder.HTTPS_REDIRECT)
             .headers(headers ->
                 headers
