@@ -100,23 +100,21 @@ public class SecurityConfiguration {
             .cors(withDefaults())
             .csrf(csrf ->
                 csrf
-                    .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
-                    .requireCsrfProtectionMatcher(
-                        exchange -> {
-                            HttpMethod method = exchange.getRequest().getMethod();
-                            if (
-                                method == HttpMethod.GET ||
-                                method == HttpMethod.HEAD ||
-                                method == HttpMethod.OPTIONS ||
-                                method == HttpMethod.TRACE
-                            ) {
+                    .csrfTokenRepository(cookieServerCsrfTokenRepository())
+                    .requireCsrfProtectionMatcher(new NegatedServerWebExchangeMatcher(
+                        new OrServerWebExchangeMatcher(
+                            // Do not apply CSRF protection for safe methods
+                            exchange -> {
+                                HttpMethod method = exchange.getRequest().getMethod();
+                                if (method == null || method.matches("GET") || method.matches("HEAD") || method.matches("OPTIONS") || method.matches("TRACE")) {
+                                    return ServerWebExchangeMatcher.MatchResult.match();
+                                }
                                 return ServerWebExchangeMatcher.MatchResult.notMatch();
-                            }
-                            if (exchange.getRequest().getHeaders().containsKey(ApiKeyAuthenticationConverter.API_KEY_HEADER)) {
-                                return ServerWebExchangeMatcher.MatchResult.notMatch();
-                            }
-                            return ServerWebExchangeMatcher.MatchResult.match();
-                        }
+                            },
+                            // Do not apply CSRF protection for API key authentication
+                            exchange -> exchange.getRequest().getHeaders().containsKey(ApiKeyAuthenticationConverter.API_KEY_HEADER)
+                                ? ServerWebExchangeMatcher.MatchResult.match() : ServerWebExchangeMatcher.MatchResult.notMatch()
+                        ))
                     )
                     // See https://stackoverflow.com/q/74447118/65681
                     .csrfTokenRequestHandler(new ServerCsrfTokenRequestAttributeHandler())
@@ -181,6 +179,16 @@ public class SecurityConfiguration {
             authorizationRequestResolver.setAuthorizationRequestCustomizer(authorizationRequestCustomizer());
         }
         return authorizationRequestResolver;
+    }
+
+    @Bean
+    public CookieServerCsrfTokenRepository cookieServerCsrfTokenRepository() {
+        CookieServerCsrfTokenRepository repository = new CookieServerCsrfTokenRepository();
+        repository.setCookieHttpOnly(false);
+        repository.setCookiePath("/");
+        // Explicitly set SameSite to Lax to prevent issues with Undertow
+        repository.setCookieCustomizer(customizer -> customizer.sameSite("Lax"));
+        return repository;
     }
 
     private Consumer<OAuth2AuthorizationRequest.Builder> authorizationRequestCustomizer() {
