@@ -200,33 +200,32 @@ public class UserService {
       return Mono.empty();
     }
 
-    return Mono.fromCallable(() -> {
-        Optional<User> userOptional = userRepository.findById(userId);
-        if (userOptional.isPresent()) {
-          User user = userOptional.get();
-          if (CommonUtils.isValid(firstName)) {
-            user.setFirstName(firstName.trim());
-          }
-          if (CommonUtils.isValid(lastName)) {
-            user.setLastName(lastName.trim());
-          }
-          if (CommonUtils.isValid(firstName) || CommonUtils.isValid(lastName)) {
-            user.setName(CommonUtils.buildFullName(langKey, firstName, lastName));
-          }
-          if (CommonUtils.isValid(langKey)) {
-            user.setLangKey(langKey.trim());
-          }
-          if (CommonUtils.isValid(imageUrl)) {
-            user.setImageUrl(imageUrl.trim());
-          }
-          user.setLastModifiedDate(timestamp);
-          noosphereHubClient.updateUserProfile(userMapper.userToUserDTO(user));
-          userRepository.save(user);
-          clearUserCaches(user);
-          return user;
-        }
-        return null;
-      })
+    return Mono
+      .fromRunnable(() ->
+        userRepository
+          .findById(userId)
+          .ifPresent(user -> {
+            if (CommonUtils.isValid(firstName)) {
+              user.setFirstName(firstName.trim());
+            }
+            if (CommonUtils.isValid(lastName)) {
+              user.setLastName(lastName.trim());
+            }
+            if (CommonUtils.isValid(firstName) || CommonUtils.isValid(lastName)) {
+              user.setName(CommonUtils.buildFullName(langKey, firstName, lastName));
+            }
+            if (CommonUtils.isValid(langKey)) {
+              user.setLangKey(langKey.trim());
+            }
+            if (CommonUtils.isValid(imageUrl)) {
+              user.setImageUrl(imageUrl.trim());
+            }
+            user.setLastModifiedDate(timestamp);
+            noosphereHubClient.updateUserProfile(userMapper.userToUserDTO(user));
+            userRepository.save(user);
+            clearUserCaches(user);
+          })
+      )
       .subscribeOn(Schedulers.boundedElastic())
       .then();
   }
@@ -355,7 +354,7 @@ public class UserService {
   @Transactional(readOnly = true)
   public User findEntityById(String userId) {
     Optional<User> optionalUser = this.findOptionalEntityById(userId);
-    return optionalUser.orElse(null);
+    return optionalUser.orElseThrow();
   }
 
   public UserDTO findById(String userId) {
