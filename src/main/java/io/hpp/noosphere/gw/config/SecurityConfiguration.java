@@ -186,7 +186,7 @@ public class SecurityConfiguration {
         CookieServerCsrfTokenRepository repository = new CookieServerCsrfTokenRepository();
         repository.setCookieHttpOnly(false);
         repository.setCookiePath("/");
-        // Explicitly set SameSite to Lax to prevent issues with Undertow
+        // Explicitly set SameSite to Lax to prevent the IllegalArgumentException from Undertow
         repository.setCookieCustomizer(customizer -> customizer.sameSite("Lax"));
         return repository;
     }
@@ -239,7 +239,12 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    ReactiveJwtDecoder jwtDecoder(OAuth2ClientProperties properties, @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}") String issuerUri) {
+    public WebClient userInfoWebClient() {
+        return WebClient.create();
+    }
+
+    @Bean
+    ReactiveJwtDecoder jwtDecoder(OAuth2ClientProperties properties, @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri}") String issuerUri, WebClient userInfoWebClient) {
         NimbusReactiveJwtDecoder jwtDecoder = (NimbusReactiveJwtDecoder) ReactiveJwtDecoders.fromOidcIssuerLocation(issuerUri);
         OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(jHipsterProperties.getSecurity().getOauth2().getAudience());
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
@@ -260,7 +265,7 @@ public class SecurityConfiguration {
                 }
                 // Get user info from `users` cache if present
                 return Optional.ofNullable(users.getIfPresent(jwt.getSubject())).orElseGet(() -> // Retrieve user info from OAuth provider if not already loaded
-                    WebClient.create()
+                    userInfoWebClient
                         .get()
                         .uri(properties.getProvider().get("oidc").getUserInfoUri())
                         .headers(headers -> headers.setBearerAuth(token))
