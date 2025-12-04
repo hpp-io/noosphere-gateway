@@ -244,18 +244,34 @@ public class UserService {
     }
     // save account in to sync users between IdP and JHipster's local database
     Optional<User> existingUserOptional = userRepository.findOneByEmail(user.getEmail());
-    if (existingUserOptional.isPresent()) {
-      User existingUser = existingUserOptional.get();
-      // if IdP sends last updated information, use it to determine if an update should happen
-      if (details.get("updated_at") != null) {
-        Instant dbModifiedDate = existingUser.getLastModifiedDate();
-        Instant idpModifiedDate;
-        if (details.get("updated_at") instanceof Instant) {
-          idpModifiedDate = (Instant) details.get("updated_at");
+    existingUserOptional.ifPresentOrElse(
+      existingUser -> {
+        // if IdP sends last updated information, use it to determine if an update should happen
+        if (details.get("updated_at") != null) {
+          Instant dbModifiedDate = existingUser.getLastModifiedDate();
+          Instant idpModifiedDate;
+          if (details.get("updated_at") instanceof Instant) {
+            idpModifiedDate = (Instant) details.get("updated_at");
+          } else {
+            idpModifiedDate = Instant.ofEpochSecond((Integer) details.get("updated_at"));
+          }
+          if (idpModifiedDate.isAfter(dbModifiedDate)) {
+            LOG.debug("Updating user '{}' in local database", user.getLogin());
+            updateUser(
+              user.getId(),
+              user.getFirstName(),
+              user.getLastName(),
+              user.getEmail(),
+              user.getApiKey(),
+              user.getLangKey(),
+              user.getImageUrl(),
+              user.getWalletAddress()
+            );
+            userRepository.save(user);
+            this.clearUserCaches(user);
+          }
+          // no last updated info, blindly update
         } else {
-          idpModifiedDate = Instant.ofEpochSecond((Integer) details.get("updated_at"));
-        }
-        if (idpModifiedDate.isAfter(dbModifiedDate)) {
           LOG.debug("Updating user '{}' in local database", user.getLogin());
           updateUser(
             user.getId(),
@@ -270,30 +286,16 @@ public class UserService {
           userRepository.save(user);
           this.clearUserCaches(user);
         }
-        // no last updated info, blindly update
-      } else {
-        LOG.debug("Updating user '{}' in local database", user.getLogin());
-        updateUser(
-          user.getId(),
-          user.getFirstName(),
-          user.getLastName(),
-          user.getEmail(),
-          user.getApiKey(),
-          user.getLangKey(),
-          user.getImageUrl(),
-          user.getWalletAddress()
-        );
+      },
+      () -> {
+        LOG.debug("Saving user '{}' in local database", user.getLogin());
+        if (!CommonUtils.isValid(user.getCreatedBy())) {
+          user.setCreatedBy(SYSTEM);
+        }
         userRepository.save(user);
         this.clearUserCaches(user);
       }
-    } else {
-      LOG.debug("Saving user '{}' in local database", user.getLogin());
-      if (!CommonUtils.isValid(user.getCreatedBy())) {
-        user.setCreatedBy(SYSTEM);
-      }
-      userRepository.save(user);
-      this.clearUserCaches(user);
-    }
+    );
     return user;
   }
 
