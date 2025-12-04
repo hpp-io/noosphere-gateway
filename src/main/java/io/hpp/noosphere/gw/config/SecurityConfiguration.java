@@ -121,7 +121,7 @@ public class SecurityConfiguration {
             )
             // See https://github.com/spring-projects/spring-security/issues/5766
             .addFilterBefore(apiKeyAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
-            .addFilterAfter(new CookieCsrfFilter(), SecurityWebFiltersOrder.CSRF)
+            .addFilterAfter(cookieCsrfFilter(), SecurityWebFiltersOrder.CSRF)
             .addFilterAfter(new SpaWebFilter(), SecurityWebFiltersOrder.HTTPS_REDIRECT)
             .headers(headers ->
                 headers
@@ -189,6 +189,11 @@ public class SecurityConfiguration {
         // Explicitly set SameSite to Lax to prevent the IllegalArgumentException from Undertow
         repository.setCookieCustomizer(customizer -> customizer.sameSite("Lax"));
         return repository;
+    }
+
+    @Bean
+    public CookieCsrfFilter cookieCsrfFilter() {
+        return new CookieCsrfFilter();
     }
 
     private Consumer<OAuth2AuthorizationRequest.Builder> authorizationRequestCustomizer() {
