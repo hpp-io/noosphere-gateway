@@ -13,7 +13,7 @@ const queryClient = new QueryClient();
 const metadata = {
   name: 'Noosphere Gateway',
   description: 'Noosphere Gateway',
-  url: 'https://www.hpp.io',
+  url: 'https://nsapp.hpp.io',
   icons: ['https://avatars.githubusercontent.com/u/179229932'],
 };
 
@@ -29,6 +29,10 @@ function AppkitProvider({ children, cookies }: { children: ReactNode; cookies: s
         const { projectId, envValue } = response.data;
         const wagmiConfig = initializeWagmi(projectId, envValue);
         setConfig(wagmiConfig);
+
+        if (envValue === 'test2' || envValue === 'test' ){
+          metadata.url = "https://nstest.hpp.io"
+        }
 
         createAppKit({
           adapters: [wagmiConfig.wagmiAdapter],
