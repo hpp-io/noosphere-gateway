@@ -54,7 +54,10 @@ public class UserResource {
     LOG.debug("REST request to get wallet");
     return SecurityUtils.getCurrentUserId()
       .map(userService::findById)
-      .flatMap(user -> Mono.justOrEmpty(user.getWalletAddress()))
+      .flatMap(user -> {
+        LOG.info("User found: {}", user);
+        return Mono.justOrEmpty(user.getWalletAddress());
+      })
       .map(ResponseEntity::ok)
       .defaultIfEmpty(ResponseEntity.ok("")); // If NO key, return 200 OK with empty string
   }
@@ -65,7 +68,10 @@ public class UserResource {
     LOG.debug("REST request to get apiKey");
     return SecurityUtils.getCurrentUserId()
       .map(userService::findById)
-      .flatMap(user -> Mono.justOrEmpty(user.getApiKey()))
+      .flatMap(user -> {
+        LOG.info("User found: {}", user);
+        return Mono.justOrEmpty(user.getApiKey());
+      })
       .map(ResponseEntity::ok)
       .defaultIfEmpty(ResponseEntity.ok("")); // If NO key, return 200 OK with empty string
   }
