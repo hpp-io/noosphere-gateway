@@ -91,6 +91,9 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ReactiveClientRegistrationRepository clientRegistrationRepository) {
+
+        CookieServerCsrfTokenRepository csrfRepository = new CookieServerCsrfTokenRepository();
+        csrfRepository.setCookieCustomizer(builder -> builder.sameSite("Lax"));
         http
             .securityMatcher(
                 new NegatedServerWebExchangeMatcher(
@@ -100,7 +103,7 @@ public class SecurityConfiguration {
             .cors(withDefaults())
             .csrf(csrf ->
                 csrf
-                    .csrfTokenRepository(cookieServerCsrfTokenRepository())
+                    .csrfTokenRepository(csrfRepository)
                     .requireCsrfProtectionMatcher(new NegatedServerWebExchangeMatcher(
                         new OrServerWebExchangeMatcher(
                             // Do not apply CSRF protection for safe methods
@@ -179,16 +182,6 @@ public class SecurityConfiguration {
             authorizationRequestResolver.setAuthorizationRequestCustomizer(authorizationRequestCustomizer());
         }
         return authorizationRequestResolver;
-    }
-
-    @Bean
-    public CookieServerCsrfTokenRepository cookieServerCsrfTokenRepository() {
-        CookieServerCsrfTokenRepository repository = new CookieServerCsrfTokenRepository();
-        repository.setCookieHttpOnly(false);
-        repository.setCookiePath("/");
-        // Explicitly set SameSite to Lax to prevent the IllegalArgumentException from Undertow
-        repository.setCookieCustomizer(customizer -> customizer.sameSite("Lax"));
-        return repository;
     }
 
     @Bean
