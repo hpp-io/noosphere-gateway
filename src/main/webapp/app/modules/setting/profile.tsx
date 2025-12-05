@@ -170,7 +170,7 @@ export const Profile = () => {
             </FormGroup>
             <FormGroup>
               <Label for="walletAddress">Wallet Address</Label>
-              { walletAddress ? (
+              { (walletAddress || walletAddress === "") ? (
                   <>
                     <Input
                         type="text"
