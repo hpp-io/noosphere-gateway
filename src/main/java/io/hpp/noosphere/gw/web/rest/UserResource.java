@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import java.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -49,20 +50,24 @@ public class UserResource {
 
   @GetMapping("/mine/wallet")
   @RateLimited
-  public Mono<String> getMyWallet() {
+  public Mono<ResponseEntity<String>> getMyWallet() {
     LOG.debug("REST request to get wallet");
     return SecurityUtils.getCurrentUserId()
       .map(userService::findById)
-      .map(UserDTO::getWalletAddress);
+      .flatMap(user -> Mono.justOrEmpty(user.getWalletAddress()))
+      .map(ResponseEntity::ok)
+      .defaultIfEmpty(ResponseEntity.notFound().build());
   }
 
   @GetMapping("/mine/api-key")
   @RateLimited
-  public Mono<String> getMyApiKey() {
+  public Mono<ResponseEntity<String>> getMyApiKey() {
     LOG.debug("REST request to get apiKey");
     return SecurityUtils.getCurrentUserId()
       .map(userService::findById)
-      .map(UserDTO::getApiKey);
+      .flatMap(user -> Mono.justOrEmpty(user.getApiKey()))
+      .map(ResponseEntity::ok)
+      .defaultIfEmpty(ResponseEntity.notFound().build());
   }
 
   @PostMapping("/mine/api-key")
