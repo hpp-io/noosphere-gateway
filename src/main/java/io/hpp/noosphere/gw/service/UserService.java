@@ -19,6 +19,7 @@ import io.hpp.noosphere.gw.repository.AuthorityRepository;
 import io.hpp.noosphere.gw.repository.UserRepository;
 import io.hpp.noosphere.gw.service.dto.UserDTO;
 import io.hpp.noosphere.gw.service.mapper.UserMapper;
+import io.hpp.noosphere.gw.web.rest.vm.CreateWalletVm;
 import io.hpp.noosphere.gw.web.rest.vm.UpdateWalletVm;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
@@ -397,7 +398,6 @@ public class UserService {
       this.findOptionalEntityById(userId).ifPresent(user -> {
         user.setWalletAddress(walletAddress);
         user.setLastModifiedDate(timestamp);
-//        keycloakService.updateKeycloakUser(user.getId(), user.getEmail(), null, null, null, null, null, null, walletAddress);
         userRepository.save(user);
         this.clearUserCaches(user);
       });
@@ -409,18 +409,21 @@ public class UserService {
       this.findOptionalEntityById(userId).ifPresent(user -> {
         user.setApiKey(apiKey);
         user.setLastModifiedDate(timestamp);
-//        keycloakService.updateKeycloakUser(user.getId(), user.getEmail(), null, null, null, apiKey, null, null, null);
         userRepository.save(user);
         this.clearUserCaches(user);
       });
     }
   }
 
-  public Mono<String> updateWithNewMyWallet(String userId, String ownerAddress, Instant timestamp) {
-    UpdateWalletVm updateWalletVm = new UpdateWalletVm();
-    updateWalletVm.setOwnerAddress(ownerAddress);
+  public Mono<String> createMyWallet(String userId, String ownerAddress, Instant timestamp) {
+    //    UserDTO userDTO = this.findById(userId);
+    //    if (CommonUtils.isValid(userDTO.getWalletAddress())) {
+    //      throw new InvalidDataException(PROPERTY_NAME_USER, "wallet exists");
+    //    }
+    CreateWalletVm createWalletVm = new CreateWalletVm();
+    createWalletVm.setOwnerAddress(ownerAddress);
     return noosphereHubClient
-      .createMyWallet(updateWalletVm)
+      .createMyWallet(createWalletVm)
       .publishOn(Schedulers.boundedElastic())
       .doOnNext(walletAddress -> {
         if (CommonUtils.isValid(walletAddress)) {
@@ -429,14 +432,6 @@ public class UserService {
           throw new IllegalStateException("Failed to extract wallet address from receipt for user ID: " + userId);
         }
       });
-  }
-
-  public Mono<String> createAndUpdateMyWallet(String userId, String ownerAddress, Instant timestamp) {
-    //    UserDTO userDTO = this.findById(userId);
-    //    if (CommonUtils.isValid(userDTO.getWalletAddress())) {
-    //      throw new InvalidDataException(PROPERTY_NAME_USER, "wallet exists");
-    //    }
-    return this.updateWithNewMyWallet(userId, ownerAddress, timestamp);
   }
 
   public Mono<String> updateWithNewMyApiKey(String userId, Instant timestamp) {
@@ -455,4 +450,14 @@ public class UserService {
   public Mono<String> createAndUpdateMyApiKey(String userId, Instant timestamp) {
     return this.updateWithNewMyApiKey(userId, timestamp);
   }
+
+  public Mono<Void> updateMyWalletAndPropagate(String userId, String walletAddress, Instant timestamp) {
+    UpdateWalletVm updateWalletVm = new UpdateWalletVm();
+    updateWalletVm.setWalletAddress(walletAddress);
+    return noosphereHubClient
+      .updateMyWallet(updateWalletVm)
+      .publishOn(Schedulers.boundedElastic())
+      .doOnSuccess(aVoid -> this.updateMyWalletAddress(userId, walletAddress, timestamp));
+  }
+
 }

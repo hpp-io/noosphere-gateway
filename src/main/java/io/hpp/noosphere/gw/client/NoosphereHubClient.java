@@ -5,10 +5,10 @@ import io.hpp.noosphere.gw.web.rest.dto.AgentContainerDTO;
 import io.hpp.noosphere.gw.web.rest.dto.AgentDTO;
 import io.hpp.noosphere.gw.web.rest.dto.AgentRequestDTO;
 import io.hpp.noosphere.gw.web.rest.dto.ContainerDTO;
-import io.hpp.noosphere.gw.web.rest.dto.CreateWalletRequest;
 import io.hpp.noosphere.gw.web.rest.dto.UserDTO;
 import io.hpp.noosphere.gw.web.rest.dto.UserSubscriptionDTO;
 import io.hpp.noosphere.gw.web.rest.dto.VerifierDTO;
+import io.hpp.noosphere.gw.web.rest.vm.CreateWalletVm;
 import io.hpp.noosphere.gw.web.rest.vm.KeepAliveResponse;
 import io.hpp.noosphere.gw.web.rest.vm.PageableVm;
 import io.hpp.noosphere.gw.web.rest.vm.RegisterAgentVm;
@@ -48,7 +48,7 @@ public interface NoosphereHubClient {
   Flux<UserDTO> searchUsers(@RequestBody SearchUserVm searchVm, @SpringQueryMap PageableVm pageable);
 
   @PostMapping("/api/wallets")
-  Mono<String> createWallet(@RequestBody CreateWalletRequest createWalletRequest);
+  Mono<String> createWallet(@RequestBody CreateWalletVm createWalletVm);
 
   @PostMapping("/api/containers/search")
   Flux<ContainerDTO> searchContainers(@RequestBody SearchContainerVm searchVm, @SpringQueryMap PageableVm pageable);
@@ -81,10 +81,10 @@ public interface NoosphereHubClient {
   Mono<AgentRequestDTO> getAgentRequest(@PathVariable("id") UUID id);
 
   @PostMapping("/api/users/mine/wallet")
-  Mono<String> createMyWallet(@RequestBody UpdateWalletVm updateWalletVm);
+  Mono<String> createMyWallet(@RequestBody CreateWalletVm createWalletVm);
 
   @PutMapping("/api/users/mine/wallet")
-  Mono<String> updateMyWallet(@RequestBody UpdateWalletVm updateWalletVm);
+  Mono<Void> updateMyWallet(@RequestBody UpdateWalletVm updateWalletVm);
 
   @GetMapping("/api/users/mine/wallet")
   Mono<String> getMyWallet();
@@ -156,7 +156,7 @@ public interface NoosphereHubClient {
         }
 
         @Override
-        public Mono<String> createWallet(CreateWalletRequest createWalletRequest) {
+        public Mono<String> createWallet(CreateWalletVm createWalletVm) {
           return Mono.error(cause);
         }
 
@@ -211,12 +211,12 @@ public interface NoosphereHubClient {
         }
 
         @Override
-        public Mono<String> createMyWallet(UpdateWalletVm updateWalletVm) {
+        public Mono<String> createMyWallet(CreateWalletVm createWalletVm) {
           return Mono.error(cause);
         }
 
         @Override
-        public Mono<String> updateMyWallet(UpdateWalletVm updateWalletVm) {
+        public Mono<Void> updateMyWallet(UpdateWalletVm updateWalletVm) {
           return Mono.error(cause);
         }
 

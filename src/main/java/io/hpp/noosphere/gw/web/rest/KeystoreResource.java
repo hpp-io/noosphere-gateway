@@ -5,9 +5,10 @@ import static io.hpp.noosphere.gw.config.Constants.KEY_ALIAS_HPP_WALLET_ADDRESS;
 import io.hpp.noosphere.gw.client.NoosphereHubClient;
 import io.hpp.noosphere.gw.config.RateLimited;
 import io.hpp.noosphere.common.security.KeystoreManager;
-import io.hpp.noosphere.gw.web.rest.dto.CreateWalletRequest;
 import io.hpp.noosphere.gw.web.rest.dto.KeystoreReadRequest;
 import io.hpp.noosphere.gw.web.rest.dto.KeystoreRequest;
+import io.hpp.noosphere.gw.web.rest.vm.CreateWalletVm;
+import io.hpp.noosphere.gw.web.rest.vm.WalletCreationVm;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -57,23 +58,23 @@ public class KeystoreResource {
                 request.getKeyAlias(),
                 request.getPrivateKey()
               );
-              CreateWalletRequest createWalletRequest = new CreateWalletRequest();
-              createWalletRequest.setOwnerAddress(credentials.getAddress());
-              return new WalletCreationData(ks, createWalletRequest);
+              CreateWalletVm createWalletVm = new CreateWalletVm();
+              createWalletVm.setOwnerAddress(credentials.getAddress());
+              return new WalletCreationVm(ks, createWalletVm);
             })
             .flatMap(walletData ->
               noosphereHubClient
-                .createWallet(walletData.createWalletRequest)
+                .createWallet(walletData.getCreateWalletVm())
                 .switchIfEmpty(Mono.error(new IOException("Failed to create HPP wallet in Noosphere Hub.")))
                 .flatMap(newHppWallet -> {
                   try {
                     KeystoreManager.addSecretKeyWithUtf8String(
-                      walletData.keyStore,
+                      walletData.getKeyStore(),
                       request.getPassword(),
                       KEY_ALIAS_HPP_WALLET_ADDRESS,
                       newHppWallet
                     );
-                    KeystoreManager.saveKeyStore(walletData.keyStore, tempFile, request.getPassword());
+                    KeystoreManager.saveKeyStore(walletData.getKeyStore(), tempFile, request.getPassword());
                     return Mono.just(tempFile);
                   } catch (GeneralSecurityException | IOException e) {
                     return Mono.error(e);
@@ -155,7 +156,4 @@ public class KeystoreResource {
       .doOnError(e -> log.error("Failed to read keystore", e));
   }
 
-  private record WalletCreationData(KeyStore keyStore, CreateWalletRequest createWalletRequest) {
-
-  }
 }

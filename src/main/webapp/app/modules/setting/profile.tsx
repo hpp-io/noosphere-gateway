@@ -2,9 +2,9 @@ import './profile.scss';
 
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { createMyApiKey, createMyWalletAddress, getMyApiKey, getMyWalletAddress, updateUser } from 'app/shared/reducers/user-management';
+import { reset, createMyKeystore, createMyApiKey, createMyWalletAddress, getMyApiKey, getMyWalletAddress, updateUser } from 'app/shared/reducers/user-management';
 import { Alert, Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
-import { useAppKit, useAppKitAccount } from '@reown/appkit/react';
+import { useAppKit } from '@reown/appkit/react';
 import { useAccount, useDisconnect } from 'wagmi';
 
 export const Profile = () => {
@@ -14,25 +14,32 @@ export const Profile = () => {
   const walletAddress = useAppSelector(state => state.userManagement.walletAddress);
   const apiKey = useAppSelector(state => state.userManagement.apiKey);
   const userLoading = useAppSelector(state => state.userManagement.loading);
+  const keystoreFile = useAppSelector(state => state.userManagement.keystoreFile);
+  const fileName = useAppSelector(state => state.userManagement.fileName);
+  const keystoreLoading = useAppSelector(state => state.userManagement.keystoreLoading);
+
   const [formData, setFormData] = useState({
     firstName: account?.firstName || '',
     lastName: account?.lastName || '',
     email: account?.email || '',
   });
+  const [privateKey, setPrivateKey] = useState('');
+  const [keyAlias, setKeyAlias] = useState('hpp-eth-key');
+  const [keyPassword, setKeyPassword] = useState('');
 
 
-  const { open: openWalletDialog , close: closeWalletDialog } = useAppKit();
+  const {open: openWalletDialog, close: closeWalletDialog} = useAppKit();
 
-  const { address, isConnected } = useAccount();
+  const {address, isConnected} = useAccount();
 
-  const { disconnect } = useDisconnect();
+  const {disconnect} = useDisconnect();
 
 
-  const openWalletDialogClicked = () =>{
-    openWalletDialog({ view: "Connect" });
+  const openWalletDialogClicked = () => {
+    openWalletDialog({view: "Connect"});
   }
 
-  const disconnectWalletClicked = () =>{
+  const disconnectWalletClicked = () => {
     disconnect();
   }
 
@@ -63,6 +70,22 @@ export const Profile = () => {
     }
   }, [address]);
 
+  useEffect(() => {
+    if (keystoreFile) {
+      const url = window.URL.createObjectURL(keystoreFile);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+      dispatch(reset());
+      dispatch(getMyWalletAddress());
+    }
+  }, [keystoreFile, fileName, dispatch]);
+
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = event.target;
     setFormData({
@@ -92,6 +115,10 @@ export const Profile = () => {
 
   const onCreateApiKey = () => {
     dispatch(createMyApiKey());
+  };
+
+  const onGenerateKeystore = () => {
+    dispatch(createMyKeystore({privateKey, keyAlias, password: keyPassword, createHppWallet: true, isWallet: true}));
   };
 
 
@@ -170,49 +197,98 @@ export const Profile = () => {
             </FormGroup>
             <FormGroup>
               <Label for="walletAddress">Wallet Address</Label>
-              { (walletAddress || walletAddress === "") ? (
+              <Input
+                  type="text"
+                  id="walletAddress"
+                  name="walletAddress"
+                  disabled={ true }
+                  value={ walletAddress }
+              />
+              <br/>
+              <Input
+                  type="text"
+                  id="ownerAddress"
+                  name="ownerAddress"
+                  value={ ownerAddress }
+                  onChange={ e => setOwnerAddress(e.target.value) }
+                  placeholder="Enter your owner address"
+              />
+              <br/>
+              { isConnected === true ? (
+                  <Button color="primary" disabled={ userLoading } onClick={ disconnectWalletClicked }>
+                    { 'Disconnect Wallet' }
+                  </Button>
+              ) : (
+                  <Button color="primary" disabled={ userLoading } onClick={ openWalletDialogClicked }>
+                    { 'Connect Wallet' }
+                  </Button>
+              ) }
+              <br/>
+              <br/>
+              { (ownerAddress && ownerAddress !== "") ? (
+                  (walletAddress && walletAddress !== "") ? (
+                      <>
+                        <Button color="primary" disabled={ userLoading } onClick={ onCreateWalletAddress }>
+                          { 'Regenerate Wallet Address' }
+                        </Button>
+                      </>
+                  ) : (
+                      <>
+                        <br/>
+                        <Button color="primary" disabled={ userLoading } onClick={ onCreateWalletAddress }>
+                          { 'Generate Wallet Address' }
+                        </Button>
+                      </>
+                  )
+              ) : null }
+              <br/>
+              <br/>
+              <Label for="keyAlias">Key Alias</Label>
+              <Input
+                  type="text"
+                  id="keyAlias"
+                  name="keyAlias"
+                  onChange={ e => setKeyAlias(e.target.value) }
+                  placeholder="Enter your key alias"
+                  value={ keyAlias }
+              />
+              <br/>
+              <Label for="keyPassword">Keystore Password</Label>
+              <Input
+                  type="password"
+                  id="keyPassword"
+                  name="keyPassword"
+                  onChange={ e => setKeyPassword(e.target.value) }
+                  placeholder="Enter your key password"
+                  value={ keyPassword }
+              />
+              <br/>
+              <Label for="privateKey">Private Key</Label>
+              <Input
+                  type="text"
+                  id="privateKey"
+                  name="privateKey"
+                  onChange={ e => setPrivateKey(e.target.value) }
+                  placeholder="Enter your private key"
+                  value={ privateKey }
+              />
+              <br/>
+              { (keyAlias && keyAlias !== "" && keyPassword && keyPassword !== "" && privateKey && privateKey !== "") ? (
                   <>
-                    <Input
-                        type="text"
-                        id="walletAddress"
-                        name="walletAddress"
-                        disabled={ true }
-                        value={ walletAddress }
-                    />
-                    <br/>
-                    <Input
-                        type="text"
-                        id="ownerAddress"
-                        name="ownerAddress"
-                        value={ ownerAddress }
-                        onChange={ e => setOwnerAddress(e.target.value) }
-                        placeholder="Enter your owner address"
-                    />
-                    <br/>
-                    {isConnected === true ?(
-                        <Button color="primary" disabled={ userLoading } onClick={ disconnectWalletClicked }>
-                          { 'Disconnect Wallet' }
-                        </Button>
-                    ):(
-                        <Button color="primary" disabled={ userLoading } onClick={ openWalletDialogClicked }>
-                          { 'Connect Wallet' }
-                        </Button>
-                    )}
-
-                    <br/>
-                    <br/>
-                    <Button color="primary" disabled={ userLoading } onClick={ onCreateWalletAddress }>
-                      { 'Regenerate Wallet Address' }
+                    <Button color="primary" disabled={ userLoading } onClick={ onGenerateKeystore }>
+                      { 'Generate Keystore' }
                     </Button>
                   </>
               ) : (
                   <>
-                    <br/>
-                    <Button color="primary" disabled={ userLoading } onClick={ onCreateWalletAddress }>
-                      { 'Generate Wallet Address' }
+                    <Button color="primary" disabled={ true } >
+                      { 'Generate Keystore' }
                     </Button>
                   </>
-              ) }
+              )
+              }
+              <br/>
+              <br/>
             </FormGroup>
             { userLoading && <Alert color="info" className="mt-3">Processing your request...</Alert> }
 

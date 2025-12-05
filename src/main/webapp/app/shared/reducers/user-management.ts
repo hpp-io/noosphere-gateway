@@ -1,17 +1,18 @@
 import axios from 'axios';
-import { createAsyncThunk, createSlice, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
+import { createAsyncThunk, isFulfilled, isPending, isRejected, createSlice } from '@reduxjs/toolkit';
 
 import { IUser, defaultValue } from 'app/shared/model/user.model';
-import { createEntitySlice, EntityState, IQueryParams } from 'app/shared/reducers/reducer.utils';
-import { IUpdateWallet } from "app/shared/model/update-wallet.model";
+import { EntityState, IQueryParams, serializeAxiosError } from 'app/shared/reducers/reducer.utils';
+import { IUpdateWallet } from 'app/shared/model/update-wallet.model';
 
-
-export interface UserState<T> extends EntityState<T> {
-  walletAddress: string,
-  apiKey: string,
+export interface UserState extends EntityState<IUser> {
+  walletAddress: string;
+  apiKey: string;
+  keystoreFile: Blob;
+  fileName: string;
 }
 
-const initialState : UserState<IUser> = {
+const initialState: UserState = {
   loading: false,
   errorMessage: null,
   entities: [],
@@ -21,6 +22,8 @@ const initialState : UserState<IUser> = {
   updateSuccess: false,
   walletAddress: null,
   apiKey: null,
+  keystoreFile: null as Blob | null,
+  fileName: '',
 };
 
 const apiUrl = 'api/users';
@@ -69,8 +72,27 @@ export const updateUser = createAsyncThunk('userManagement/update_user',
       return axios.put<IUser>(requestUrl, requestBody);
     });
 
+export const createMyKeystore = createAsyncThunk(
+    'userManagement/createMyKeystore',
+    async (data: { keyAlias: string; password: string; privateKey: string; isWallet: boolean, createHppWallet: boolean }) => {
+      const requestUrl = `${ apiUrl }/mine/keystore`;
+      const response = await axios.post(
+          requestUrl, data,
+          {
+            responseType: 'blob',
+          }
+      );
+      return {
+        file: response.data,
+        fileName: `${data.keyAlias}.p12`,
+      };
+    },
+    {
+      serializeError: serializeAxiosError,
+    }
+);
 
-export const UserManagementSlice = createEntitySlice({
+export const UserManagementSlice = createSlice({
   name: 'userManagement',
   initialState,
   reducers: {
@@ -80,6 +102,11 @@ export const UserManagementSlice = createEntitySlice({
   },
   extraReducers(builder) {
     builder
+    .addCase(createMyKeystore.fulfilled, (state, action) => {
+      state.loading = false;
+      state.keystoreFile = action.payload.file;
+      state.fileName = action.payload.fileName;
+    })
     .addCase(getUsers.pending, (state, action) => {
       state.updateSuccess = false;
       state.loading = true;
@@ -166,6 +193,16 @@ export const UserManagementSlice = createEntitySlice({
       state.loading = false;
       state.updating = false;
       state.errorMessage = null;
+    })
+    .addMatcher(isPending(createMyKeystore), state => {
+      state.errorMessage = null;
+      state.loading = true;
+      state.keystoreFile = null;
+      state.fileName = '';
+    })
+    .addMatcher(isRejected(createMyKeystore), (state, action) => {
+      state.loading = false;
+      state.errorMessage = action.error.message;
     })
     ;
   },

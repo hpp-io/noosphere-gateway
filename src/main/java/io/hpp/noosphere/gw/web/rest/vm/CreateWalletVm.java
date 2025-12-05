@@ -5,9 +5,10 @@ import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import lombok.Data;
 
 @Data
-public class UpdateWalletVm {
+@Schema
+public class CreateWalletVm {
 
-    @Schema(description = "Wallet Address", requiredMode = RequiredMode.REQUIRED)
-    private String walletAddress;
+    @Schema(description = "Owner Address", requiredMode = RequiredMode.REQUIRED)
+    private String ownerAddress;
 
 }
