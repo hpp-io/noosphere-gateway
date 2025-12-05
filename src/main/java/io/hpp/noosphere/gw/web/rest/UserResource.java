@@ -56,7 +56,7 @@ public class UserResource {
       .map(userService::findById)
       .flatMap(user -> Mono.justOrEmpty(user.getWalletAddress()))
       .map(ResponseEntity::ok)
-      .defaultIfEmpty(ResponseEntity.notFound().build());
+      .defaultIfEmpty(ResponseEntity.ok("")); // If NO key, return 200 OK with empty string
   }
 
   @GetMapping("/mine/api-key")
@@ -67,7 +67,7 @@ public class UserResource {
       .map(userService::findById)
       .flatMap(user -> Mono.justOrEmpty(user.getApiKey()))
       .map(ResponseEntity::ok)
-      .defaultIfEmpty(ResponseEntity.notFound().build());
+      .defaultIfEmpty(ResponseEntity.ok("")); // If NO key, return 200 OK with empty string
   }
 
   @PostMapping("/mine/api-key")
