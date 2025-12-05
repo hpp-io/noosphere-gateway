@@ -91,7 +91,11 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ReactiveClientRegistrationRepository clientRegistrationRepository) {
+        // 1. Define a custom CSRF Repository
+        CookieServerCsrfTokenRepository csrfRepository = new CookieServerCsrfTokenRepository();
 
+        // 2. FORCE SameSite to "Lax" (Fixes the Undertow crash)
+        csrfRepository.setCookieCustomizer(builder -> builder.sameSite("Lax"));
         http
             .securityMatcher(
                 new NegatedServerWebExchangeMatcher(
@@ -101,7 +105,7 @@ public class SecurityConfiguration {
             .cors(withDefaults())
             .csrf(csrf ->
                 csrf
-                    .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
+                    .csrfTokenRepository(csrfRepository) // <--- Apply the fix here
                     .requireCsrfProtectionMatcher(new NegatedServerWebExchangeMatcher(
                         new OrServerWebExchangeMatcher(
                             // Do not apply CSRF protection for safe methods
