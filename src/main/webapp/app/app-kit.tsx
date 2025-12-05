@@ -46,10 +46,12 @@ function AppkitProvider({ children, cookies }: { children: ReactNode; cookies: s
               'c57ca95b47569778a828d19178114f4db188b89b763c899ba0be274e97267d96',
               'a797aa35c0fadbfc1a53e7f675162ed5226968b44a19ee3d24385c64d1d3c393'
           ],
-          debug: envValue === 'production' ? false : true,
+          debug: (envValue === 'prod' || envValue === 'production') ? false : true,
           enableWalletGuide: true,
           allWallets: 'HIDE',
           enableWalletConnect: true,
+          enableWallets: true,
+          showWallets: true,
           termsConditionsUrl: 'https://paper.hpp.io/HPP_TermsConditions_v1.4.pdf',
           privacyPolicyUrl: 'https://paper.hpp.io/HPP_PrivacyPolicy_v1.6.pdf',
           features: {
