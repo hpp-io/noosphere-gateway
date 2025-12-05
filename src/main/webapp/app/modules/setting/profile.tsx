@@ -2,7 +2,15 @@ import './profile.scss';
 
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
-import { reset, createMyKeystore, createMyApiKey, createMyWalletAddress, getMyApiKey, getMyWalletAddress, updateUser } from 'app/shared/reducers/user-management';
+import {
+  createMyApiKey,
+  createMyKeystore,
+  createMyWalletAddress,
+  getMyApiKey,
+  getMyWalletAddress,
+  reset,
+  updateUser
+} from 'app/shared/reducers/user-management';
 import { Alert, Button, Col, Form, FormGroup, Input, Label, Row } from 'reactstrap';
 import { useAppKit } from '@reown/appkit/react';
 import { useAccount, useDisconnect } from 'wagmi';
@@ -16,7 +24,6 @@ export const Profile = () => {
   const userLoading = useAppSelector(state => state.userManagement.loading);
   const keystoreFile = useAppSelector(state => state.userManagement.keystoreFile);
   const fileName = useAppSelector(state => state.userManagement.fileName);
-  const keystoreLoading = useAppSelector(state => state.userManagement.keystoreLoading);
 
   const [formData, setFormData] = useState({
     firstName: account?.firstName || '',
@@ -193,7 +200,9 @@ export const Profile = () => {
                     </Button>
                   </>
               ) }
-
+              <br/>
+              <br/>
+              <br/>
             </FormGroup>
             <FormGroup>
               <Label for="walletAddress">Wallet Address</Label>
@@ -204,44 +213,6 @@ export const Profile = () => {
                   disabled={ true }
                   value={ walletAddress }
               />
-              <br/>
-              <Input
-                  type="text"
-                  id="ownerAddress"
-                  name="ownerAddress"
-                  value={ ownerAddress }
-                  onChange={ e => setOwnerAddress(e.target.value) }
-                  placeholder="Enter your owner address"
-              />
-              <br/>
-              { isConnected === true ? (
-                  <Button color="primary" disabled={ userLoading } onClick={ disconnectWalletClicked }>
-                    { 'Disconnect Wallet' }
-                  </Button>
-              ) : (
-                  <Button color="primary" disabled={ userLoading } onClick={ openWalletDialogClicked }>
-                    { 'Connect Wallet' }
-                  </Button>
-              ) }
-              <br/>
-              <br/>
-              { (ownerAddress && ownerAddress !== "") ? (
-                  (walletAddress && walletAddress !== "") ? (
-                      <>
-                        <Button color="primary" disabled={ userLoading } onClick={ onCreateWalletAddress }>
-                          { 'Regenerate Wallet Address' }
-                        </Button>
-                      </>
-                  ) : (
-                      <>
-                        <br/>
-                        <Button color="primary" disabled={ userLoading } onClick={ onCreateWalletAddress }>
-                          { 'Generate Wallet Address' }
-                        </Button>
-                      </>
-                  )
-              ) : null }
-              <br/>
               <br/>
               <Label for="keyAlias">Key Alias</Label>
               <Input
@@ -281,12 +252,52 @@ export const Profile = () => {
                   </>
               ) : (
                   <>
-                    <Button color="primary" disabled={ true } >
+                    <Button color="primary" disabled={ true }>
                       { 'Generate Keystore' }
                     </Button>
                   </>
               )
               }
+              <br/>
+              <br/>
+              <br/>
+              <br/>
+              <Input
+                  type="text"
+                  id="ownerAddress"
+                  name="ownerAddress"
+                  value={ ownerAddress }
+                  onChange={ e => setOwnerAddress(e.target.value) }
+                  placeholder="Enter your owner address"
+              />
+              <br/>
+              { isConnected === true ? (
+                  <Button color="primary" disabled={ userLoading } onClick={ disconnectWalletClicked }>
+                    { 'Disconnect Wallet' }
+                  </Button>
+              ) : (
+                  <Button color="primary" disabled={ userLoading } onClick={ openWalletDialogClicked }>
+                    { 'Connect Wallet' }
+                  </Button>
+              ) }
+              <br/>
+              <br/>
+              { (ownerAddress && ownerAddress !== "") ? (
+                  (walletAddress && walletAddress !== "") ? (
+                      <>
+                        <Button color="primary" disabled={ userLoading } onClick={ onCreateWalletAddress }>
+                          { 'Regenerate Wallet Address' }
+                        </Button>
+                      </>
+                  ) : (
+                      <>
+                        <br/>
+                        <Button color="primary" disabled={ userLoading } onClick={ onCreateWalletAddress }>
+                          { 'Generate Wallet Address' }
+                        </Button>
+                      </>
+                  )
+              ) : null }
               <br/>
               <br/>
             </FormGroup>
