@@ -92,8 +92,6 @@ public class SecurityConfiguration {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ReactiveClientRegistrationRepository clientRegistrationRepository) {
 
-        CookieServerCsrfTokenRepository csrfRepository = new CookieServerCsrfTokenRepository();
-        csrfRepository.setCookieCustomizer(builder -> builder.sameSite("Lax"));
         http
             .securityMatcher(
                 new NegatedServerWebExchangeMatcher(
@@ -103,7 +101,7 @@ public class SecurityConfiguration {
             .cors(withDefaults())
             .csrf(csrf ->
                 csrf
-                    .csrfTokenRepository(csrfRepository)
+                    .csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse())
                     .requireCsrfProtectionMatcher(new NegatedServerWebExchangeMatcher(
                         new OrServerWebExchangeMatcher(
                             // Do not apply CSRF protection for safe methods
