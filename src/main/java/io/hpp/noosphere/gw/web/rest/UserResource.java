@@ -3,6 +3,7 @@ package io.hpp.noosphere.gw.web.rest;
 import static io.hpp.noosphere.common.config.Constants.KEY_ALIAS_HPP_WALLET_ADDRESS;
 
 import io.hpp.noosphere.common.security.KeystoreManager;
+import io.hpp.noosphere.common.service.util.CommonUtils;
 import io.hpp.noosphere.gw.client.NoosphereHubClient;
 import io.hpp.noosphere.gw.config.RateLimited;
 import io.hpp.noosphere.gw.security.SecurityUtils;
@@ -118,7 +119,7 @@ public class UserResource {
       .subscribeOn(Schedulers.boundedElastic());
 
     Mono<Path> keystoreMono;
-    if (Boolean.TRUE.equals(request.getIsWallet()) && Boolean.TRUE.equals(request.getCreateHppWallet())) {
+    if (Boolean.TRUE.equals(request.getIsWallet())) {
       keystoreMono =
         tempFileMono.flatMap(tempFile ->
           Mono
@@ -132,39 +133,63 @@ public class UserResource {
               );
               CreateWalletVm createWalletVm = new CreateWalletVm();
               createWalletVm.setOwnerAddress(credentials.getAddress());
-              return new WalletCreationVm(ks, createWalletVm);
+              return new WalletCreationVm(ks, createWalletVm, request.getWalletAddress());
             })
-            .flatMap(walletData ->
-              noosphereHubClient
-                .createMyWallet(walletData.getCreateWalletVm())
-                .switchIfEmpty(Mono.error(new IOException("Failed to create HPP wallet in Noosphere Hub.")))
-                .flatMap(newHppWallet ->
-                  SecurityUtils
-                    .getCurrentUserId()
-                    .flatMap(userId ->
-                      Mono
-                        .fromCallable(() -> {
-                          try {
-                            userService.updateMyWalletAddress(userId, newHppWallet, now);
-                            KeystoreManager.addSecretKeyWithUtf8String(
-                              walletData.getKeyStore(),
-                              request.getPassword(),
-                              KEY_ALIAS_HPP_WALLET_ADDRESS,
-                              newHppWallet
-                            );
-                            KeystoreManager.saveKeyStore(
-                              walletData.getKeyStore(),
-                              tempFile,
-                              request.getPassword()
-                            );
-                            return tempFile;
-                          } catch (GeneralSecurityException | IOException e) {
-                            throw new RuntimeException(e);
-                          }
-                        })
-                    )
-                    .subscribeOn(Schedulers.boundedElastic())
-                )
+            .flatMap(walletData -> {
+                if (CommonUtils.isValid(walletData.getWalletAddress())) {
+                  return Mono
+                    .fromCallable(() -> {
+                      try {
+                        KeystoreManager.addSecretKeyWithUtf8String(
+                          walletData.getKeyStore(),
+                          request.getPassword(),
+                          KEY_ALIAS_HPP_WALLET_ADDRESS,
+                          walletData.getWalletAddress()
+                        );
+                        KeystoreManager.saveKeyStore(
+                          walletData.getKeyStore(),
+                          tempFile,
+                          request.getPassword()
+                        );
+                        return tempFile;
+                      } catch (GeneralSecurityException | IOException e) {
+                        throw new RuntimeException(e);
+                      }
+                    })
+                    .subscribeOn(Schedulers.boundedElastic());
+                } else {
+                  return noosphereHubClient
+                    .createMyWallet(walletData.getCreateWalletVm())
+                    .switchIfEmpty(Mono.error(new IOException("Failed to create HPP wallet in Noosphere Hub.")))
+                    .flatMap(newHppWallet ->
+                      SecurityUtils
+                        .getCurrentUserId()
+                        .flatMap(userId ->
+                          Mono
+                            .fromCallable(() -> {
+                              try {
+                                userService.updateMyWalletAddress(userId, newHppWallet, now);
+                                KeystoreManager.addSecretKeyWithUtf8String(
+                                  walletData.getKeyStore(),
+                                  request.getPassword(),
+                                  KEY_ALIAS_HPP_WALLET_ADDRESS,
+                                  newHppWallet
+                                );
+                                KeystoreManager.saveKeyStore(
+                                  walletData.getKeyStore(),
+                                  tempFile,
+                                  request.getPassword()
+                                );
+                                return tempFile;
+                              } catch (GeneralSecurityException | IOException e) {
+                                throw new RuntimeException(e);
+                              }
+                            })
+                        )
+                        .subscribeOn(Schedulers.boundedElastic())
+                    );
+                }
+              }
             )
         );
     } else {

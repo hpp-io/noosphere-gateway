@@ -60,7 +60,7 @@ public class KeystoreResource {
               );
               CreateWalletVm createWalletVm = new CreateWalletVm();
               createWalletVm.setOwnerAddress(credentials.getAddress());
-              return new WalletCreationVm(ks, createWalletVm);
+              return new WalletCreationVm(ks, createWalletVm, null);
             })
             .flatMap(walletData ->
               noosphereHubClient

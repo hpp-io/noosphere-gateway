@@ -128,6 +128,10 @@ export const Profile = () => {
     dispatch(createMyKeystore({privateKey, keyAlias, password: keyPassword, createHppWallet: true, isWallet: true}));
   };
 
+  const onGenerateKeystoreWithExistingWalletAddress = () => {
+    dispatch(createMyKeystore({privateKey, keyAlias, password: keyPassword, walletAddress, isWallet: true}));
+  };
+
 
   return (
       <div className="profile-page">
@@ -246,14 +250,24 @@ export const Profile = () => {
               <br/>
               { (keyAlias && keyAlias !== "" && keyPassword && keyPassword !== "" && privateKey && privateKey !== "") ? (
                   <>
+                    <Button color="primary" disabled={ userLoading } onClick={ onGenerateKeystoreWithExistingWalletAddress }>
+                      { 'Generate Keystore With Existing Wallet Address' }
+                    </Button>
+                    <br/>
+                    <br/>
                     <Button color="primary" disabled={ userLoading } onClick={ onGenerateKeystore }>
-                      { 'Generate Keystore' }
+                      { 'Generate Keystore With New Wallet Address' }
                     </Button>
                   </>
               ) : (
                   <>
                     <Button color="primary" disabled={ true }>
-                      { 'Generate Keystore' }
+                      { 'Generate Keystore With Existing Wallet Address' }
+                    </Button>
+                    <br/>
+                    <br/>
+                    <Button color="primary" disabled={ true }>
+                      { 'Generate Keystore With New Wallet Address' }
                     </Button>
                   </>
               )

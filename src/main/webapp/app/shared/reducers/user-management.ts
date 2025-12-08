@@ -74,7 +74,7 @@ export const updateUser = createAsyncThunk('userManagement/update_user',
 
 export const createMyKeystore = createAsyncThunk(
     'userManagement/createMyKeystore',
-    async (data: { keyAlias: string; password: string; privateKey: string; isWallet: boolean, createHppWallet: boolean }) => {
+    async (data: { keyAlias: string; password: string; privateKey: string; isWallet: boolean, createHppWallet?: boolean, walletAddress?: string }) => {
       const requestUrl = `${ apiUrl }/mine/keystore`;
       const response = await axios.post(
           requestUrl, data,

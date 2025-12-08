@@ -8,11 +8,13 @@ public class WalletCreationVm {
 
   private KeyStore keyStore;
   private CreateWalletVm createWalletVm;
+  private String walletAddress;
 
 
-  public WalletCreationVm(KeyStore keyStore, CreateWalletVm createWalletVm) {
+  public WalletCreationVm(KeyStore keyStore, CreateWalletVm createWalletVm, String walletAddress) {
     this.keyStore = keyStore;
     this.createWalletVm = createWalletVm;
+    this.walletAddress = walletAddress;
   }
 
 }

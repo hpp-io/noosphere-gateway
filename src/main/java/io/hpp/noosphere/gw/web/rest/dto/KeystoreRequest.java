@@ -10,4 +10,5 @@ public class KeystoreRequest {
     private Boolean createHppWallet;
     private String password;
     private String privateKey;
+    private String walletAddress;
 }
