@@ -72,7 +72,7 @@ export const parseEnvVariablesStringToJsonObject = (inputString: string,) => {
 export const convertEnvVariablesToString = (environmentVariables): string => {
   return "{" + environmentVariables
   .filter(env => env.name && env.name.trim() !== '')
-  .map(env => `"${ env.name }": ${ env.value || '' }"`)
+  .map(env => `"${ env.name }": "${ env.value || '' }"`)
   .join(',') + "}";
 };
 
