@@ -15,7 +15,6 @@ public class VerifierDTO implements Serializable {
 
     private String name;
 
-    private String walletAddress;
     private String verifierAddress;
     private String imageName;
     private Integer port;

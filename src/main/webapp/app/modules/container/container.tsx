@@ -80,7 +80,7 @@ export const SearchContainer = () => {
 
     const selectedData: IDownloadContainer[] = Array.from(selectedItems).map(index => mapToDownloadContainer((searchResults[index])));
 
-    console.log(selectedData);
+    // console.log(selectedData);
     const jsonContent = JSON.stringify(selectedData, null, 2);
     const blob = new Blob([jsonContent], {type: 'application/json;charset=utf-8;'});
     const link = document.createElement('a');
@@ -99,7 +99,7 @@ export const SearchContainer = () => {
         <h2 className="text-center my-4">Search Containers</h2>
         <Form onSubmit={ handleSearch } className="search-form">
           <Row form>
-            <Col md={ 4 }>
+            <Col md={ 8 }>
               <Input
                   type="text"
                   name="searchText"
@@ -108,15 +108,7 @@ export const SearchContainer = () => {
                   onChange={ handleInputChange }
               />
             </Col>
-            <Col md={ 4 }>
-              <Input
-                  type="text"
-                  name="name"
-                  placeholder="Name"
-                  value={ searchCriteria.name }
-                  onChange={ handleInputChange }
-              />
-            </Col>
+
             <Col md={ 1 }>
             </Col>
           </Row>
@@ -124,9 +116,9 @@ export const SearchContainer = () => {
             <Col md={ 4 }>
               <Input
                   type="text"
-                  name="walletAddress"
-                  placeholder="WalletAddress"
-                  value={ searchCriteria.walletAddress }
+                  name="name"
+                  placeholder="Name"
+                  value={ searchCriteria.name }
                   onChange={ handleInputChange }
               />
             </Col>
@@ -199,7 +191,6 @@ export const SearchContainer = () => {
                   </th>
                   <th>#</th>
                   <th>Name</th>
-                  <th>Wallet Address</th>
                   <th>Image Name</th>
                   <th>Port</th>
                   <th>Command</th>
@@ -221,7 +212,6 @@ export const SearchContainer = () => {
                       </td>
                       <td>{ index + 1 }</td>
                       <td>{ result.name }</td>
-                      <td>{ result.walletAddress }</td>
                       <td>{ result.imageName }</td>
                       <td>{ result.port }</td>
                       <td>{ result.command }</td>

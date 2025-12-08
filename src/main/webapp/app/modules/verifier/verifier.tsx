@@ -114,14 +114,7 @@ export const SearchVerifier = () => {
                   onChange={ handleInputChange }
               />
             </Col>
-            <Col md={ 4 }>
-              <Input
-                  type="text"
-                  name="walletAddress"
-                  placeholder="WalletAddress"
-                  value={ searchCriteria.walletAddress }
-                  onChange={ handleInputChange }
-              />
+            <Col md={ 1 }>
             </Col>
           </Row>
           <Row form className="mt-3">
@@ -162,7 +155,7 @@ export const SearchVerifier = () => {
                   onChange={ handleInputChange }
               />
             </Col>
-            <Col md={ 4 }>
+            <Col md={ 1 }>
               <Button className="mt-4" color="primary" type="submit">
                 Search
               </Button>
@@ -203,7 +196,6 @@ export const SearchVerifier = () => {
                   </th>
                   <th>#</th>
                   <th>Name</th>
-                  <th>Wallet Address</th>
                   <th>Verifier Address</th>
                   <th>Image Name</th>
                   <th>Port</th>
@@ -226,7 +218,6 @@ export const SearchVerifier = () => {
                       </td>
                       <td>{ index + 1 }</td>
                       <td>{ result.name }</td>
-                      <td>{ result.walletAddress }</td>
                       <td>{ result.verifierAddress }</td>
                       <td>{ result.imageName }</td>
                       <td>{ result.port }</td>

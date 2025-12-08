@@ -14,7 +14,6 @@ public class ContainerDTO implements Serializable {
 
     private String name;
 
-    private String walletAddress;
     private String imageName;
     private Integer port;
     private String command;

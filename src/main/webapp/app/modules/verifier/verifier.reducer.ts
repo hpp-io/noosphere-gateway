@@ -22,7 +22,6 @@ export const searchVerifiers = createAsyncThunk('verifier/fetch_entities',
       const requestBody = {
         name: entity.name,
         searchText: entity.searchText,
-        walletAddress: entity.walletAddress,
         verifierAddress: entity.verifierAddress,
         statusCode: entity.statusCode,
         createdByUserId: entity.createdByUserId,
